@@ -2,6 +2,8 @@
 # Credits
 Big thanks to **justcamtro** for helping me with design.
 And thanks to all people who were supporting me during this project!
+
+
 ![image](https://github.com/TheLeonX/NSC-ModManager/assets/92672927/84ce33d9-af2f-40b2-8190-e5206bc0584d)
 
 # Features
