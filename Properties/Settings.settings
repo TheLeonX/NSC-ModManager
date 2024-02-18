@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NSC_ModManager.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="StretchMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Uniform</Value>
+    </Setting>
+    <Setting Name="BackgroundColor1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#9C000000</Value>
+    </Setting>
+    <Setting Name="ButtonColor1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#9C000000</Value>
+    </Setting>
+    <Setting Name="BackgroundImagePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">UI/background/bg_toolbox_main.png</Value>
+    </Setting>
+    <Setting Name="TextColor1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="ModdingGroupLink" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://discord.gg/naruto-storm-modding-server-841394026599022682</Value>
+    </Setting>
+    <Setting Name="RootGameFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

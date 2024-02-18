@@ -1,0 +1,131 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <RootNamespace>NSC_ModManager</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>white_MM.ico</ApplicationIcon>
+    <PlatformTarget>x86</PlatformTarget>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Authors>TheLeonX</Authors>
+    <Version>1.11</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\Storm4_rus.ttf" />
+    <None Remove="Resources\Styles\UI\background\bg_toolbox_main.png" />
+    <None Remove="Resources\Styles\UI\background\wizard_background_1.png" />
+    <None Remove="Resources\Styles\UI\charsel\pt_brank_emp.png" />
+    <None Remove="Resources\Styles\UI\charsel\s_brt5.png" />
+    <None Remove="Resources\Styles\UI\kurama\dialog_name_background.png" />
+    <None Remove="Resources\Styles\UI\kurama\kurama_body.png" />
+    <None Remove="Resources\Styles\UI\kurama\kurama_tail_1.png" />
+    <None Remove="Resources\Styles\UI\kurama\kurama_tail_2.png" />
+    <None Remove="Resources\Styles\UI\kurama\kurama_tail_3.png" />
+    <None Remove="Resources\Styles\UI\kurama\kurama_tail_4.png" />
+    <None Remove="Resources\Styles\UI\kurama\meouch_appear_effect.gif" />
+    <None Remove="Resources\Styles\UI\kurama\meouch_body.png" />
+    <None Remove="Resources\Styles\UI\loading\toolbox_load_1.png" />
+    <None Remove="Resources\Styles\UI\loading\toolbox_load_2.png" />
+    <None Remove="Resources\Styles\UI\logo\modmanager_logo.png" />
+    <None Remove="Resources\Styles\UI\logo\toolbox_logo.png" />
+    <None Remove="white_MM.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="white_MM.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\Storm4_rus.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Styles\UI\background\bg_toolbox_main.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Styles\UI\background\wizard_background_1.png" />
+    <Resource Include="Resources\Styles\UI\charsel\pt_brank_emp.png" />
+    <Resource Include="Resources\Styles\UI\charsel\s_brt5.png" />
+    <Resource Include="Resources\Styles\UI\kurama\dialog_name_background.png" />
+    <Resource Include="Resources\Styles\UI\kurama\kurama_body.png" />
+    <Resource Include="Resources\Styles\UI\kurama\kurama_tail_1.png" />
+    <Resource Include="Resources\Styles\UI\kurama\kurama_tail_2.png" />
+    <Resource Include="Resources\Styles\UI\kurama\kurama_tail_3.png" />
+    <Resource Include="Resources\Styles\UI\kurama\kurama_tail_4.png" />
+    <Resource Include="Resources\Styles\UI\kurama\meouch_appear_effect.gif" />
+    <Resource Include="Resources\Styles\UI\kurama\meouch_body.png" />
+    <Resource Include="Resources\Styles\UI\loading\toolbox_load_1.png" />
+    <Resource Include="Resources\Styles\UI\loading\toolbox_load_2.png" />
+    <Resource Include="Resources\Styles\UI\logo\modmanager_logo.png" />
+    <Resource Include="Resources\Styles\UI\logo\toolbox_logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.1" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Windows.Compatibility.Shims" Version="2.0.1" />
+    <PackageReference Include="ModernWpf.MessageBox" Version="0.5.2" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="NodeNetwork" Version="6.0.0" />
+    <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ModdingAPIFiles\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ParamFiles\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\TemplateImages\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Styles\UI\charsel_icons\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ModdingAPIFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CpkMaker">
+      <HintPath>CpkMaker.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

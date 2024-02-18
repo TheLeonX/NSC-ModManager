@@ -1,0 +1,383 @@
+﻿<Window xmlns:Controls="clr-namespace:NSC_ModManager.Controls"  x:Class="NSC_ModManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NSC_ModManager"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  
+        xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:properties="clr-namespace:NSC_ModManager.Properties"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        mc:Ignorable="d"
+        xmlns:converter="clr-namespace:NSC_ModManager.Converter"
+        
+        Title="{DynamicResource m_Title}"  Height="800" Width="1300">
+    <Window.Background>
+        <ImageBrush ImageSource="{DynamicResource ResourceKey=TitleBackground}" Stretch="UniformToFill"/>
+    </Window.Background>
+    <Window.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="MinWidth"
+                                                From="330"
+                                                To="340"
+                                                Duration="0:0:0.1"
+                                                AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Viewbox Stretch="{Binding Source={x:Static properties:Settings.Default}, Path=StretchMode}" >
+        <Grid>
+            <Grid ShowGridLines="False" Height="800" Width="1300"  Visibility="{Binding MainWindowVisibility}" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderBrush="White" BorderThickness="0,0,0,1"/>
+                    <Menu VerticalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}" >
+                        <MenuItem Header="{DynamicResource m_mainWindow_006}" Foreground="{DynamicResource Toolbox_button_text_color_1}">
+                            <MenuItem Header="{DynamicResource m_mainWindow_010}" Command="{Binding InstallModdingAPICommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
+                            <MenuItem Header="{DynamicResource m_mainWindow_011}" Command="{Binding DeleteModdingAPICommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
+
+                        </MenuItem>
+                        <MenuItem Foreground="{DynamicResource Toolbox_button_text_color_1}" Command="{Binding VisitModdingGroupCommand}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <Path  VerticalAlignment="Center" Stroke="#FF4B1C67" Fill="{DynamicResource Toolbox_button_text_color_1}"  Data="{DynamicResource Discord_logo}"/>
+                                    <TextBlock Margin="5,0,0,0" TextAlignment="Left" VerticalAlignment="Center" Text="{DynamicResource m_mainWindow_007}"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource m_mainWindow_012}" Command="{Binding BoostyCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
+                        <MenuItem Header="{DynamicResource m_mainWindow_008}" Command="{Binding CreditsCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
+                        <MenuItem Header="{DynamicResource m_mainWindow_005}" Command="{Binding OptionsCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
+                    </Menu>
+                    <Grid Grid.Row="1" Background="{DynamicResource Toolbox_button_background_color_1}" Visibility="{Binding ModManagerVisibility}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid Grid.ColumnSpan="3" Grid.RowSpan="3" ItemsSource="{Binding ModManagerList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMod}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="false" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{DynamicResource m_modmanager_001}" Binding="{Binding Path=ModName}" MinWidth="300" IsReadOnly="True" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontFamily="{StaticResource NarutoFont}"/>
+                                <DataGridTemplateColumn Header="{DynamicResource m_modmanager_002}" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox HorizontalAlignment="Center"
+                                              Command="{Binding DataContext.EnableModIsCheckedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                              IsChecked="{Binding Path=EnableMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button MouseEnter="InstallMod_MouseEnter" Command="{Binding InstallModCommand}" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_modmanager_009}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="18"/>
+                        <Button MouseEnter="DeleteMod_MouseEnter" Command="{Binding DeleteModCommand}" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_modmanager_010}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="18"/>
+                        <Button Command="{Binding RefreshModListCommand}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_modmanager_011}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="18"/>
+
+                        <Grid Grid.Column="4" Grid.ColumnSpan="3" Grid.RowSpan="7">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="200"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Grid.ColumnSpan="3" TextWrapping="Wrap" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" FontFamily="{StaticResource NarutoFont}" Text="{Binding ModName_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="25"/>
+                            <Label Grid.Row="3"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" Content="{DynamicResource m_modmanager_006}"  FontSize="12"/>
+                            <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Left" FontFamily="{StaticResource NarutoFont}" Text="{Binding ModDescription_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14"/>
+                            <Image Grid.Row="1" Grid.Column="0" Source="{Binding ModIconPreview}" RenderOptions.BitmapScalingMode="HighQuality" MaxHeight="200" MaxWidth="200" Stretch="Fill" HorizontalAlignment="Left"/>
+                            <Grid Grid.Row="1" Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="5"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" Content="{DynamicResource m_modmanager_003}"  FontSize="12"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding ModAuthor_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Top" HorizontalAlignment="Stretch" TextAlignment="Left" TextWrapping="Wrap" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" FontSize="14" />
+                                <Label Grid.Row="3"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" Content="{DynamicResource m_modmanager_004}"  FontSize="12"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding ModVersion_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Top" HorizontalAlignment="Stretch" TextAlignment="Left" TextWrapping="Wrap" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" FontSize="14" />
+                                <Label Grid.Row="6"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" Content="{DynamicResource m_modmanager_005}"  FontSize="12"/>
+                                <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding ModLastUpdate_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Top" HorizontalAlignment="Stretch" TextAlignment="Left" TextWrapping="Wrap" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" FontSize="14" />
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="20" Background="{DynamicResource Toolbox_button_background_color_1}" Visibility="{Binding OptionsVisibility}">
+                        <Label Grid.Column="1"  Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option001}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <ComboBox Grid.Column="1"  Grid.Row="2" Grid.ColumnSpan="1" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" SelectedIndex="{Binding StretchMode_field}">
+                            <ComboBoxItem>
+                                <TextBlock Text="{StaticResource m_option002}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="{StaticResource m_option003}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="{StaticResource m_option005}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}"/>
+                            </ComboBoxItem>
+                        </ComboBox>
+                        <Label Grid.Column="1"  Grid.Row="4" Grid.ColumnSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option006}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <xctk:ColorPicker Grid.Column="1" Foreground="Black" Grid.Row="5" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" SelectedColor="{Binding BackgroundColor_field, Mode=TwoWay}" />
+                        <Label Grid.Column="1"  Grid.Row="7" Grid.ColumnSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option007}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <xctk:ColorPicker Grid.Column="1" Foreground="Black" Grid.Row="8" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" SelectedColor="{Binding ButtonColor_field, Mode=TwoWay}" />
+                        <Label Grid.Column="3"  Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option011}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <xctk:ColorPicker Grid.Column="3" Foreground="Black" Grid.Row="2" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" SelectedColor="{Binding TextColor_field, Mode=TwoWay}" />
+                        <Label Grid.Column="1"  Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option008}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <TextBox Grid.Column="1" Grid.Row="11" Text="{Binding BackgroundImagePath_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" />
+                        <Button Command="{Binding SelectImageBackgroundCommand}" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="11" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14">
+                            <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_option010}"/>
+                        </Button>
+
+                        <Label Grid.Column="1"  Grid.Row="13" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option013}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <TextBox Grid.Column="1" Grid.Row="14" Text="{Binding RootFolderPath_field}" Foreground="{DynamicResource Toolbox_button_text_color_1}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" />
+                        <Button Command="{Binding SelectRootFolderCommand}" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="14" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14">
+                            <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_option012}"/>
+                        </Button>
+                        
+                        <Border Grid.ColumnSpan="40" Grid.RowSpan="40" BorderBrush="White" BorderThickness="2,2,2,2"/>
+                        <Button Command="{Binding SaveSettingsCommand}" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="34" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14">
+                            <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_option004}"/>
+                        </Button>
+                        <Button Command="{Binding ResetSettingsCommand}" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="34" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14">
+                            <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_option009}"/>
+                        </Button>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+
+                    </Grid>
+                </Grid>
+                <Border Grid.Column="1" BorderBrush="White" BorderThickness="1,0,0,1" Grid.RowSpan="1"/>
+                <StackPanel Panel.ZIndex="5" >
+                    <Button MinWidth="330" Style="{StaticResource NoChromeButton}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding AddMeouch}">
+                        <Image Source="{DynamicResource ResourceKey=ModManager_Logo}" Margin="20" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Button>
+                    <Button Command="{Binding CharacterManagementCommand}"  Panel.ZIndex="5" Margin="10" HorizontalAlignment="Stretch" MinHeight="50" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_mainWindow_001}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="23"/>
+                    <Button MouseEnter="RosterEditor_MouseEnter" Command="{Binding RosterEditorCommand}"  Panel.ZIndex="5" Margin="10" HorizontalAlignment="Stretch" MinHeight="50" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_rosterEditor}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="23"/>
+                    <Button MouseEnter="CompileMods_MouseEnter" Command="{Binding CompileModsCommand}"  Panel.ZIndex="5" Margin="10" HorizontalAlignment="Stretch" MinHeight="50" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_modmanager_008}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="23"/>
+                    <Button MouseEnter="ClearGame_MouseEnter"  Command="{Binding CleanGameRootCommand}"  Panel.ZIndex="5" Margin="10" HorizontalAlignment="Stretch" MinHeight="50" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_modmanager_007}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="23"/>
+                </StackPanel>
+                <Image Visibility="{Binding MeouchVisibility}"  Height="270" MaxWidth="300" Grid.Row="0" Grid.RowSpan="3"  VerticalAlignment="Bottom" HorizontalAlignment="Center" Panel.ZIndex="1" gif:ImageBehavior.AnimatedSource="{DynamicResource MeouchEffect}" gif:ImageBehavior.AutoStart="{Binding MeouchEffectAutoPlay}" gif:ImageBehavior.RepeatBehavior="{Binding MeouchEffectRepeat}"/>
+                <Image Visibility="{Binding MeouchVisibility}" Margin="0,0,0,-70" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="0" Source="{DynamicResource ResourceKey=MeouchBody}"  RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Controls:KuramaControl Visibility="{Binding KyurutoVisibility}" Grid.Row="0" Grid.RowSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Panel.ZIndex="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                <Image Grid.Column="0" Grid.Row="0"  Source="{DynamicResource KuramaDialogNameBackground}" RenderOptions.BitmapScalingMode="HighQuality" Width="270" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-131,-91"/>
+                <Grid Grid.Column="1" Grid.Row="2" Margin="-120,0,20,10" Background="{DynamicResource Toolbox_button_background_color_1}" HorizontalAlignment="Stretch">
+
+                    <Border Grid.Column="1" BorderBrush="White" BorderThickness="1,1,1,1" Grid.RowSpan="5"/>
+                    <TextBlock TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,-47,0,0" TextWrapping="WrapWithOverflow" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="25" Text="{Binding KuramaName}"/>
+                    <TextBlock MinWidth="740" TextAlignment="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0" TextWrapping="WrapWithOverflow" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="20" Text="{Binding KuramaDialog}"/>
+
+                </Grid>
+                <Grid Grid.RowSpan="10" Grid.ColumnSpan="10" Visibility="{Binding LoadingStatePlay}" Panel.ZIndex="10" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
+                    <Controls:LoadingControl Grid.Row="2" Grid.Column="2" LoadingState="{Binding LoadingStatePlay}"/>
+                </Grid>
+            </Grid>
+            <Grid ShowGridLines="False" Height="800" Width="1000" Visibility="{Binding Credits2024Visibility}"  Grid.RowSpan="3" Background="{DynamicResource Toolbox_button_background_color_1}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="10"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="1"  Grid.Row="1" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_credits_001}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="45"/>
+                <Label Grid.Column="1"  Grid.Row="2" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_credits_002}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="40"/>
+                <StackPanel Grid.Column="1" Grid.Row="3">
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Carrington Bennett" Foreground="Red" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="justcamtro" Foreground="Red" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="EliteAce" Foreground="Orange" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Chakra Warrior" Foreground="Orange" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Halucygeno" Foreground="Orange" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="little Damien" Foreground="Orange" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="HydraBladeZ" Foreground="Orange" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Jonathan Nefores" Foreground="Orange" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Anime Knight" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Alex Olney" Foreground="Yellow" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="3">
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Nate Roberts" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Shoii" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Steinixos" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="UltimateOmbuStorm" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Amritz kenzy" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Naggingclub5" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Jonas Martinez" Foreground="Yellow" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="N&amp;D Productions" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="The Brothers" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Shoyo" Foreground="White" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Grid.Row="3">
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="G3ku" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Hunter Yang" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Aleksa Nikolić" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Ceaz Azce" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Клим Сапранков" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="dark94" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="许誉骞" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Fearless Intelligent" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Erik Petrosyan" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Moeru Storm" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Bully" Foreground="White" FontSize="20"/>
+                </StackPanel>
+                <Label Grid.Column="1"  Grid.Row="4" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_credits_003}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="40"/>
+
+                <StackPanel Grid.Column="1" Grid.Row="5">
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="HydraBladeZ" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="SutandoTsukai" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="ZealotTormunds" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="dei" Foreground="White" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="5">
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="justcamtro" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Chakra Warrior" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Xact" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Portable Productions" Foreground="White" FontSize="20"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Grid.Row="5">
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="exavadeathwitch" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Xuân Thái" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="Dark Madara" Foreground="White" FontSize="20"/>
+                    <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="EliteAce" Foreground="White" FontSize="20"/>
+                </StackPanel>
+                <Label Grid.Column="3"  Grid.Row="7" Grid.ColumnSpan="1" HorizontalAlignment="Right" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="2024" Foreground="White" FontSize="27"/>
+                <Button Grid.Column="5" Grid.Row="7" Command="{Binding MainMenuCommand}" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"  MinHeight="50" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="20">
+                    <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_credits_004}"/>
+                </Button>
+
+                <Border Grid.Column="1" Grid.Row="1"  BorderBrush="White" BorderThickness="1,1,1,1" Grid.RowSpan="7" Grid.ColumnSpan="5"/>
+            </Grid>
+        </Grid>
+        
+    </Viewbox>
+</Window>

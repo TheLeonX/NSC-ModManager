@@ -1,0 +1,20 @@
+﻿NSC-ModManager
+1.0.0.0
+
+winexe
+C#
+.cs
+E:\Desktop\C# Projects\NSC-ModManager\obj\Debug\net472\
+NSC_ModManager
+none
+false
+TRACE;DEBUG;NETFRAMEWORK;NET472;
+E:\Desktop\C# Projects\NSC-ModManager\App.xaml
+6390980019
+11827244706
+88285293964
+289-1318278985
+Controls\KuramaControl.xaml;Controls\LoadingControl.xaml;Resources\Localization\lang.xaml;Resources\Styles\LightStyle.xaml;View\CharacterRosterEditorView.xaml;View\TitleView.xaml;
+
+True
+

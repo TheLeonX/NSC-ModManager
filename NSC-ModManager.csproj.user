@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Controls\KuramaControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\LoadingControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\CharacterRosterEditorView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\KuramaControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\LoadingControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Localization\lang.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\LightStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\CharacterRosterEditorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\TitleView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

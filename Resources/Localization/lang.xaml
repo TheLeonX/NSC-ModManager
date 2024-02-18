@@ -1,0 +1,68 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+
+
+    <v:String x:Key="m_AddDupEntry">Add/Duplicate Entry</v:String>
+    <v:String x:Key="m_DupEntry">Duplicate Entry</v:String>
+    <v:String x:Key="m_AddEntry">Add Entry</v:String>
+    <v:String x:Key="m_DeleteEntry">Delete Entry</v:String>
+    <v:String x:Key="m_SaveEntry">Save Entry</v:String>
+    <v:String x:Key="m_SearchEntry">Search Entry</v:String>
+    <v:String x:Key="m_File">File</v:String>
+    <v:String x:Key="m_OpenFile">Open</v:String>
+    <v:String x:Key="m_SaveFile">Save</v:String>
+    <v:String x:Key="m_SaveAsFile">Save As</v:String>
+
+    <!-- Title Window-->
+    <v:String x:Key="m_Title">NSC Mod Manager v1.0</v:String>
+    <v:String x:Key="m_mainWindow_001">Mod Manager</v:String>
+    <v:String x:Key="m_mainWindow_005">Options</v:String>
+    <v:String x:Key="m_mainWindow_006">ModdingAPI</v:String>
+    <v:String x:Key="m_mainWindow_007">Discord Group</v:String>
+    <v:String x:Key="m_mainWindow_008">Credits</v:String>
+    <v:String x:Key="m_mainWindow_009">Export Mod</v:String>
+    <v:String x:Key="m_mainWindow_010">Install</v:String>
+    <v:String x:Key="m_mainWindow_011">Delete</v:String>
+    <v:String x:Key="m_mainWindow_012">Support Me</v:String>
+
+    <v:String x:Key="m_option001">Stretch Mode</v:String>
+    <v:String x:Key="m_option002">Fill</v:String>
+    <v:String x:Key="m_option003">Uniform</v:String>
+    <v:String x:Key="m_option004">Save Settings</v:String>
+    <v:String x:Key="m_option005">None</v:String>
+    <v:String x:Key="m_option006">Background Color</v:String>
+    <v:String x:Key="m_option007">Button Color</v:String>
+    <v:String x:Key="m_option008">Background Image</v:String>
+    <v:String x:Key="m_option009">Reset Settings</v:String>
+    <v:String x:Key="m_option010">Select Image</v:String>
+    <v:String x:Key="m_option011">Font Color</v:String>
+    <v:String x:Key="m_option012">Select Root Folder</v:String>
+    <v:String x:Key="m_option013">Root Folder</v:String>
+
+    <!--Roster Editor-->
+    <v:String x:Key="m_rosterEditor">Character Roster Editor</v:String>
+    <v:String x:Key="m_rosterEditorPage">Page</v:String>
+    <v:String x:Key="m_rosterEditorSave">Save Roster</v:String>
+    <v:String x:Key="m_rosterEditorRestore">Restore Roster</v:String>
+
+
+    <!--credits-->
+    <v:String x:Key="m_credits_001">Thank you all for support and help!</v:String>
+    <v:String x:Key="m_credits_002">Contributors</v:String>
+    <v:String x:Key="m_credits_003">Special thanks to this guys</v:String>
+    <v:String x:Key="m_credits_004">Come back to menu</v:String>
+
+
+    <v:String x:Key="m_modmanager_001">Mod Name</v:String>
+    <v:String x:Key="m_modmanager_002">Enable Mod</v:String>
+    <v:String x:Key="m_modmanager_003">Authors:</v:String>
+    <v:String x:Key="m_modmanager_004">Version:</v:String>
+    <v:String x:Key="m_modmanager_005">Last Update:</v:String>
+    <v:String x:Key="m_modmanager_006">Description:</v:String>
+    <v:String x:Key="m_modmanager_007">Clear Game</v:String>
+    <v:String x:Key="m_modmanager_008">Compile Mods</v:String>
+    <v:String x:Key="m_modmanager_009">Install Mod</v:String>
+    <v:String x:Key="m_modmanager_010">Delete Mod</v:String>
+    <v:String x:Key="m_modmanager_011">Refresh Mod List</v:String>
+</ResourceDictionary>

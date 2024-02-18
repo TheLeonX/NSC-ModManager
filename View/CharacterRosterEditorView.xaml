@@ -1,0 +1,121 @@
+﻿<Window x:Class="NSC_ModManager.View.CharacterRosterEditorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NSC_ModManager"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  
+        xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:properties="clr-namespace:NSC_ModManager.Properties"
+        Title="{DynamicResource m_rosterEditor}"   Height="700" Width="560">
+    <Window.Background>
+        <ImageBrush ImageSource="{DynamicResource ResourceKey=TitleBackground}" Stretch="UniformToFill"/>
+    </Window.Background>
+    <Viewbox Stretch="{Binding Source={x:Static properties:Settings.Default}, Path=StretchMode}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="220"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="530"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ListBox Name="CharacterIconListPreview" ItemsSource="{Binding CharacterList}" SelectedItem="{Binding SelectedCharacter}" SelectedIndex="{Binding SelectedCharacterIndex}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" PreviewMouseMove="LBoxSort_OnPreviewMouseMove" Drop="LBoxSort_OnDrop" AllowDrop="True" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" >
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Image Width="64" Height="64" Source="{Binding CharacterIconPreview}"  RenderOptions.BitmapScalingMode="HighQuality" Stretch="Fill" />
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Bottom"  FontFamily="{StaticResource NarutoFont}" Content="{Binding CSP_code}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="1" Color="Black"/>
+                                    </Label.Effect>
+                                </Label>
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Bottom"  FontFamily="{StaticResource NarutoFont}" Content="{Binding SlotIndex}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="1" Color="Black"/>
+                                    </Label.Effect>
+                                </Label>
+
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ListBox  Grid.Column="2" Name="CharacterPlaceHolderIconListPreview" ItemsSource="{Binding CharacterPlaceHolderList}" SelectedItem="{Binding SelectedPlaceholderCharacter}" SelectedIndex="{Binding SelectedPlaceholderCharacterIndex}"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" PreviewMouseMove="LBoxSort_OnPreviewMouseMove" Drop="LBoxSort_OnDrop" AllowDrop="True" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1" >
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Image Width="64" Height="64" Source="{Binding CharacterIconPreview}" RenderOptions.BitmapScalingMode="HighQuality" Stretch="Fill" />
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Bottom"  FontFamily="{StaticResource NarutoFont}" Content="{Binding CSP_code}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="1" Color="Black"/>
+                                    </Label.Effect>
+                                </Label>
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Bottom"  FontFamily="{StaticResource NarutoFont}" Content="{Binding SlotIndex}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="1" Color="Black"/>
+                                    </Label.Effect>
+                                </Label>
+                            </Grid>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Label Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_rosterEditorPage}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10">
+                    <Label.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="1" 
+                      Color="Black"/>
+                    </Label.Effect>
+                </Label>
+                <xctk:IntegerUpDown Grid.Column="0" MinHeight="35" Grid.Row="3" Value="{Binding RosterPage_field}" Grid.ColumnSpan="3" Increment="1" Minimum="0" Maximum="65565" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" Background="{DynamicResource Toolbox_button_background_color_1}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" BorderThickness="1"/>
+                <Button Command="{Binding SaveRosterCommand}" Content="{DynamicResource m_rosterEditorSave}" Grid.Row="5" Grid.Column="2" MinHeight="35" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="12"/>
+                <Button Command="{Binding RestoreRosterCommand}" Content="{DynamicResource m_rosterEditorRestore}" Grid.Row="5" Grid.Column="0" MinHeight="35" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_1}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="12"/>
+
+            </Grid>
+        </Grid>
+        
+    </Viewbox>
+</Window>

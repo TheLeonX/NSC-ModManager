@@ -1,0 +1,20 @@
+﻿NSC-Toolbox
+
+
+winexe
+C#
+.cs
+E:\Desktop\C# Projects\NSC-ModManager\obj\Debug\net6.0-windows\
+NSC_ModManager
+none
+false
+TRACE;DEBUG;NET;NET6_0;NETCOREAPP
+E:\Desktop\C# Projects\NSC-ModManager\App.xaml
+32242861200
+1-854401585
+108-1614544702
+225-2118912812
+Controls\KuramaControl.xaml;Controls\LoadingControl.xaml;Resources\Localization\lang.xaml;Resources\Styles\LightStyle.xaml;View\AfterAttachObjectEditorView.xaml;View\AppearanceAnmEditorView.xaml;View\AwakeAuraEditorView.xaml;View\CharacodeEditorView.xaml;View\CharacterSelectParamEditorView.xaml;View\cmnparamEditorView.xaml;View\CostumeBreakColorParamEditorView.xaml;View\CostumeBreakParamEditorView.xaml;View\CostumeParamEditorView.xaml;View\DamageEffEditorView.xaml;View\DuelPlayerParamEditorView.xaml;View\EffectPrmEditorView.xaml;View\ExportModView.xaml;View\MessageInfoEditorView.xaml;View\PlayerDoubleEffectParamEditorView.xaml;View\PlayerIconEditorView.xaml;View\PlayerSettingParamEditorView.xaml;View\PrivateCameraEditorView.xaml;View\PRMEditorView.xaml;View\PRMLoadEditorView.xaml;View\SkillCustomizeParamEditorView.xaml;View\SkillIndexSettingParamEditorView.xaml;View\SpSkillCustomizeParamEditorView.xaml;View\SpTypeSupportParamEditorView.xaml;View\StageInfoEditorView.xaml;View\SupportActionParamEditorView.xaml;View\SupportSkillRecoverySpeedParamEditorView.xaml;View\TitleView.xaml;
+
+True
+
