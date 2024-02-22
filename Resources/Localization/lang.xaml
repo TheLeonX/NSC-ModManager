@@ -15,7 +15,7 @@
     <v:String x:Key="m_SaveAsFile">Save As</v:String>
 
     <!-- Title Window-->
-    <v:String x:Key="m_Title">NSC Mod Manager v1.0</v:String>
+    <v:String x:Key="m_Title">NSC Mod Manager</v:String>
     <v:String x:Key="m_mainWindow_001">Mod Manager</v:String>
     <v:String x:Key="m_mainWindow_005">Options</v:String>
     <v:String x:Key="m_mainWindow_006">ModdingAPI</v:String>
@@ -25,6 +25,7 @@
     <v:String x:Key="m_mainWindow_010">Install</v:String>
     <v:String x:Key="m_mainWindow_011">Delete</v:String>
     <v:String x:Key="m_mainWindow_012">Support Me</v:String>
+    <v:String x:Key="m_mainWindow_013">GitHub Page</v:String>
 
     <v:String x:Key="m_option001">Stretch Mode</v:String>
     <v:String x:Key="m_option002">Fill</v:String>

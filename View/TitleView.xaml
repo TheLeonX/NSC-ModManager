@@ -85,6 +85,7 @@
                             </MenuItem.Header>
                         </MenuItem>
                         <MenuItem Header="{DynamicResource m_mainWindow_012}" Command="{Binding BoostyCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
+                        <MenuItem Header="{DynamicResource m_mainWindow_013}" Command="{Binding VisitGitHubPageCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
                         <MenuItem Header="{DynamicResource m_mainWindow_008}" Command="{Binding CreditsCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
                         <MenuItem Header="{DynamicResource m_mainWindow_005}" Command="{Binding OptionsCommand}" Foreground="{DynamicResource Toolbox_button_text_color_1}"/>
                     </Menu>

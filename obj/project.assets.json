@@ -744,6 +744,19 @@
           "Microsoft.WindowsDesktop.App.WPF"
         ]
       },
+      "Octokit/9.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Octokit.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Octokit.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Pharmacist.Common/2.0.8": {
         "type": "package",
         "dependencies": {
@@ -3180,6 +3193,20 @@
         "lib/netcoreapp3.1/NodeNetworkToolkit.xml",
         "nodenetworktoolkit.6.0.0.nupkg.sha512",
         "nodenetworktoolkit.nuspec"
+      ]
+    },
+    "Octokit/9.1.2": {
+      "sha512": "YKh5EYi+b2mV8eafANJkkZKKBCpI2MNPeSCTlKLYWqVGktOn/TBc7NZEcViPMSNw6R+glgmbkOetLc6LuNK5qQ==",
+      "type": "package",
+      "path": "octokit/9.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Octokit.dll",
+        "lib/netstandard2.0/Octokit.xml",
+        "octokit.9.1.2.nupkg.sha512",
+        "octokit.nuspec",
+        "octokit.png"
       ]
     },
     "Pharmacist.Common/2.0.8": {
@@ -6196,6 +6223,7 @@
       "ModernWpfUI >= 0.9.6",
       "NodeNetwork >= 6.0.0",
       "NodeNetworkToolkit >= 6.0.0",
+      "Octokit >= 9.1.2",
       "SharpZipLib >= 1.4.2",
       "WindowsAPICodePack-Shell >= 1.1.1",
       "WpfAnimatedGif >= 2.0.2"
@@ -6274,6 +6302,10 @@
           "NodeNetworkToolkit": {
             "target": "Package",
             "version": "[6.0.0, )"
+          },
+          "Octokit": {
+            "target": "Package",
+            "version": "[9.1.2, )"
           },
           "SharpZipLib": {
             "target": "Package",

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SvpVbB1QCenNyTk+NsjOP+VuCG8c90oDY3t7l0c//IbmcVUidVwuv9Lr9Zio9fPpVzwIO3bJCO1HjWxYNHc0hA==",
+  "dgSpecHash": "Q5wixku/IwzOqKuO1uZ6HxvOH75n4397pPd2ppW20vydGeiitsk5CxrIh9/g8owKK+/pAUImNuUPGpiYf+WPYg==",
   "success": true,
   "projectFilePath": "E:\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
   "expectedPackageFiles": [
@@ -21,6 +21,7 @@
     "C:\\Users\\user\\.nuget\\packages\\modernwpfui\\0.9.6\\modernwpfui.0.9.6.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\nodenetwork\\6.0.0\\nodenetwork.6.0.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\nodenetworktoolkit\\6.0.0\\nodenetworktoolkit.6.0.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\octokit\\9.1.2\\octokit.9.1.2.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\pharmacist.common\\2.0.8\\pharmacist.common.2.0.8.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\reactiveui\\13.2.18\\reactiveui.13.2.18.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\reactiveui.events.wpf\\13.2.18\\reactiveui.events.wpf.13.2.18.nupkg.sha512",

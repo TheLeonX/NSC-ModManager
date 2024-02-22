@@ -540,3 +540,4 @@ E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\Defaul
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\charsel — копия.gfx
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccPostEffect_dx11.nsh
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccPostEffect_dx11_S2.nsh
+E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\Octokit.dll

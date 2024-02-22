@@ -12,13 +12,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using Octokit;
 
 namespace NSC_ModManager.ViewModel {
     public class TitleViewModel : INotifyPropertyChanged {
@@ -428,8 +429,29 @@ namespace NSC_ModManager.ViewModel {
             CPKList = new ObservableCollection<string>();
             ShaderList = new ObservableCollection<string>();
             RefreshModList();
+            CheckGitHubNewerVersion();
         }
+        private async System.Threading.Tasks.Task CheckGitHubNewerVersion() {
+            //Get all releases from GitHub
+            //Source: https://octokitnet.readthedocs.io/en/latest/getting-started/
+            GitHubClient client = new GitHubClient(new Octokit.ProductHeaderValue("NSC-ModManager"));
+            IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("TheLeonX", "NSC-ModManager");
 
+            //Setup the versions
+            //Source: https://learn.microsoft.com/en-us/archive/msdn-technet-forums/7fe34424-0a53-46cb-b4b3-ab63b0823d01
+            Version latestGitHubVersion = new Version(releases[0].TagName);
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            Version localVersion = assembly.GetName().Version;
+
+            //Compare the Versions
+            //Source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
+            int versionComparison = localVersion.CompareTo(latestGitHubVersion);
+            if (versionComparison < 0) {
+                SystemSounds.Beep.Play();
+                ModernWpf.MessageBox.Show("There is new version of Mod Manager on GitHub page.");
+            }
+
+        }
         public void RefreshModList() {
             ModManagerList.Clear();
             CharacterList.Clear();
@@ -2140,6 +2162,13 @@ namespace NSC_ModManager.ViewModel {
 
         }
 
+        public void VisitGitHubPage() {
+            System.Diagnostics.Process.Start(new ProcessStartInfo {
+                FileName = "https://github.com/TheLeonX/NSC-ModManager/releases",
+                UseShellExecute = true
+            });
+
+        }
         public void SelectRootFolder() {
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
@@ -2422,6 +2451,16 @@ namespace NSC_ModManager.ViewModel {
                   (_rosterEditorCommand = new RelayCommand(obj => {
                       CharacterRosterEditorView s = new CharacterRosterEditorView();
                       s.Show();
+
+                  }));
+            }
+        }
+        private RelayCommand _visitGitHubPage;
+        public RelayCommand VisitGitHubPageCommand {
+            get {
+                return _visitGitHubPage ??
+                  (_visitGitHubPage = new RelayCommand(obj => {
+                      VisitGitHubPage();
 
                   }));
             }

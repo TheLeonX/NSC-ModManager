@@ -9,8 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>white_MM.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.1.3</FileVersion>
+    <AssemblyVersion>1.0.1.4</AssemblyVersion>
+    <FileVersion>1.0.1.4</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.11</Version>
   </PropertyGroup>
@@ -74,6 +74,7 @@
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
+    <PackageReference Include="Octokit" Version="9.1.2" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />

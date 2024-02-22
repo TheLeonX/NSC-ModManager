@@ -657,6 +657,14 @@
           }
         }
       },
+      "Octokit/9.1.2": {
+        "runtime": {
+          "lib/netstandard2.0/Octokit.dll": {
+            "assemblyVersion": "9.1.2.0",
+            "fileVersion": "9.1.2.0"
+          }
+        }
+      },
       "Pharmacist.Common/2.0.8": {
         "dependencies": {
           "System.Reactive": "5.0.0"
@@ -1823,6 +1831,13 @@
       "sha512": "sha512-vM0/q+DXyS6Pcmg6ju5M0bg/JDsBWSwKT/2i9gT8gVTTwd8Iq2LB7yzJbTd7W9goxU6cHdFIbStT0mERAmfD+w==",
       "path": "nodenetworktoolkit/6.0.0",
       "hashPath": "nodenetworktoolkit.6.0.0.nupkg.sha512"
+    },
+    "Octokit/9.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YKh5EYi+b2mV8eafANJkkZKKBCpI2MNPeSCTlKLYWqVGktOn/TBc7NZEcViPMSNw6R+glgmbkOetLc6LuNK5qQ==",
+      "path": "octokit/9.1.2",
+      "hashPath": "octokit.9.1.2.nupkg.sha512"
     },
     "Pharmacist.Common/2.0.8": {
       "type": "package",
