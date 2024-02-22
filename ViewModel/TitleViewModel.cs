@@ -252,7 +252,14 @@ namespace NSC_ModManager.ViewModel {
                 OnPropertyChanged("ModLastUpdate_field");
             }
         }
-
+        private bool _enableMotionBlur_field;
+        public bool EnableMotionBlur_field {
+            get { return _enableMotionBlur_field; }
+            set {
+                _enableMotionBlur_field = value;
+                OnPropertyChanged("EnableMotionBlur_field");
+            }
+        }
 
         private string _modIconPath;
         public string ModIconPath {
@@ -406,6 +413,7 @@ namespace NSC_ModManager.ViewModel {
             ButtonColor_field = Properties.Settings.Default.ButtonColor1;
             TextColor_field = Properties.Settings.Default.TextColor1;
             RootFolderPath_field = Properties.Settings.Default.RootGameFolder; // use "\\\\?\\" for fixing issue with loading files in long paths
+            EnableMotionBlur_field = Properties.Settings.Default.EnableMotionBlur;
             if (File.Exists(Properties.Settings.Default.BackgroundImagePath))
                 BackgroundImagePath_field = Properties.Settings.Default.BackgroundImagePath;
             else {
@@ -1108,18 +1116,15 @@ namespace NSC_ModManager.ViewModel {
                 SupportActionParamViewModel supportActionParam_mod = new SupportActionParamViewModel();
                 if (File.Exists(supportActionParamModPath) && !character_mod.Partner) {
                     supportActionParam_mod.OpenFile(supportActionParamModPath);
-                    if (replace_character) {
-                        for (int i = 0; i < supportActionParam_vanilla.SupportActionParamList.Count; i++) {
-                            if (supportActionParam_vanilla.SupportActionParamList[i].CharacodeID == mod_characodeID) {
-                                supportActionParam_vanilla.SupportActionParamList[i] = supportActionParam_mod.SupportActionParamList[0];
-                                break;
-                            }
+                    for (int i = 0; i < supportActionParam_vanilla.SupportActionParamList.Count; i++) {
+                        if (supportActionParam_vanilla.SupportActionParamList[i].CharacodeID == mod_characodeID) {
+                            supportActionParam_vanilla.SupportActionParamList[i] = supportActionParam_mod.SupportActionParamList[0];
+                            break;
                         }
-                    } else {
-                        SupportActionParamModel supportActionParamEntry = (SupportActionParamModel)supportActionParam_mod.SupportActionParamList[0].Clone();
-                        supportActionParamEntry.CharacodeID = mod_characodeID;
-                        supportActionParam_vanilla.SupportActionParamList.Add(supportActionParamEntry);
                     }
+                    SupportActionParamModel supportActionParamEntry = (SupportActionParamModel)supportActionParam_mod.SupportActionParamList[0].Clone();
+                    supportActionParamEntry.CharacodeID = mod_characodeID;
+                    supportActionParam_vanilla.SupportActionParamList.Add(supportActionParamEntry);
                 }
 
                 /*---------------------------------------NOT REQUIRED FILES-------------------------------------------*/
@@ -1127,29 +1132,18 @@ namespace NSC_ModManager.ViewModel {
                 CostumeBreakParamViewModel costumeBreakParam_mod = new CostumeBreakParamViewModel();
                 if (File.Exists(costumeBreakParamModPath) && !character_mod.Partner) {
                     costumeBreakParam_mod.OpenFile(costumeBreakParamModPath);
-                    if (replace_character) {
-                        if (costumeBreakParam_mod.CostumeBreakParamList.Count > 0) {
-                            //Remove old entries
-                            for (int i = 0; i < costumeBreakParam_vanilla.CostumeBreakParamList.Count; i++) {
-                                if (costumeBreakParam_mod.CostumeBreakParamList[i].CharacodeID == mod_characodeID) {
-                                    costumeBreakParam_vanilla.CostumeBreakParamList.RemoveAt(i);
-                                    i--;
-                                }
-                            }
-                            //Add new entries
-                            for (int i = 0; i < costumeBreakParam_mod.CostumeBreakParamList.Count; i++) {
-                                CostumeBreakParamModel costumeColor_entry = (CostumeBreakParamModel)costumeBreakParam_mod.CostumeBreakParamList[i].Clone();
-                                costumeColor_entry.CharacodeID = mod_characodeID;
-                                costumeBreakParam_vanilla.CostumeBreakParamList.Add(costumeColor_entry);
-                            }
+                    //Remove old entries
+                    for (int i = 0; i < costumeBreakParam_vanilla.CostumeBreakParamList.Count; i++) {
+                        if (costumeBreakParam_mod.CostumeBreakParamList[i].CharacodeID == mod_characodeID) {
+                            costumeBreakParam_vanilla.CostumeBreakParamList.RemoveAt(i);
+                            i--;
                         }
-                    } else {
-                        //Add new entries
-                        for (int i = 0; i < costumeBreakParam_mod.CostumeBreakParamList.Count; i++) {
-                            CostumeBreakParamModel costumeColor_entry = (CostumeBreakParamModel)costumeBreakParam_mod.CostumeBreakParamList[i].Clone();
-                            costumeColor_entry.CharacodeID = mod_characodeID;
-                            costumeBreakParam_vanilla.CostumeBreakParamList.Add(costumeColor_entry);
-                        }
+                    }
+                    //Add new entries
+                    for (int i = 0; i < costumeBreakParam_mod.CostumeBreakParamList.Count; i++) {
+                        CostumeBreakParamModel costumeColor_entry = (CostumeBreakParamModel)costumeBreakParam_mod.CostumeBreakParamList[i].Clone();
+                        costumeColor_entry.CharacodeID = mod_characodeID;
+                        costumeBreakParam_vanilla.CostumeBreakParamList.Add(costumeColor_entry);
                     }
                 }
 
@@ -1157,109 +1151,77 @@ namespace NSC_ModManager.ViewModel {
                 AwakeAuraViewModel awakeeAura_mod = new AwakeAuraViewModel();
                 if (File.Exists(awakeAuraModPath) && !character_mod.Partner) {
                     awakeeAura_mod.OpenFile(awakeAuraModPath);
-                    if (replace_character) {
-                        for (int i = 0; i < awakeAura_vanilla.AwakeAuraList.Count; i++) {
-                            if (awakeAura_vanilla.AwakeAuraList[i].Characode == mod_characode) {
-                                awakeAura_vanilla.AwakeAuraList.RemoveAt(i);
-                                i--;
-                            }
+                    for (int i = 0; i < awakeAura_vanilla.AwakeAuraList.Count; i++) {
+                        if (awakeAura_vanilla.AwakeAuraList[i].Characode == mod_characode) {
+                            awakeAura_vanilla.AwakeAuraList.RemoveAt(i);
+                            i--;
                         }
-                        for (int i = 0; i < awakeeAura_mod.AwakeAuraList.Count; i++) {
-                            awakeAura_vanilla.AwakeAuraList.Add((AwakeAuraModel)awakeeAura_mod.AwakeAuraList[i].Clone());
-                        }
-                    } else {
-                        for (int i = 0; i < awakeeAura_mod.AwakeAuraList.Count; i++) {
-                            awakeAura_vanilla.AwakeAuraList.Add((AwakeAuraModel)awakeeAura_mod.AwakeAuraList[i].Clone());
-                        }
+                    }
+                    for (int i = 0; i < awakeeAura_mod.AwakeAuraList.Count; i++) {
+                        awakeAura_vanilla.AwakeAuraList.Add((AwakeAuraModel)awakeeAura_mod.AwakeAuraList[i].Clone());
                     }
                 }
                 //AppearanceAnm file
                 AppearanceAnmViewModel appearanceAnm_mod = new AppearanceAnmViewModel();
                 if (File.Exists(appearanceAnmModPath) && !character_mod.Partner) {
                     appearanceAnm_mod.OpenFile(appearanceAnmModPath);
-                    if (replace_character) {
-                        for (int i = 0; i < appearanceAnm_vanilla.AppearanceAnmList.Count; i++) {
-                            if (appearanceAnm_vanilla.AppearanceAnmList[i].CharacodeID == mod_characodeID) {
-                                appearanceAnm_vanilla.AppearanceAnmList.RemoveAt(i);
-                                i--;
-                            }
+                    for (int i = 0; i < appearanceAnm_vanilla.AppearanceAnmList.Count; i++) {
+                        if (appearanceAnm_vanilla.AppearanceAnmList[i].CharacodeID == mod_characodeID) {
+                            appearanceAnm_vanilla.AppearanceAnmList.RemoveAt(i);
+                            i--;
                         }
-                        for (int i = 0; i < appearanceAnm_mod.AppearanceAnmList.Count; i++) {
-                            appearanceAnm_vanilla.AppearanceAnmList.Add((AppearanceAnmModel)appearanceAnm_mod.AppearanceAnmList[i].Clone());
-                        }
-                    } else {
-                        for (int i = 0; i < appearanceAnm_mod.AppearanceAnmList.Count; i++) {
-                            AppearanceAnmModel appearanceAnmEntry = (AppearanceAnmModel)appearanceAnm_mod.AppearanceAnmList[i].Clone();
-                            appearanceAnmEntry.CharacodeID = mod_characodeID;
-                            appearanceAnm_vanilla.AppearanceAnmList.Add(appearanceAnmEntry);
-                        }
+                    }
+                    for (int i = 0; i < appearanceAnm_mod.AppearanceAnmList.Count; i++) {
+                        AppearanceAnmModel appearanceAnmEntry = (AppearanceAnmModel)appearanceAnm_mod.AppearanceAnmList[i].Clone();
+                        appearanceAnmEntry.CharacodeID = mod_characodeID;
+                        appearanceAnm_vanilla.AppearanceAnmList.Add(appearanceAnmEntry);
                     }
                 }
                 //afterAttachObject file
                 AfterAttachObjectViewModel afterAttachObject_mod = new AfterAttachObjectViewModel();
                 if (File.Exists(afterAttachObjectModPath) && !character_mod.Partner) {
                     afterAttachObject_mod.OpenFile(afterAttachObjectModPath);
-                    if (replace_character) {
-                        for (int i = 0; i < afterAttachObject_vanilla.AfterAttachObjectList.Count; i++) {
-                            if (baseModel.Contains(afterAttachObject_vanilla.AfterAttachObjectList[i].Characode)
-                                || awakeModel.Contains(afterAttachObject_vanilla.AfterAttachObjectList[i].Characode)
-                                || afterAttachObject_vanilla.AfterAttachObjectList[i].Costume == mod_characode) {
-                                afterAttachObject_vanilla.AfterAttachObjectList.RemoveAt(i);
-                                i--;
-                            }
+                    for (int i = 0; i < afterAttachObject_vanilla.AfterAttachObjectList.Count; i++) {
+                        if (baseModel.Contains(afterAttachObject_vanilla.AfterAttachObjectList[i].Characode)
+                            || awakeModel.Contains(afterAttachObject_vanilla.AfterAttachObjectList[i].Characode)
+                            || afterAttachObject_vanilla.AfterAttachObjectList[i].Costume == mod_characode) {
+                            afterAttachObject_vanilla.AfterAttachObjectList.RemoveAt(i);
+                            i--;
                         }
-                        for (int i = 0; i < afterAttachObject_mod.AfterAttachObjectList.Count; i++) {
-                            afterAttachObject_vanilla.AfterAttachObjectList.Add((AfterAttachObjectModel)afterAttachObject_mod.AfterAttachObjectList[i].Clone());
-                        }
-                    } else {
-                        for (int i = 0; i < afterAttachObject_mod.AfterAttachObjectList.Count; i++) {
-                            afterAttachObject_vanilla.AfterAttachObjectList.Add((AfterAttachObjectModel)afterAttachObject_mod.AfterAttachObjectList[i].Clone());
-                        }
+                    }
+                    for (int i = 0; i < afterAttachObject_mod.AfterAttachObjectList.Count; i++) {
+                        afterAttachObject_vanilla.AfterAttachObjectList.Add((AfterAttachObjectModel)afterAttachObject_mod.AfterAttachObjectList[i].Clone());
                     }
                 }
                 //playerDoubleEffectParam file
                 PlayerDoubleEffectParamViewModel playerDoubleEffectParam_mod = new PlayerDoubleEffectParamViewModel();
                 if (File.Exists(playerDoubleEffectParamModPath) && !character_mod.Partner) {
                     playerDoubleEffectParam_mod.OpenFile(playerDoubleEffectParamModPath);
-                    if (replace_character) {
-                        for (int i = 0; i < playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.Count; i++) {
-                            if (playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList[i].CharacodeID == mod_characodeID) {
-                                playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.RemoveAt(i);
-                                i--;
-                            }
+                    for (int i = 0; i < playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.Count; i++) {
+                        if (playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList[i].CharacodeID == mod_characodeID) {
+                            playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.RemoveAt(i);
+                            i--;
                         }
-                        for (int i = 0; i < playerDoubleEffectParam_mod.PlayerDoubleEffectParamList.Count; i++) {
-                            playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.Add((PlayerDoubleEffectParamModel)playerDoubleEffectParam_mod.PlayerDoubleEffectParamList[i].Clone());
-                        }
-                    } else {
-                        for (int i = 0; i < playerDoubleEffectParam_mod.PlayerDoubleEffectParamList.Count; i++) {
-                            PlayerDoubleEffectParamModel playerDoubleEffectEntry = (PlayerDoubleEffectParamModel)playerDoubleEffectParam_mod.PlayerDoubleEffectParamList[i].Clone();
-                            playerDoubleEffectEntry.CharacodeID = mod_characodeID;
-                            playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.Add(playerDoubleEffectEntry);
-                        }
+                    }
+                    for (int i = 0; i < playerDoubleEffectParam_mod.PlayerDoubleEffectParamList.Count; i++) {
+                        PlayerDoubleEffectParamModel playerDoubleEffectEntry = (PlayerDoubleEffectParamModel)playerDoubleEffectParam_mod.PlayerDoubleEffectParamList[i].Clone();
+                        playerDoubleEffectEntry.CharacodeID = mod_characodeID;
+                        playerDoubleEffectParam_vanilla.PlayerDoubleEffectParamList.Add(playerDoubleEffectEntry);
                     }
                 }
                 //spTypeSupportParam file
                 SpTypeSupportParamViewModel spTypeSupportParam_mod = new SpTypeSupportParamViewModel();
                 if (File.Exists(spTypeSupportParamModPath) && !character_mod.Partner) {
                     spTypeSupportParam_mod.OpenFile(spTypeSupportParamModPath);
-                    if (replace_character) {
-                        for (int i = 0; i < spTypeSupportParam_vanilla.SpTypeSupportParamList.Count; i++) {
-                            if (spTypeSupportParam_vanilla.SpTypeSupportParamList[i].CharacodeID == mod_characodeID) {
-                                spTypeSupportParam_vanilla.SpTypeSupportParamList.RemoveAt(i);
-                                break;
-                            }
-                        }
-                        for (int i = 0; i < spTypeSupportParam_mod.SpTypeSupportParamList.Count; i++) {
-                            spTypeSupportParam_vanilla.SpTypeSupportParamList.Add((SpTypeSupportParamModel)spTypeSupportParam_mod.SpTypeSupportParamList[i].Clone());
-                        }
-                    } else {
-                        for (int i = 0; i < spTypeSupportParam_mod.SpTypeSupportParamList.Count; i++) {
-                            SpTypeSupportParamModel spTypeSupportParamEntry = (SpTypeSupportParamModel)spTypeSupportParam_mod.SpTypeSupportParamList[i].Clone();
-                            spTypeSupportParamEntry.CharacodeID = mod_characodeID;
-                            spTypeSupportParam_vanilla.SpTypeSupportParamList.Add(spTypeSupportParamEntry);
+                    for (int i = 0; i < spTypeSupportParam_vanilla.SpTypeSupportParamList.Count; i++) {
+                        if (spTypeSupportParam_vanilla.SpTypeSupportParamList[i].CharacodeID == mod_characodeID) {
+                            spTypeSupportParam_vanilla.SpTypeSupportParamList.RemoveAt(i);
+                            break;
                         }
                     }
+                    SpTypeSupportParamModel spTypeSupportParamEntry = (SpTypeSupportParamModel)spTypeSupportParam_mod.SpTypeSupportParamList[0].Clone();
+                    spTypeSupportParamEntry.CharacodeID = mod_characodeID;
+                    spTypeSupportParam_vanilla.SpTypeSupportParamList.Add(spTypeSupportParamEntry);
                 }
 
                 //specialCondParam file
@@ -1649,13 +1611,13 @@ namespace NSC_ModManager.ViewModel {
             }
 
             string param_modmanager_path = root_folder + "\\param_files\\";
+            byte[] nuccMaterialFile = File.ReadAllBytes(nuccMaterialDx11Path); // This function reading all bytes from nuccMaterial_dx11 file
             foreach (ModManagerModel mod in ModManagerList) {
 
                 if (mod.EnableMod) {
                     DirectoryInfo mod_d = new DirectoryInfo(mod.ModFolder);
                     //save shaders
                     FileInfo[] shaderList = mod_d.GetFiles("*.hlsl", SearchOption.AllDirectories);
-                    byte[] nuccMaterialFile = File.ReadAllBytes(nuccMaterialDx11Path); // This function reading all bytes from nuccMaterial_dx11 file
                     int ShaderCount = BinaryReader.b_ReadInt16(nuccMaterialFile, 0x0E);
                     List<string> UsedShaders = new List<string>();
                     foreach (FileInfo shader in shaderList) {
@@ -1669,8 +1631,7 @@ namespace NSC_ModManager.ViewModel {
                     }
                     nuccMaterialFile = BinaryReader.b_ReplaceBytes(nuccMaterialFile, BitConverter.GetBytes((short)ShaderCount), 0x0E, 0); //Replacing byte of shader's count
                     nuccMaterialFile = BinaryReader.b_ReplaceBytes(nuccMaterialFile, BitConverter.GetBytes(nuccMaterialFile.Length), 0x04, 0); //Replacing size bytes of nuccMaterial_dx11 file
-                    File.WriteAllBytes(root_folder +"\\data\\system\\nuccMaterial_dx11.nsh", nuccMaterialFile);
-
+                    
                     //unpack CPKs
                     if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\"))
                         Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\");
@@ -1693,6 +1654,7 @@ namespace NSC_ModManager.ViewModel {
 
                 }
             }
+            File.WriteAllBytes(root_folder + "\\data\\system\\nuccMaterial_dx11.nsh", nuccMaterialFile);
 
             //charsel.gfx - dont really need to be changed with updates
             byte[] charsel_gfx = File.ReadAllBytes(charselGfxPath);
@@ -2079,6 +2041,11 @@ namespace NSC_ModManager.ViewModel {
                         File.Copy(appFolder + "\\ParamFiles\\charsel.gfx", rootFolder + "\\charsel\\charsel.gfx", true);
                         File.Copy(appFolder + "\\ParamFiles\\charicon_s.gfx", rootFolder + "\\charicon_s\\charicon_s.gfx", true);
                         File.Copy(appFolder + "\\ParamFiles\\nuccMaterial_dx11.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccMaterial_dx11.nsh", true);
+                        
+                        if (Properties.Settings.Default.EnableMotionBlur)
+                            File.Copy(appFolder + "\\ParamFiles\\nuccPostEffect_dx11_S2.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccPostEffect_dx11.nsh", true);
+                        else
+                            File.Copy(appFolder + "\\ParamFiles\\nuccPostEffect_dx11.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccPostEffect_dx11.nsh", true);
 
                         if (OpenMessage)
                             ModernWpf.MessageBox.Show("Game was cleaned!");
@@ -2112,6 +2079,8 @@ namespace NSC_ModManager.ViewModel {
             Properties.Settings.Default.ButtonColor1 = ButtonColor_field;
             Properties.Settings.Default.TextColor1 = TextColor_field;
             Properties.Settings.Default.RootGameFolder = RootFolderPath_field;
+            Properties.Settings.Default.EnableMotionBlur = EnableMotionBlur_field;
+
             if (File.Exists(BackgroundImagePath_field)) {
                 Properties.Settings.Default.BackgroundImagePath = BackgroundImagePath_field;
                 restart = true;

@@ -538,3 +538,5 @@ E:\Desktop\C# Projects\NSC-ModManager\obj\Debug\net7.0-windows\NSC-ModManager.pd
 E:\Desktop\C# Projects\NSC-ModManager\obj\Debug\net7.0-windows\ref\NSC-ModManager.dll
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\DefaultIcons\s_test_charicon_s.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\charsel — копия.gfx
+E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccPostEffect_dx11.nsh
+E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccPostEffect_dx11_S2.nsh

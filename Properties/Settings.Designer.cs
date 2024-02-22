@@ -106,5 +106,17 @@ namespace NSC_ModManager.Properties {
                 this["RootGameFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableMotionBlur {
+            get {
+                return ((bool)(this["EnableMotionBlur"]));
+            }
+            set {
+                this["EnableMotionBlur"] = value;
+            }
+        }
     }
 }

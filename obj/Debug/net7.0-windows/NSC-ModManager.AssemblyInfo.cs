@@ -13,7 +13,7 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("TheLeonX")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.1.3")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.11")]
 [assembly: System.Reflection.AssemblyProductAttribute("NSC-ModManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NSC-ModManager")]

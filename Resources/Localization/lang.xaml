@@ -39,6 +39,9 @@
     <v:String x:Key="m_option011">Font Color</v:String>
     <v:String x:Key="m_option012">Select Root Folder</v:String>
     <v:String x:Key="m_option013">Root Folder</v:String>
+    <v:String x:Key="m_option014">S2 Motion Blur</v:String>
+    <v:String x:Key="m_option015">Enabled</v:String>
+    <v:String x:Key="m_option016">Disabled</v:String>
 
     <!--Roster Editor-->
     <v:String x:Key="m_rosterEditor">Character Roster Editor</v:String>

@@ -197,7 +197,9 @@
                         <Button Command="{Binding SelectRootFolderCommand}" Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="14" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14">
                             <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_option012}"/>
                         </Button>
-                        
+                        <Label Grid.Column="1"  Grid.Row="16" HorizontalAlignment="Left" VerticalAlignment="Center"  FontFamily="{StaticResource NarutoFont}" Content="{DynamicResource m_option014}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="10"/>
+                        <ui:ToggleSwitch Grid.Column="1" Grid.Row="17" Grid.ColumnSpan="1" IsOn="{Binding EnableMotionBlur_field}" OffContent="{DynamicResource m_option016}" OnContent="{DynamicResource m_option015}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontFamily="{StaticResource NarutoFont}"/>
+
                         <Border Grid.ColumnSpan="40" Grid.RowSpan="40" BorderBrush="White" BorderThickness="2,2,2,2"/>
                         <Button Command="{Binding SaveSettingsCommand}" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="34" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Background="{DynamicResource Toolbox_button_background_color_2}" BorderBrush="{DynamicResource Toolbox_button_border_color_2}" FontFamily="{StaticResource NarutoFont}" Foreground="{DynamicResource Toolbox_button_text_color_1}" FontSize="14">
                             <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Center" TextAlignment="Center" Text="{DynamicResource m_option004}"/>
