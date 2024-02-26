@@ -9,8 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>white_MM.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
-    <AssemblyVersion>1.0.1.4</AssemblyVersion>
-    <FileVersion>1.0.1.4</FileVersion>
+    <AssemblyVersion>1.0.1.5</AssemblyVersion>
+    <FileVersion>1.0.1.5</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.11</Version>
   </PropertyGroup>
@@ -68,8 +68,6 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.1" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Windows.Compatibility.Shims" Version="2.0.1" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.2" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />

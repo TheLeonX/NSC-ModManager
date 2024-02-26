@@ -546,6 +546,7 @@ namespace NSC_ModManager.ViewModel {
         }
 
         async void CompileModAsyncProcess(string root_folder) {
+
             try {
                 await Task.Run(() => CompileModProcess(root_folder));
                 LoadingStatePlay = Visibility.Hidden;
@@ -1634,6 +1635,9 @@ namespace NSC_ModManager.ViewModel {
 
             string param_modmanager_path = root_folder + "\\param_files\\";
             byte[] nuccMaterialFile = File.ReadAllBytes(nuccMaterialDx11Path); // This function reading all bytes from nuccMaterial_dx11 file
+                                                                               //unpack CPKs
+            if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\"))
+                Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\");
             foreach (ModManagerModel mod in ModManagerList) {
 
                 if (mod.EnableMod) {
@@ -1654,9 +1658,6 @@ namespace NSC_ModManager.ViewModel {
                     nuccMaterialFile = BinaryReader.b_ReplaceBytes(nuccMaterialFile, BitConverter.GetBytes((short)ShaderCount), 0x0E, 0); //Replacing byte of shader's count
                     nuccMaterialFile = BinaryReader.b_ReplaceBytes(nuccMaterialFile, BitConverter.GetBytes(nuccMaterialFile.Length), 0x04, 0); //Replacing size bytes of nuccMaterial_dx11 file
                     
-                    //unpack CPKs
-                    if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\"))
-                        Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\");
                     FileInfo[] cpkList = mod_d.GetFiles("*.cpk", SearchOption.AllDirectories);
 
                     foreach (FileInfo cpk in cpkList) {
@@ -1680,9 +1681,9 @@ namespace NSC_ModManager.ViewModel {
 
             //charsel.gfx - dont really need to be changed with updates
             byte[] charsel_gfx = File.ReadAllBytes(charselGfxPath);
-            int charsel_offset_1 = 0x20C4E; // 8 + 1 + count of pages
-            int charsel_offset_2 = 0x4079F; // 1 + count of pages
-            charsel_gfx[charsel_offset_1] = (byte)(8 + 1 + characterSelectParam_vanilla.MaxPage());
+            //int charsel_offset_1 = 0x21672; // 8 + 1 + count of pages
+            int charsel_offset_2 = 0x419EF; // 1 + count of pages
+            //charsel_gfx[charsel_offset_1] = (byte)(8 + 1 + characterSelectParam_vanilla.MaxPage());
             charsel_gfx[charsel_offset_2] = (byte)(1 + characterSelectParam_vanilla.MaxPage());
             string charsel_updated_path = Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\charsel\\charsel.gfx";
             File.WriteAllBytes(charsel_updated_path, charsel_gfx);
@@ -1945,24 +1946,29 @@ namespace NSC_ModManager.ViewModel {
             KyurutoDialogTextLoader("Removing all trash from root folder and packing everything in CPK archives.",
             20);
             //pack all CPKs
-            if (Directory.EnumerateFiles(@Path.GetFullPath(root_folder + "\\cpk_assets"), "*.*", SearchOption.AllDirectories).Any()) {
-                YaCpkTool.CPK_repack(@Path.GetFullPath(root_folder + "\\cpk_assets"));
-                File.Move(root_folder + "\\cpk_assets.cpk", root_folder + "\\moddingapi\\mods\\base_game\\cpk_assets.cpk");
-                File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\cpk_assets.cpk.info", new byte[4] { 0x20, 0, 0, 0 });
+            if (Directory.Exists(@Path.GetFullPath(root_folder + "\\cpk_assets"))){
+                if (Directory.EnumerateFiles(@Path.GetFullPath(root_folder + "\\cpk_assets"), "*.*", SearchOption.AllDirectories).Any()) {
+                    YaCpkTool.CPK_repack(@Path.GetFullPath(root_folder + "\\cpk_assets"));
+                    File.Move(root_folder + "\\cpk_assets.cpk", root_folder + "\\moddingapi\\mods\\base_game\\cpk_assets.cpk");
+                    File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\cpk_assets.cpk.info", new byte[4] { 0x20, 0, 0, 0 });
+                }
             }
-            if (Directory.EnumerateFiles(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"), "*.*", SearchOption.AllDirectories).Any()) {
+            if (Directory.Exists(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"))){
+                if (Directory.EnumerateFiles(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"), "*.*", SearchOption.AllDirectories).Any()) {
 
-                YaCpkTool.CPK_repack(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"));
-                File.Move(root_folder + "\\data_win32_modmanager.cpk", root_folder + "\\moddingapi\\mods\\base_game\\data_win32_modmanager.cpk");
-                File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\data_win32_modmanager.cpk.info", new byte[4] { 0x21, 0, 0, 0 });
+                    YaCpkTool.CPK_repack(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"));
+                    File.Move(root_folder + "\\data_win32_modmanager.cpk", root_folder + "\\moddingapi\\mods\\base_game\\data_win32_modmanager.cpk");
+                    File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\data_win32_modmanager.cpk.info", new byte[4] { 0x21, 0, 0, 0 });
+                }
             }
-            if (Directory.EnumerateFiles(@Path.GetFullPath(param_modmanager_path), "*.*", SearchOption.AllDirectories).Any()) {
+            if (Directory.Exists(@Path.GetFullPath(param_modmanager_path))){
+                if (Directory.EnumerateFiles(@Path.GetFullPath(param_modmanager_path), "*.*", SearchOption.AllDirectories).Any()) {
 
-                YaCpkTool.CPK_repack(@Path.GetFullPath(param_modmanager_path));
-                File.Move(param_modmanager_path+".cpk", root_folder + "\\moddingapi\\mods\\base_game\\param_files.cpk");
-                File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\param_files.cpk.info", new byte[4] { 0x22, 0, 0, 0 });
+                    YaCpkTool.CPK_repack(@Path.GetFullPath(param_modmanager_path));
+                    File.Move(param_modmanager_path + ".cpk", root_folder + "\\moddingapi\\mods\\base_game\\param_files.cpk");
+                    File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\param_files.cpk.info", new byte[4] { 0x22, 0, 0, 0 });
+                }
             }
-
             if (Directory.Exists(root_folder + "\\cpk_assets"))
                 Directory.Delete(root_folder + "\\cpk_assets", true);
             if (Directory.Exists(root_folder + "\\data_win32_modmanager"))

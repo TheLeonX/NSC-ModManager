@@ -95,7 +95,7 @@ namespace NSC_ModManager.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.0.1.4;component/view/characterrostereditorview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.0.1.5;component/view/characterrostereditorview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\View\CharacterRosterEditorView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
