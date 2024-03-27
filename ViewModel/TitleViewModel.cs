@@ -1708,12 +1708,12 @@ namespace NSC_ModManager.ViewModel {
             //charicon_s.gfx
             byte[] charicon_s_filebytes = File.ReadAllBytes(chariconGfxPath);
             string charicon_s_updated_path = Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\charicon_s\\charicon_s.gfx";
-            byte[] charicon_s_header = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0, 0xCA);
-            byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCA, 0x4348);
-            byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x4412, 0x11D7);
-            byte[] charicon_s_end = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x55E9, 0x150EC); //0x08,0x15,0x7D,0x1503E - change counts!
+            byte[] charicon_s_header = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0, 0xCC);
+            byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCC, 0x441D);
+            byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x44E9, 0x11EA);
+            byte[] charicon_s_end = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x56D3, 0x150EC); //0x08,0x15,0x7D,0x1503E - change counts!
             byte[] charicon_s_newFile = new byte[0];
-            int icon_count = 0x1BE;
+            int icon_count = 0x1C4;
             int icon_count2 = 0xE3;
             int external_image_count = 5;
             for (int i = 0; i < CharselIconNamesList.Count; i++) {

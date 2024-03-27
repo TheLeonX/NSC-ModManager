@@ -33,11 +33,9 @@ E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\messag
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\kokr\messageInfo.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\pol\messageInfo.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\por\messageInfo.bin.xfbin
-E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\prohibitedSubstringParam.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\rus\messageInfo.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\spa\messageInfo.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\thth\messageInfo.bin.xfbin
-E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\whitelistSubstringParam.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\message\WIN64\zhcn\messageInfo.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccMaterial_dx11.nsh
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\OugiFinishParam.bin.xfbin
@@ -434,3 +432,4 @@ E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\Defaul
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccPostEffect_dx11.nsh
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\nuccPostEffect_dx11_S2.nsh
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\Octokit.dll
+E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\Resources\Styles\UI\charsel_icons\9ish00.png
