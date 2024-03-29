@@ -1295,26 +1295,33 @@ namespace NSC_ModManager.ViewModel {
                     messageInfoModified = true;
 
                 }
+                ////damageprm file
+                //DamagePrmViewModel damageprm_mod = new DamagePrmViewModel();
+                //if (File.Exists(damageprmModPath)) {
+                //    damageprm_mod.OpenFile(damageprmModPath);
+                //    for (int c = 0; c < damageprm_mod.DamagePrmList.Count; c++) {
+                //        for (int i = 0; i < damageprm_vanilla.DamagePrmList.Count; i++) {
+                //            string vanilla_name = BinaryReader.b_ReadString(damageprm_vanilla.DamagePrmList[i].Data, 0);
+                //            string mod_name = BinaryReader.b_ReadString(damageprm_mod.DamagePrmList[c].Data, 0);
+                //            if (vanilla_name == mod_name) {
+                //                damageprm_vanilla.DamagePrmList[i] = (DamagePrmModel)damageprm_mod.DamagePrmList[c].Clone();
+                //                damageprm_mod.DamagePrmList.RemoveAt(c);
+                //                c--;
+                //            }
+                //        }
+                //    }
+                //    for (int i = 0; i < damageprm_mod.DamagePrmList.Count; i++) {
+                //        damageprm_vanilla.DamagePrmList.Add((DamagePrmModel)damageprm_mod.DamagePrmList[i].Clone());
+                //    }
+                //}
                 //damageprm file
                 DamagePrmViewModel damageprm_mod = new DamagePrmViewModel();
                 if (File.Exists(damageprmModPath)) {
                     damageprm_mod.OpenFile(damageprmModPath);
-                    for (int c = 0; c < damageprm_mod.DamagePrmList.Count; c++) {
-                        for (int i = 0; i < damageprm_vanilla.DamagePrmList.Count; i++) {
-                            string vanilla_name = BinaryReader.b_ReadString(damageprm_vanilla.DamagePrmList[i].Data, 0);
-                            string mod_name = BinaryReader.b_ReadString(damageprm_mod.DamagePrmList[c].Data, 0);
-                            if (vanilla_name == mod_name) {
-                                damageprm_vanilla.DamagePrmList[i] = (DamagePrmModel)damageprm_mod.DamagePrmList[c].Clone();
-                                damageprm_mod.DamagePrmList.RemoveAt(c);
-                                c--;
-                            }
-                        }
-                    }
                     for (int i = 0; i < damageprm_mod.DamagePrmList.Count; i++) {
                         damageprm_vanilla.DamagePrmList.Add((DamagePrmModel)damageprm_mod.DamagePrmList[i].Clone());
                     }
                 }
-
 
                 //prm
                 PRMEditorViewModel prm_mod = new PRMEditorViewModel();
