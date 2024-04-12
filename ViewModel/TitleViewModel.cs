@@ -516,7 +516,7 @@ namespace NSC_ModManager.ViewModel {
                             CostumeModModel CostumeEntry = new CostumeModModel() {
                                 Characode = CostumeInfo.Read("Characode", "ModManager"),
                                 BaseCostume = CostumeInfo.Read("BaseModel", "ModManager"),
-                                AwakeCostume = ModInfo.Read("AwakeModel", "ModManager"),
+                                AwakeCostume = CostumeInfo.Read("AwakeModel", "ModManager"),
                                 RootPath = Path.GetDirectoryName(costume_path.FullName)
                             };
                             CostumeList.Add(CostumeEntry);
