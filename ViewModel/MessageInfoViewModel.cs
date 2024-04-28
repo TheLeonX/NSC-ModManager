@@ -1043,20 +1043,20 @@ namespace NSC_ModManager.ViewModel
                 file.Add(0);
             }
 
-            List<int> MainTextPointer = new List<int>();
-            List<int> SecondaryTextPointer = new List<int>();
             List<int> SpeakerTextPointer = new List<int>();
+            List<int> SecondaryTextPointer = new List<int>();
+            List<int> MainTextPointer = new List<int>();
+
 
             for (int x2 = 0; x2 < MessageInfo_List[ListIndex].Count; x2++) {
-                MainTextPointer.Add(file.Count);
-                int nameLength3 = MessageInfo_List[ListIndex][x2].MainText.Length;
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].MainText) != "") {
+                SpeakerTextPointer.Add(file.Count);
+                int nameLength3 = MessageInfo_List[ListIndex][x2].Speaker.Length;
+                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].Speaker) != "") {
                     for (int a17 = 0; a17 < nameLength3; a17++) {
-                        file.Add(MessageInfo_List[ListIndex][x2].MainText[a17]);
+                        file.Add(MessageInfo_List[ListIndex][x2].Speaker[a17]);
                     }
                     file.Add(0);
                 }
-
                 SecondaryTextPointer.Add(file.Count);
                 nameLength3 = MessageInfo_List[ListIndex][x2].SecondaryText.Length;
                 if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].SecondaryText) != "") {
@@ -1065,30 +1065,35 @@ namespace NSC_ModManager.ViewModel
                     }
                     file.Add(0);
                 }
-                SpeakerTextPointer.Add(file.Count);
-                nameLength3 = MessageInfo_List[ListIndex][x2].Speaker.Length;
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].Speaker) != "") {
+                MainTextPointer.Add(file.Count);
+                nameLength3 = MessageInfo_List[ListIndex][x2].MainText.Length;
+                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].MainText) != "") {
                     for (int a17 = 0; a17 < nameLength3; a17++) {
-                        file.Add(MessageInfo_List[ListIndex][x2].Speaker[a17]);
+                        file.Add(MessageInfo_List[ListIndex][x2].MainText[a17]);
                     }
                     file.Add(0);
                 }
-                int newPointer3 = MainTextPointer[x2] - 0x30 * x2 - 0x18;
-                byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
-                for (int a7 = 0; a7 < 4; a7++) {
-                    file[0x30 * x2 + 0x18 + a7] = ptrBytes3[a7];
+                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].Speaker) != "") {
+                    int newPointer3 = SpeakerTextPointer[x2] - 0x30 * x2 - 0x08;
+                    byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
+                    for (int a7 = 0; a7 < 4; a7++) {
+                        file[0x30 * x2 + 0x08 + a7] = ptrBytes3[a7];
+                    }
                 }
-                newPointer3 = SecondaryTextPointer[x2] - 0x30 * x2 - 0x10;
-                ptrBytes3 = BitConverter.GetBytes(newPointer3);
-                for (int a7 = 0; a7 < 4; a7++) {
-                    file[0x30 * x2 + 0x10 + a7] = ptrBytes3[a7];
+                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].SecondaryText) != "") {
+                    int newPointer3 = SecondaryTextPointer[x2] - 0x30 * x2 - 0x10;
+                    byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
+                    for (int a7 = 0; a7 < 4; a7++) {
+                        file[0x30 * x2 + 0x10 + a7] = ptrBytes3[a7];
+                    }
                 }
-                newPointer3 = SpeakerTextPointer[x2] - 0x30 * x2 - 0x08;
-                ptrBytes3 = BitConverter.GetBytes(newPointer3);
-                for (int a7 = 0; a7 < 4; a7++) {
-                    file[0x30 * x2 + 0x08 + a7] = ptrBytes3[a7];
+                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].MainText) != "") {
+                    int newPointer3 = MainTextPointer[x2] - 0x30 * x2 - 0x18;
+                    byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
+                    for (int a7 = 0; a7 < 4; a7++) {
+                        file[0x30 * x2 + 0x18 + a7] = ptrBytes3[a7];
+                    }
                 }
-
 
 
 
