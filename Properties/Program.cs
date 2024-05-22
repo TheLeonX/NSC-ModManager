@@ -136,6 +136,7 @@ namespace NSC_ModManager.Properties {
             //Copy all the files & Replaces any files with the same name
             foreach (string newPath in Directory.GetFiles(sourcePath, "*.xfbin", SearchOption.AllDirectories)) {
                 if (!newPath.Contains("characode") &&
+                    !newPath.Contains("damageprm") &&
                     !newPath.Contains("duelPlayerParam") &&
                     !newPath.Contains("playerSettingParam") &&
                     !newPath.Contains("skillCustomizeParam") &&

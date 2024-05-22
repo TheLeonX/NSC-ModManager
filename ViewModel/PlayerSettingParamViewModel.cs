@@ -324,6 +324,18 @@ namespace NSC_ModManager.ViewModel
                 return 0;
         }
 
+        public int MaxSlot() {
+            if (PlayerSettingParamList.Count > 0) {
+                List<int> PSP_ID_List = new List<int>();
+                for (int c = 0; c < PlayerSettingParamList.Count; c++) {
+                    PSP_ID_List.Add(PlayerSettingParamList[c].PSP_ID);
+                }
+               
+                return PSP_ID_List.Max();
+            } else
+                return 0;
+        }
+
         public void AddDupEntry() {
             PlayerSettingParamModel PSP_entry = new PlayerSettingParamModel();
             if (SelectedPSP is not null) {

@@ -671,6 +671,8 @@ namespace NSC_ModManager.ViewModel {
                     CharselLoadedIconsList.Add(playerIcon_vanilla.playerIconList[i].BaseIcon);
                 }
             }
+            int PSP_counter = 1;
+
             //Compile Character mods
             foreach (CharacterModModel character_mod in CharacterList) {
                 string mod_characode = character_mod.Characode;
@@ -742,12 +744,16 @@ namespace NSC_ModManager.ViewModel {
                             continue;
                         }
                     }
+
                     //Add new code of character (leader/partner) into characode file
                     CharacodeEditorModel characode_entry = new CharacodeEditorModel();
                     characode_entry.CharacodeName = mod_characode;
                     mod_characodeID = characode_vanilla.CharacodeList.Count + 1;
                     characode_entry.CharacodeIndex = mod_characodeID;
                     characode_vanilla.CharacodeList.Add(characode_entry);
+
+                    
+
                 }
                 /*---------------------------------------REQUIRED FILES-------------------------------------------*/
                 //duelPlayerParam file
@@ -803,8 +809,8 @@ namespace NSC_ModManager.ViewModel {
                                 if (i == 0)
                                     charMessageID = psp_entry.CharacterNameMessageID;
                                 psp_entry.CharacodeID = mod_characodeID;
-                                psp_entry.PSP_ID = playerSettingParam_vanilla.FreeSlot();
-                                AddedPresetIds.Add(playerSettingParam_vanilla.FreeSlot());
+                                psp_entry.PSP_ID = playerSettingParam_vanilla.MaxSlot() + i + 1;
+                                AddedPresetIds.Add(playerSettingParam_vanilla.MaxSlot() + i + 1);
                                 if (psp_entry.ReferenceCharacodeID > characode_count) {
                                     psp_entry.ReferenceCharacodeID = mod_characodeID;
                                     psp_entry.Unk = 1;
@@ -820,10 +826,10 @@ namespace NSC_ModManager.ViewModel {
                         for (int i = 0; i < playerSettingParam_mod.PlayerSettingParamList.Count; i++) {
                             PlayerSettingParamModel psp_entry = (PlayerSettingParamModel)playerSettingParam_mod.PlayerSettingParamList[i].Clone();
                             psp_entry.CharacodeID = mod_characodeID;
-                            psp_entry.PSP_ID = playerSettingParam_vanilla.FreeSlot();
+                            psp_entry.PSP_ID = playerSettingParam_vanilla.MaxSlot() + i+1;
                             if (i == 0)
                                 charMessageID = psp_entry.CharacterNameMessageID;
-                            AddedPresetIds.Add(playerSettingParam_vanilla.FreeSlot());
+                            AddedPresetIds.Add(playerSettingParam_vanilla.MaxSlot() + i + 1);
                             if (psp_entry.ReferenceCharacodeID > characode_count) {
                                 psp_entry.ReferenceCharacodeID = mod_characodeID;
                                 psp_entry.Unk = 1;
@@ -1521,9 +1527,9 @@ namespace NSC_ModManager.ViewModel {
                     playerSettingParam_mod.OpenFile(playerSettingParamModPath);
                     PlayerSettingParamModel psp_entry = (PlayerSettingParamModel)playerSettingParam_mod.PlayerSettingParamList[0].Clone();
                     psp_entry.CharacodeID = mod_characodeID;
-                    psp_entry.PSP_ID = playerSettingParam_vanilla.FreeSlot();
+                    psp_entry.PSP_ID = playerSettingParam_vanilla.MaxSlot()+1;
                     charMessageID = psp_entry.CharacterNameMessageID;
-                    new_preset_id = playerSettingParam_vanilla.FreeSlot();
+                    new_preset_id = playerSettingParam_vanilla.MaxSlot() + 1;
                     psp_entry.MainPSP_ID = main_psp_id;
                     psp_entry.CostumeID = costume_index;
                     playerSettingParam_vanilla.PlayerSettingParamList.Add(psp_entry);
