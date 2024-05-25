@@ -137,6 +137,14 @@ namespace NSC_ModManager.Model
                 OnPropertyChanged("EnableNearestGroundPos");
             }
         }
+        private int _unk4;
+        public int Unk4 {
+            get { return _unk4; }
+            set {
+                _unk4 = value;
+                OnPropertyChanged("Unk4");
+            }
+        }
         public object Clone() {
             return new PlayerDoubleEffectParamModel {
                 CharacodeID = this.CharacodeID,
@@ -154,7 +162,8 @@ namespace NSC_ModManager.Model
                 SoundID = this.SoundID,
                 Unk2 = this.Unk2,
                 Unk3 = this.Unk3,
-                EnableNearestGroundPos = this.EnableNearestGroundPos
+                EnableNearestGroundPos = this.EnableNearestGroundPos,
+                Unk4 = this.Unk4
             };
         }
         public event PropertyChangedEventHandler PropertyChanged;
