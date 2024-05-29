@@ -81,7 +81,7 @@ namespace NSC_ModManager {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.0.5.0;component/view/titleview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.1.0.0;component/view/titleview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\View\TitleView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

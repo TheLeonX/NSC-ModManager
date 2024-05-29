@@ -5,7 +5,6 @@ E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\appear
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\awakeAura.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\characode.bin.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\characterSelectParam.xfbin
-E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\characterSelectParam_vanilla.xfbin
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\charicon_s.gfx
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\charsel.gfx
 E:\Desktop\C# Projects\NSC-ModManager\bin\Debug\net7.0-windows\ParamFiles\cmnparam.xfbin
