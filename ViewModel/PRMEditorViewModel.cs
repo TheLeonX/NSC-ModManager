@@ -1887,8 +1887,8 @@ namespace NSC_ModManager.ViewModel
                 for (int c = 0; c < VerList[i].PL_ANM_Sections.Count; c++) {
                     int _ptr = 0;
                     byte[] copyBytes = new byte[0xD4];
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_current_name, _ptr);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_animation, _ptr + 0x20);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_current_name ?? "EMPTY", _ptr);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_animation ?? "EMPTY", _ptr + 0x20);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList.Count), _ptr + 0x50);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].Interpolation), _ptr + 0x54);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].Type), _ptr + 0x56);
@@ -1904,19 +1904,19 @@ namespace NSC_ModManager.ViewModel
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].Press_start), _ptr + 0x6E);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].Press_end), _ptr + 0x70);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].Trigger_condition_2), _ptr + 0x72);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_previous_name, _ptr + 0x74);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_next_name, _ptr + 0x94);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_DMG_name, _ptr + 0xB4);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_previous_name ?? "", _ptr + 0x74);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_next_name ?? "", _ptr + 0x94);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].PL_ANM_DMG_name ?? "", _ptr + 0xB4);
                     _ptr += 0xD4;
 
                     for (int func = 0; func < VerList[i].PL_ANM_Sections[c].FunctionList.Count; func++) {
                         bool dmg_entry = false;
                         copyBytes = BinaryReader.b_AddBytes(copyBytes, new byte[0x40]);
-                        if (VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageCode != "") {
+                        if ((VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageCode ?? "") != "") {
                             dmg_entry = true;
                             copyBytes = BinaryReader.b_AddBytes(copyBytes, new byte[0x60]);
                         }
-                        copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].FunctionList[func].StringParam, _ptr);
+                        copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].FunctionList[func].StringParam ?? "", _ptr);
                         copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].FunctionTiming), _ptr + 0x20);
                         copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].FunctionID), _ptr + 0x22);
                         copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].FunctionParam1), _ptr + 0x24);
@@ -1924,7 +1924,7 @@ namespace NSC_ModManager.ViewModel
                         copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].FunctionParam3), _ptr + 0x28);
                         copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].FunctionParam4), _ptr + 0x2C);
                         if (dmg_entry) {
-                            copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageCode, _ptr + 0x40);
+                            copyBytes = BinaryReader.b_ReplaceString(copyBytes, VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageCode ?? "", _ptr + 0x40);
                             copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageHitEffectID), _ptr + 0x82);
                             copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageHitSoundID), _ptr + 0x84);
                             copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(VerList[i].PL_ANM_Sections[c].FunctionList[func].DamageCondition), _ptr + 0x86);
@@ -1955,16 +1955,16 @@ namespace NSC_ModManager.ViewModel
                 projectileChunk = BinaryReader.b_AddBytes(projectileChunk, new byte[0x04], 1); //Size 2
                 for (int i = 0; i < ProjectileList.Count; i++) {
                     byte[] copyBytes = new byte[0x80];
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, ProjectileList[i].ProjectileName, 0x00);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, ProjectileList[i].SkillFileName, 0x40);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, ProjectileList[i].SkillEntryName, 0x60);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, ProjectileList[i].ProjectileName ?? "", 0x00);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, ProjectileList[i].SkillFileName ?? "", 0x40);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, ProjectileList[i].SkillEntryName ?? "", 0x60);
                     copyBytes = BinaryReader.b_AddBytes(copyBytes, new byte[1] { ProjectileList[i].Unk });
                     projectileChunk = BinaryReader.b_AddBytes(projectileChunk, copyBytes);
                 }
                 byte[] lastBytes = new byte[0x80];
-                lastBytes = BinaryReader.b_ReplaceString(lastBytes, ProjectileList[ProjectileList.Count - 1].ProjectileName, 0x00);
+                lastBytes = BinaryReader.b_ReplaceString(lastBytes, ProjectileList[ProjectileList.Count - 1].ProjectileName ?? "", 0x00);
                 lastBytes = BinaryReader.b_ReplaceString(lastBytes, "END", 0x40);
-                lastBytes = BinaryReader.b_ReplaceString(lastBytes, ProjectileList[ProjectileList.Count - 1].SkillEntryName, 0x60);
+                lastBytes = BinaryReader.b_ReplaceString(lastBytes, ProjectileList[ProjectileList.Count - 1].SkillEntryName ?? "", 0x60);
                 lastBytes = BinaryReader.b_AddBytes(lastBytes, new byte[1] { 1 });
                 projectileChunk = BinaryReader.b_AddBytes(projectileChunk, lastBytes);
                 projectileChunk = BinaryReader.b_ReplaceBytes(projectileChunk, BitConverter.GetBytes(projectileChunk.Length - 0x0C), 0, 1);
@@ -2010,7 +2010,7 @@ namespace NSC_ModManager.ViewModel
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(CollisionList[i].State), 0x04);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(CollisionList[i].BoneEnabler), 0x08);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(i + 1), 0x0C);
-                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, CollisionList[i].BoneName, 0x10);
+                    copyBytes = BinaryReader.b_ReplaceString(copyBytes, CollisionList[i].BoneName ?? "", 0x10);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(CollisionList[i].HurtboxRadius), 0x50);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(CollisionList[i].Hurtbox_Y_Pos), 0x54);
                     copyBytes = BinaryReader.b_ReplaceBytes(copyBytes, BitConverter.GetBytes(CollisionList[i].Hurtbox_Z_Pos), 0x58);
