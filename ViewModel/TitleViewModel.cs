@@ -556,7 +556,7 @@ namespace NSC_ModManager.ViewModel {
                 //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
             } catch (Exception) {
                 SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process. If itsn't a case, send mod on gitHub and make a report about that issue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.",
             20);
                 LoadingStatePlay = Visibility.Hidden;
@@ -878,7 +878,7 @@ namespace NSC_ModManager.ViewModel {
                         if (costumeParam_mod.CostumeParamList.Count > 0) {
                             //Remove old entries
                             for (int i = 0; i < costumeParam_vanilla.CostumeParamList.Count; i++) {
-                                if (RemovedPresetIds.Contains(costumeParam_mod.CostumeParamList[i].PlayerSettingParamID)) {
+                                if (RemovedPresetIds.Contains(costumeParam_vanilla.CostumeParamList[i].PlayerSettingParamID)) {
                                     costumeParam_vanilla.CostumeParamList.RemoveAt(i);
                                     i--;
                                 }
