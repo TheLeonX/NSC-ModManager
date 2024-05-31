@@ -548,15 +548,16 @@ namespace NSC_ModManager.ViewModel {
         async void CompileModAsyncProcess(string root_folder) {
 
             try {
+                //MessageBox.Show(CharacterList[-1].Characode);
                 await Task.Run(() => CompileModProcess(root_folder));
                 LoadingStatePlay = Visibility.Hidden;
                 KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!",
             20);
                 SystemSounds.Beep.Play();
                 //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
-            } catch (Exception) {
+            } catch (Exception ex) {
                 SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process. If itsn't a case, send mod on gitHub and make a report about that issue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace +" \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.",
             20);
                 LoadingStatePlay = Visibility.Hidden;
@@ -849,7 +850,7 @@ namespace NSC_ModManager.ViewModel {
                         if (costumeBreakColorParam_mod.CostumeBreakColorParamList.Count > 0) {
                             //Remove old entries
                             for (int i = 0; i < costumeBreakColorParam_vanilla.CostumeBreakColorParamList.Count; i++) {
-                                if (RemovedPresetIds.Contains(costumeBreakColorParam_mod.CostumeBreakColorParamList[i].PlayerSettingParamID)) {
+                                if (RemovedPresetIds.Contains(costumeBreakColorParam_vanilla.CostumeBreakColorParamList[i].PlayerSettingParamID)) {
                                     costumeBreakColorParam_vanilla.CostumeBreakColorParamList.RemoveAt(i);
                                     i--;
                                 }
@@ -2000,34 +2001,42 @@ namespace NSC_ModManager.ViewModel {
 
 
         public void InstallMod(string mod_path = "") {
-            if (mod_path == "") {
-                OpenFileDialog myDialog = new OpenFileDialog();
-                myDialog.Filter = "Naruto Storm Connection Mod (*.nsc)|*.nsc";
-                myDialog.CheckFileExists = true;
-                myDialog.Multiselect = false;
-                if (myDialog.ShowDialog() == true) {
-                    mod_path = myDialog.FileName;
-                } else {
-                    return;
+            try {
+                if (mod_path == "") {
+                    OpenFileDialog myDialog = new OpenFileDialog();
+                    myDialog.Filter = "Naruto Storm Connection Mod (*.nsc)|*.nsc";
+                    myDialog.CheckFileExists = true;
+                    myDialog.Multiselect = false;
+                    if (myDialog.ShowDialog() == true) {
+                        mod_path = myDialog.FileName;
+                    } else {
+                        return;
+                    }
                 }
-            }
-            string root_folder = Properties.Settings.Default.RootGameFolder;
-            string modmanager_folder = root_folder + "\\modmanager\\";
-            if (Directory.Exists(root_folder)) {
-                if (!Directory.Exists(modmanager_folder)) {
-                    Directory.CreateDirectory(modmanager_folder);
-                }
-                string InstallMod_folder = modmanager_folder + Path.GetFileNameWithoutExtension(mod_path);
-                if (Directory.Exists(InstallMod_folder)) {
-                    Directory.Delete(InstallMod_folder, true);
-                }
-                Directory.CreateDirectory(InstallMod_folder);
-                System.IO.Compression.ZipFile.ExtractToDirectory(mod_path, @InstallMod_folder);
-                RefreshModList();
+                string root_folder = Properties.Settings.Default.RootGameFolder;
+                string modmanager_folder = root_folder + "\\modmanager\\";
+                if (Directory.Exists(root_folder)) {
+                    if (!Directory.Exists(modmanager_folder)) {
+                        Directory.CreateDirectory(modmanager_folder);
+                    }
+                    string InstallMod_folder = modmanager_folder + Path.GetFileNameWithoutExtension(mod_path);
+                    if (Directory.Exists(InstallMod_folder)) {
+                        Directory.Delete(InstallMod_folder, true);
+                    }
+                    Directory.CreateDirectory(InstallMod_folder);
+                    System.IO.Compression.ZipFile.ExtractToDirectory(mod_path, @InstallMod_folder);
+                    RefreshModList();
 
-            } else {
-                ModernWpf.MessageBox.Show("Select Root folder for game.");
+                } else {
+                    ModernWpf.MessageBox.Show("Select Root folder for game.");
+                }
             }
+            catch(Exception ex) {
+                SystemSounds.Exclamation.Play();
+                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace + " \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            }
+            
         }
 
         public void DeleteMod() {

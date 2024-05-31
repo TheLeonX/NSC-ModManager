@@ -402,9 +402,9 @@ namespace NSC_ModManager.ViewModel
                 
                 fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].CharacodeID), ptr);
                 fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].CostumeID), ptr + 0x04);
-                fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].EnableInAwakening), ptr + 0x14);
-                fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].EnableForClones), ptr + 0x18);
-                fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].CloneCount), ptr + 0x1C);
+                fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].EnableInAwakening), ptr + 0x10);
+                fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].EnableForClones), ptr + 0x14);
+                fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes(CostumeBreakParamList[x].CloneCount), ptr + 0x18);
             }
             fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes((CostumeBreakParamList.Count * 0x20) + 0x14 + addSize), size1_index, 1);
             fileBytes36 = BinaryReader.b_ReplaceBytes(fileBytes36, BitConverter.GetBytes((CostumeBreakParamList.Count * 0x20) + 0x10 + addSize), size2_index, 1);
