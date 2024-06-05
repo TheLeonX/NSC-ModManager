@@ -248,6 +248,20 @@ namespace NSC_ModManager.ViewModel
 
         }
 
+        public bool PSPCodeExists(string psp_code) {
+            bool entry_exist = false;
+            for (int i =0; i<PlayerSettingParamList.Count; i++) {
+                if (PlayerSettingParamList[i].PSP_code == psp_code) {
+                    entry_exist = true;
+                    break;
+                }
+            }
+
+
+
+            return entry_exist;
+        }
+
         public void RemoveEntry() {
             if (SelectedPSP is not null) {
                 PlayerSettingParamList.Remove(SelectedPSP);

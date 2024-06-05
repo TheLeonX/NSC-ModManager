@@ -755,6 +755,9 @@ namespace NSC_ModManager.ViewModel {
                     
 
                 }
+
+                Dictionary<string, string> csp_code_replace = new Dictionary<string, string>();
+
                 /*---------------------------------------REQUIRED FILES-------------------------------------------*/
                 //duelPlayerParam file
                 List<string> baseModel = new List<string>();
@@ -790,10 +793,29 @@ namespace NSC_ModManager.ViewModel {
                 PlayerSettingParamViewModel playerSettingParam_mod = new PlayerSettingParamViewModel();
                 if (File.Exists(playerSettingParamModPath) && !character_mod.Partner) {
                     playerSettingParam_mod.OpenFile(playerSettingParamModPath);
+
+                    foreach (PlayerSettingParamModel psp_entry in playerSettingParam_mod.PlayerSettingParamList) {
+                        string costume_csp_code = psp_entry.PSP_code;
+                        int csp_code_index = 0;
+                        do {
+                            csp_code_index++;
+                            costume_csp_code = psp_entry.PSP_code + "_" + csp_code_index.ToString("D6");
+                        }
+                        while (playerSettingParam_vanilla.PSPCodeExists(costume_csp_code));
+
+                        csp_code_replace.Add(psp_entry.PSP_code, costume_csp_code);
+                        psp_entry.PSP_code = costume_csp_code;
+                    }
+
+                    
+
+
+
+
+
+
                     if (replace_character) {
                         if (playerSettingParam_mod.PlayerSettingParamList.Count > 0) {
-
-
                             //Remove old entries
                             for (int i = 0; i < playerSettingParam_vanilla.PlayerSettingParamList.Count; i++) {
                                 if (playerSettingParam_vanilla.PlayerSettingParamList[i].CharacodeID == mod_characodeID) {
@@ -1101,6 +1123,17 @@ namespace NSC_ModManager.ViewModel {
                 CharacterSelectParamViewModel characterSelectParam_mod = new CharacterSelectParamViewModel();
                 if (File.Exists(characterSelectParamModPath) && !character_mod.Partner) {
                     characterSelectParam_mod.OpenFile(characterSelectParamModPath);
+
+                    foreach (CharacterSelectParamModel csp_entry in characterSelectParam_mod.CharacterSelectParamList) {
+
+                        if (csp_code_replace.ContainsKey(csp_entry.CSP_code)) {
+                            csp_entry.CSP_code = csp_code_replace[csp_entry.CSP_code];
+                        }
+                    }
+
+
+
+
                     int page = -1;
                     int slot = -1;
                     if (replace_character) {
@@ -1522,10 +1555,19 @@ namespace NSC_ModManager.ViewModel {
                 //playerSettingParam file
                 int new_preset_id = 0;
                 string charMessageID = "";
+                string costume_csp_code = "";
                 PlayerSettingParamViewModel playerSettingParam_mod = new PlayerSettingParamViewModel();
                 if (File.Exists(playerSettingParamModPath)) {
                     playerSettingParam_mod.OpenFile(playerSettingParamModPath);
                     PlayerSettingParamModel psp_entry = (PlayerSettingParamModel)playerSettingParam_mod.PlayerSettingParamList[0].Clone();
+                    costume_csp_code = psp_entry.PSP_code;
+                    int csp_code_index = 0;
+                    do {
+                        csp_code_index++;
+                        costume_csp_code = psp_entry.PSP_code + "_" + csp_code_index.ToString("D6");
+                    }
+                    while (playerSettingParam_vanilla.PSPCodeExists(costume_csp_code));
+                    psp_entry.PSP_code = costume_csp_code;
                     psp_entry.CharacodeID = mod_characodeID;
                     psp_entry.PSP_ID = playerSettingParam_vanilla.MaxSlot()+1;
                     charMessageID = psp_entry.CharacterNameMessageID;
@@ -1625,6 +1667,7 @@ namespace NSC_ModManager.ViewModel {
                     }
 
                     CharacterSelectParamModel csp_entry = (CharacterSelectParamModel)characterSelectParam_mod.CharacterSelectParamList[0].Clone();
+                    csp_entry.CSP_code = costume_csp_code;
                     csp_entry.PageIndex = page;
                     csp_entry.SlotIndex = slot;
                     csp_entry.CostumeIndex = costume;
