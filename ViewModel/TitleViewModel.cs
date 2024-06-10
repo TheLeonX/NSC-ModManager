@@ -463,6 +463,8 @@ namespace NSC_ModManager.ViewModel {
 
                 DirectoryInfo d = new DirectoryInfo(modmanager_folder); //This function getting info about all files in a path
                 FileInfo[] ModConfigList = d.GetFiles("mod_config.ini", SearchOption.AllDirectories); //Getting all files with "Icon.png" name
+                Array.Sort(ModConfigList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+
 
                 foreach (FileInfo mod_path in ModConfigList) {
                     var ModInfo = new IniFile(mod_path.FullName);
@@ -483,6 +485,7 @@ namespace NSC_ModManager.ViewModel {
                         //character mod
                         DirectoryInfo mod_dir = new DirectoryInfo(Path.GetDirectoryName(mod_path.FullName));
                         FileInfo[] CharacterModList = mod_dir.GetFiles("character_config.ini", SearchOption.AllDirectories);
+                        Array.Sort(CharacterModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                         foreach (FileInfo character_path in CharacterModList) {
                             var CharacterInfo = new IniFile(character_path.FullName);
                             CharacterModModel CharacterEntry = new CharacterModModel() {
@@ -497,6 +500,7 @@ namespace NSC_ModManager.ViewModel {
 
                         //stage mod
                         FileInfo[] StageModList = mod_dir.GetFiles("stage_config.ini", SearchOption.AllDirectories);
+                        Array.Sort(StageModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                         foreach (FileInfo stage_path in StageModList) {
                             var StageInfo = new IniFile(stage_path.FullName);
                             StageModModel StageEntry = new StageModModel() {
@@ -511,6 +515,7 @@ namespace NSC_ModManager.ViewModel {
 
                         //costume mod
                         FileInfo[] CostumeModList = mod_dir.GetFiles("model_config.ini", SearchOption.AllDirectories);
+                        Array.Sort(CostumeModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                         foreach (FileInfo costume_path in CostumeModList) {
                             var CostumeInfo = new IniFile(costume_path.FullName);
                             CostumeModModel CostumeEntry = new CostumeModModel() {
@@ -523,11 +528,13 @@ namespace NSC_ModManager.ViewModel {
                         }
                         //CPKs
                         FileInfo[] CpkListInfo = mod_dir.GetFiles("*.cpk", SearchOption.AllDirectories);
+                        Array.Sort(CpkListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                         foreach (FileInfo cpk_path in CpkListInfo) {
                             CPKList.Add(cpk_path.FullName);
                         }
                         //Shaders
                         FileInfo[] ShaderListInfo = mod_dir.GetFiles("*.hlsl", SearchOption.AllDirectories);
+                        Array.Sort(ShaderListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                         foreach (FileInfo shader_path in ShaderListInfo) {
                             ShaderList.Add(shader_path.FullName);
                         }
@@ -557,9 +564,8 @@ namespace NSC_ModManager.ViewModel {
                 //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
             } catch (Exception ex) {
                 SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace +" \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.",
-            20);
+                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace + " \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", 20);
                 LoadingStatePlay = Visibility.Hidden;
             }
         }
@@ -1334,25 +1340,6 @@ namespace NSC_ModManager.ViewModel {
                     messageInfoModified = true;
 
                 }
-                ////damageprm file
-                //DamagePrmViewModel damageprm_mod = new DamagePrmViewModel();
-                //if (File.Exists(damageprmModPath)) {
-                //    damageprm_mod.OpenFile(damageprmModPath);
-                //    for (int c = 0; c < damageprm_mod.DamagePrmList.Count; c++) {
-                //        for (int i = 0; i < damageprm_vanilla.DamagePrmList.Count; i++) {
-                //            string vanilla_name = BinaryReader.b_ReadString(damageprm_vanilla.DamagePrmList[i].Data, 0);
-                //            string mod_name = BinaryReader.b_ReadString(damageprm_mod.DamagePrmList[c].Data, 0);
-                //            if (vanilla_name == mod_name) {
-                //                damageprm_vanilla.DamagePrmList[i] = (DamagePrmModel)damageprm_mod.DamagePrmList[c].Clone();
-                //                damageprm_mod.DamagePrmList.RemoveAt(c);
-                //                c--;
-                //            }
-                //        }
-                //    }
-                //    for (int i = 0; i < damageprm_mod.DamagePrmList.Count; i++) {
-                //        damageprm_vanilla.DamagePrmList.Add((DamagePrmModel)damageprm_mod.DamagePrmList[i].Clone());
-                //    }
-                //}
                 //damageprm file
                 DamagePrmViewModel damageprm_mod = new DamagePrmViewModel();
                 if (File.Exists(damageprmModPath)) {
@@ -1367,83 +1354,88 @@ namespace NSC_ModManager.ViewModel {
 
                 DirectoryInfo mod_d = new DirectoryInfo(Path.GetDirectoryName(Path.GetDirectoryName(character_mod.RootPath)));
                 FileInfo[] characterPrmList = mod_d.GetFiles(mod_characode + "prm.bin.xfbin", SearchOption.AllDirectories);
+                Array.Sort(characterPrmList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+
                 string prm_path = "";
                 foreach (FileInfo prm_file in characterPrmList) {
                     prm_path = prm_file.FullName;
                 }
-                string new_prm_path = root_folder + "\\param_files\\" + prm_path.Remove(0, prm_path.IndexOf("data\\"));
-                //damageeff
-                DamageEffViewModel damageeff_mod = new DamageEffViewModel();
-                //effectprm
-                EffectPrmViewModel effectprm_mod = new EffectPrmViewModel();
-                if (File.Exists(prm_path) && File.Exists(damageeffModPath)) {
-                    //This function merges damageEff and effectprm files, and fixing prm files with new damageEff ids
-                    damageeff_mod.OpenFile(damageeffModPath);
-                    if (damageeff_mod.DamageEffList.Count > 0) {
-                        List<int> NewEffectIds = new List<int>();
+                if (File.Exists(prm_path) && (prm_path ?? "") != "") {
+                    string new_prm_path = root_folder + "\\param_files\\" + prm_path.Remove(0, prm_path.IndexOf("data\\"));
+                    //damageeff
+                    DamageEffViewModel damageeff_mod = new DamageEffViewModel();
+                    //effectprm
+                    EffectPrmViewModel effectprm_mod = new EffectPrmViewModel();
+                    if (File.Exists(prm_path) && File.Exists(damageeffModPath)) {
+                        //This function merges damageEff and effectprm files, and fixing prm files with new damageEff ids
+                        damageeff_mod.OpenFile(damageeffModPath);
+                        if (damageeff_mod.DamageEffList.Count > 0) {
+                            List<int> NewEffectIds = new List<int>();
 
-                        if (File.Exists(effectprmModPath)) {
-                            effectprm_mod.OpenFile(effectprmModPath);
-                            //This code adds effectprm entries to vanilla/edited files and saves new and olds effectprm ids
-                            for (int j = 0; j < effectprm_mod.EffectPrmList.Count; j++) {
-                                NewEffectIds.Add(effectprm_vanilla.MaxEffectID() + 1);
-                                effectprm_mod.EffectPrmList[j].EffectPrmID = effectprm_vanilla.MaxEffectID() + 1;
-                                effectprm_vanilla.EffectPrmList.Add((EffectPrmModel)effectprm_mod.EffectPrmList[j].Clone());
-                            }
-                        }
-
-                        List<int> OldHitIds = new List<int>();
-                        List<int> NewHitIds = new List<int>();
-                        //This code changes all effectprm ids in modded damageEff file
-                        for (int c = 0; c < damageeff_mod.DamageEffList.Count; c++) {
-                            damageeff_mod.DamageEffList[c].EffectPrmID = NewEffectIds[c];
-                            damageeff_mod.DamageEffList[c].ExtraEffectPrmID = 0;
-
-                        }
-                        //This code adding new entries to vanilla/edited damageEff file and changes damageEff ids
-                        for (int c = 0; c < damageeff_mod.DamageEffList.Count; c++) {
-                            int maxValue = damageeff_vanilla.MaxDamageID();
-                            OldHitIds.Add(damageeff_mod.DamageEffList[c].DamageEffID);
-                            NewHitIds.Add(maxValue + 1);
-
-                            DamageEffModel damageeff_entry = (DamageEffModel)damageeff_mod.DamageEffList[c].Clone();
-                            damageeff_entry.DamageEffID = maxValue + 1;
-                            if (OldHitIds.Contains(damageeff_entry.ExtraDamageEffID)) {
-                                damageeff_entry.ExtraDamageEffID = NewHitIds[OldHitIds.IndexOf(damageeff_entry.ExtraDamageEffID)];
+                            if (File.Exists(effectprmModPath)) {
+                                effectprm_mod.OpenFile(effectprmModPath);
+                                //This code adds effectprm entries to vanilla/edited files and saves new and olds effectprm ids
+                                for (int j = 0; j < effectprm_mod.EffectPrmList.Count; j++) {
+                                    NewEffectIds.Add(effectprm_vanilla.MaxEffectID() + 1);
+                                    effectprm_mod.EffectPrmList[j].EffectPrmID = effectprm_vanilla.MaxEffectID() + 1;
+                                    effectprm_vanilla.EffectPrmList.Add((EffectPrmModel)effectprm_mod.EffectPrmList[j].Clone());
+                                }
                             }
 
-                            damageeff_vanilla.DamageEffList.Add(damageeff_entry);
-                        }
-                        //This code opening prm file of character mod
-                        prm_mod.OpenFile(prm_path);
-                        //This function checking each movement section 
-                        for (int ver = 0; ver < prm_mod.VerList.Count; ver++) {
-                            for (int pl_anm = 0; pl_anm < prm_mod.VerList[ver].PL_ANM_Sections.Count; pl_anm++) {
-                                for (int function = 0; function < prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList.Count; function++) {
-                                    int selectedhit = prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList[function].DamageHitEffectID;
-                                    if (selectedhit != 0) {
-                                        for (int g = 0; g < OldHitIds.Count; g++) {
-                                            //This code checking for old damageEff Ids and changing them on new ids
-                                            if (OldHitIds[g] == selectedhit) {
-                                                prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList[function].DamageHitEffectID = (Int16)NewHitIds[g];
+                            List<int> OldHitIds = new List<int>();
+                            List<int> NewHitIds = new List<int>();
+                            //This code changes all effectprm ids in modded damageEff file
+                            for (int c = 0; c < damageeff_mod.DamageEffList.Count; c++) {
+                                damageeff_mod.DamageEffList[c].EffectPrmID = NewEffectIds[c];
+                                damageeff_mod.DamageEffList[c].ExtraEffectPrmID = 0;
+
+                            }
+                            //This code adding new entries to vanilla/edited damageEff file and changes damageEff ids
+                            for (int c = 0; c < damageeff_mod.DamageEffList.Count; c++) {
+                                int maxValue = damageeff_vanilla.MaxDamageID();
+                                OldHitIds.Add(damageeff_mod.DamageEffList[c].DamageEffID);
+                                NewHitIds.Add(maxValue + 1);
+
+                                DamageEffModel damageeff_entry = (DamageEffModel)damageeff_mod.DamageEffList[c].Clone();
+                                damageeff_entry.DamageEffID = maxValue + 1;
+                                if (OldHitIds.Contains(damageeff_entry.ExtraDamageEffID)) {
+                                    damageeff_entry.ExtraDamageEffID = NewHitIds[OldHitIds.IndexOf(damageeff_entry.ExtraDamageEffID)];
+                                }
+
+                                damageeff_vanilla.DamageEffList.Add(damageeff_entry);
+                            }
+                            //This code opening prm file of character mod
+                            prm_mod.OpenFile(prm_path);
+                            //This function checking each movement section 
+                            for (int ver = 0; ver < prm_mod.VerList.Count; ver++) {
+                                for (int pl_anm = 0; pl_anm < prm_mod.VerList[ver].PL_ANM_Sections.Count; pl_anm++) {
+                                    for (int function = 0; function < prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList.Count; function++) {
+                                        int selectedhit = prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList[function].DamageHitEffectID;
+                                        if (selectedhit != 0) {
+                                            for (int g = 0; g < OldHitIds.Count; g++) {
+                                                //This code checking for old damageEff Ids and changing them on new ids
+                                                if (OldHitIds[g] == selectedhit) {
+                                                    prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList[function].DamageHitEffectID = (Int16)NewHitIds[g];
+                                                }
+
                                             }
 
                                         }
-
                                     }
                                 }
                             }
+
+                            //Creates directory
+                            if (!Directory.Exists(Path.GetDirectoryName(new_prm_path))) {
+                                Directory.CreateDirectory(Path.GetDirectoryName(new_prm_path));
+                            }
+                            //Saves edited prm file
+                            prm_mod.SaveFileAs(new_prm_path);
                         }
 
-                        //Creates directory
-                        if (!Directory.Exists(Path.GetDirectoryName(new_prm_path))) {
-                            Directory.CreateDirectory(Path.GetDirectoryName(new_prm_path));
-                        }
-                        //Saves edited prm file
-                        prm_mod.SaveFileAs(new_prm_path);
                     }
-
                 }
+                
 
 
             }
@@ -1700,6 +1692,7 @@ namespace NSC_ModManager.ViewModel {
                     DirectoryInfo mod_d = new DirectoryInfo(mod.ModFolder);
                     //save shaders
                     FileInfo[] shaderList = mod_d.GetFiles("*.hlsl", SearchOption.AllDirectories);
+                    Array.Sort(shaderList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                     int ShaderCount = BinaryReader.b_ReadInt16(nuccMaterialFile, 0x0E);
                     List<string> UsedShaders = new List<string>();
                     foreach (FileInfo shader in shaderList) {
@@ -1716,6 +1709,7 @@ namespace NSC_ModManager.ViewModel {
                     
                     FileInfo[] cpkList = mod_d.GetFiles("*.cpk", SearchOption.AllDirectories);
 
+                    Array.Sort(cpkList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
                     foreach (FileInfo cpk in cpkList) {
                         YaCpkTool.CPK_extract(@Path.GetFullPath(cpk.FullName));
                         string file_name = Path.GetFileNameWithoutExtension(cpk.FullName);
@@ -1745,7 +1739,8 @@ namespace NSC_ModManager.ViewModel {
             File.WriteAllBytes(charsel_updated_path, charsel_gfx);
 
             DirectoryInfo default_icons = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\ParamFiles\\DefaultIcons\\");
-            FileInfo[] DefaultIconList = default_icons.GetFiles("*.xfbin", SearchOption.AllDirectories); 
+            FileInfo[] DefaultIconList = default_icons.GetFiles("*.xfbin", SearchOption.AllDirectories);
+            Array.Sort(DefaultIconList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
             foreach (FileInfo icon in DefaultIconList) {
                 File.Copy(icon.FullName, root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\" + Path.GetFileNameWithoutExtension(icon.FullName) + ".xfbin", true);
                 CharselIconNamesList.Add(Path.GetFileNameWithoutExtension(icon.FullName).Replace("_charicon_s", ""));
