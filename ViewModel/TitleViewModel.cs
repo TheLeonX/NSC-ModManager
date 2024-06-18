@@ -721,9 +721,9 @@ namespace NSC_ModManager.ViewModel {
                 string effectprmModPath = character_mod.RootPath + "\\data\\spc\\effectprm.bin.xfbin";
                 string damageprmModPath = character_mod.RootPath + "\\data\\spc\\damageprm.bin.xfbin";
 
-                string specialCondParamModPath = Directory.GetCurrentDirectory() + "\\moddingapi\\mods\\base_game\\specialCondParam.xfbin";
-                string partnerSlotParamModPath = Directory.GetCurrentDirectory() + "\\moddingapi\\mods\\base_game\\partnerSlotParam.xfbin";
-                string susanooCondParamModPath = Directory.GetCurrentDirectory() + "\\moddingapi\\mods\\base_game\\susanooCondParam.xfbin";
+                string specialCondParamModPath = character_mod.RootPath + "\\moddingapi\\mods\\base_game\\specialCondParam.xfbin";
+                string partnerSlotParamModPath = character_mod.RootPath + "\\moddingapi\\mods\\base_game\\partnerSlotParam.xfbin";
+                string susanooCondParamModPath = character_mod.RootPath + "\\moddingapi\\mods\\base_game\\susanooCondParam.xfbin";
 
                 //characode file
                 if (!replace_character) {
@@ -1202,7 +1202,7 @@ namespace NSC_ModManager.ViewModel {
                     costumeBreakParam_mod.OpenFile(costumeBreakParamModPath);
                     //Remove old entries
                     for (int i = 0; i < costumeBreakParam_vanilla.CostumeBreakParamList.Count; i++) {
-                        if (costumeBreakParam_mod.CostumeBreakParamList[i].CharacodeID == mod_characodeID) {
+                        if (costumeBreakParam_vanilla.CostumeBreakParamList[i].CharacodeID == mod_characodeID) {
                             costumeBreakParam_vanilla.CostumeBreakParamList.RemoveAt(i);
                             i--;
                         }

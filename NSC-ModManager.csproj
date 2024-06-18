@@ -9,8 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>white_MM.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
-    <AssemblyVersion>1.1.1.4</AssemblyVersion>
-    <FileVersion>1.1.1.4</FileVersion>
+    <AssemblyVersion>1.1.1.5</AssemblyVersion>
+    <FileVersion>1.1.1.5</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.30</Version>
   </PropertyGroup>

@@ -86,7 +86,7 @@ namespace NSC_ModManager.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.1.1.4;component/controls/kuramacontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.1.1.5;component/controls/kuramacontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Controls\KuramaControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
