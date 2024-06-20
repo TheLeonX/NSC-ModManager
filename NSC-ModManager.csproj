@@ -6,13 +6,13 @@
     <RootNamespace>NSC_ModManager</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>white_MM.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
-    <AssemblyVersion>1.1.1.5</AssemblyVersion>
-    <FileVersion>1.1.1.5</FileVersion>
+    <AssemblyVersion>1.1.2.0</AssemblyVersion>
+    <FileVersion>1.1.2.0</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.30</Version>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>

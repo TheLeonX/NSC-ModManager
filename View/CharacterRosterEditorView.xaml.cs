@@ -10,9 +10,9 @@ namespace NSC_ModManager.View {
     /// Логика взаимодействия для CharacterRosterEditorView.xaml
     /// </summary>
     public partial class CharacterRosterEditorView : Window {
-        public CharacterRosterEditorView() {
+        public CharacterRosterEditorView(TitleViewModel VM) {
             InitializeComponent();
-            DataContext = new CharacterRosterEditorViewModel();
+            DataContext = new CharacterRosterEditorViewModel(VM);
         }
 
         public string sender_name;

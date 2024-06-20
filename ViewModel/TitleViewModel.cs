@@ -561,6 +561,15 @@ namespace NSC_ModManager.ViewModel {
                 KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!",
             20);
                 SystemSounds.Beep.Play();
+
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "steam://rungameid/1020790";
+                startInfo.UseShellExecute = true;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+
                 //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
             } catch (Exception ex) {
                 SystemSounds.Exclamation.Play();
@@ -2514,7 +2523,8 @@ namespace NSC_ModManager.ViewModel {
             get {
                 return _rosterEditorCommand ??
                   (_rosterEditorCommand = new RelayCommand(obj => {
-                      CharacterRosterEditorView s = new CharacterRosterEditorView();
+                      TitleViewModel VM = ((TitleViewModel)this);
+                      CharacterRosterEditorView s = new CharacterRosterEditorView(VM);
                       s.Show();
 
                   }));

@@ -65,7 +65,7 @@
     <v:String x:Key="m_modmanager_005">Last Update:</v:String>
     <v:String x:Key="m_modmanager_006">Description:</v:String>
     <v:String x:Key="m_modmanager_007">Clear Game</v:String>
-    <v:String x:Key="m_modmanager_008">Compile Mods</v:String>
+    <v:String x:Key="m_modmanager_008">Compile Mods And Launch Game</v:String>
     <v:String x:Key="m_modmanager_009">Install Mod</v:String>
     <v:String x:Key="m_modmanager_010">Delete Mod</v:String>
     <v:String x:Key="m_modmanager_011">Refresh Mod List</v:String>

@@ -44,7 +44,7 @@ namespace NSC_ModManager {
         }
     }
 
- 
+
     public partial class App : Application {
 
         public App() {

@@ -13,6 +13,9 @@ using System.Windows;
 namespace NSC_ModManager.ViewModel {
     public class CharacterRosterEditorViewModel : INotifyPropertyChanged {
 
+
+        public TitleViewModel TitleVM;
+
         private ObservableCollection<CharacterSelectParamModel> _characterFullList = new ObservableCollection<CharacterSelectParamModel>();
         public ObservableCollection<CharacterSelectParamModel> CharacterFullList {
             get {
@@ -325,9 +328,16 @@ namespace NSC_ModManager.ViewModel {
             CharacterSelectParamViewModel CharacterSelectParamBase = new CharacterSelectParamViewModel();
             CharacterSelectParamBase.CharacterSelectParamList = CharacterFullList;
             CharacterSelectParamBase.SaveFileAs(AppDomain.CurrentDomain.BaseDirectory.ToString() + "\\ParamFiles\\characterSelectParam.xfbin");
-            ModernWpf.MessageBox.Show("Roster was saved! Refresh mod list before compiling mods!");
+
+
+
+            TitleVM.RefreshModList();
+            ModernWpf.MessageBox.Show("Roster was saved!");
         }
-        public CharacterRosterEditorViewModel() {
+        public CharacterRosterEditorViewModel(TitleViewModel VM) {
+
+            TitleVM = VM;
+
             CharacterList = new ObservableCollection<CharacterSelectParamModel>();
             CharacterFullList = new ObservableCollection<CharacterSelectParamModel>();
             CharacterPlaceHolderList = new ObservableCollection<CharacterSelectParamModel>();
