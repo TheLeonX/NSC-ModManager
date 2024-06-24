@@ -570,14 +570,14 @@ namespace NSC_ModManager.ViewModel {
                 process.StartInfo = startInfo;
                 process.Start();
 
-                //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
-            } catch (Exception ex) {
+            //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
+        } catch (Exception ex) {
                 SystemSounds.Exclamation.Play();
                 ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace + " \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", 20);
-                LoadingStatePlay = Visibility.Hidden;
+        LoadingStatePlay = Visibility.Hidden;
             }
-        }
+}
 
         public void CompileModProcess(string root_folder) {
             CleanGameAssets(false);
@@ -847,7 +847,7 @@ namespace NSC_ModManager.ViewModel {
                                     charMessageID = psp_entry.CharacterNameMessageID;
                                 psp_entry.CharacodeID = mod_characodeID;
                                 psp_entry.PSP_ID = playerSettingParam_vanilla.MaxSlot() + i + 1;
-                                AddedPresetIds.Add(playerSettingParam_vanilla.MaxSlot() + i + 1);
+                                AddedPresetIds.Add(psp_entry.PSP_ID);
                                 if (psp_entry.ReferenceCharacodeID > characode_count) {
                                     psp_entry.ReferenceCharacodeID = mod_characodeID;
                                     psp_entry.Unk = 1;
@@ -1732,7 +1732,8 @@ namespace NSC_ModManager.ViewModel {
                     if (!Directory.Exists(root_folder + "\\data_win32_modmanager")) {
                         Directory.CreateDirectory(root_folder + "\\data_win32_modmanager");
                     }
-                    Program.CopyFilesRecursivelyModManager(mod.ModFolder + "\\Resources\\Files\\", root_folder + "\\data_win32_modmanager\\");
+                    if (Directory.Exists(mod.ModFolder + "\\Resources\\Files\\"))
+                        Program.CopyFilesRecursivelyModManager(mod.ModFolder + "\\Resources\\Files\\", root_folder + "\\data_win32_modmanager\\");
 
                 }
             }
