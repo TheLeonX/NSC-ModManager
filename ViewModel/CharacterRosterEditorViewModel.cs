@@ -256,7 +256,8 @@ namespace NSC_ModManager.ViewModel {
                 LoadModList();
                 RosterPage_field = 0;
 
-                ModernWpf.MessageBox.Show("Roster was restored! Refresh mod list before compiling mods!");
+                TitleVM.RefreshModList();
+                ModernWpf.MessageBox.Show("Roster was restored!");
             }
             
         }
@@ -359,6 +360,7 @@ namespace NSC_ModManager.ViewModel {
 
                 DirectoryInfo d = new DirectoryInfo(modmanager_folder); //This function getting info about all files in a path
                 FileInfo[] ModConfigList = d.GetFiles("mod_config.ini", SearchOption.AllDirectories); //Getting all files with "Icon.png" name
+                Array.Sort(ModConfigList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
 
                 foreach (FileInfo mod_path in ModConfigList) {
                     var ModInfo = new IniFile(mod_path.FullName);

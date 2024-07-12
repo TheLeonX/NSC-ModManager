@@ -89,7 +89,7 @@ namespace NSC_ModManager {
             
             #line default
             #line hidden
-            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.1.2.1;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.1.2.4;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -462,8 +462,8 @@ namespace NSC_ModManager.ViewModel {
             if (Directory.Exists(modmanager_folder)) {
 
                 DirectoryInfo d = new DirectoryInfo(modmanager_folder); //This function getting info about all files in a path
-                FileInfo[] ModConfigList = d.GetFiles("mod_config.ini", SearchOption.AllDirectories); //Getting all files with "Icon.png" name
-                Array.Sort(ModConfigList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                FileInfo[] ModConfigList = d.GetFiles("mod_config.ini", SearchOption.AllDirectories); 
+                Array.Sort(ModConfigList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
 
 
                 foreach (FileInfo mod_path in ModConfigList) {
@@ -485,7 +485,7 @@ namespace NSC_ModManager.ViewModel {
                         //character mod
                         DirectoryInfo mod_dir = new DirectoryInfo(Path.GetDirectoryName(mod_path.FullName));
                         FileInfo[] CharacterModList = mod_dir.GetFiles("character_config.ini", SearchOption.AllDirectories);
-                        Array.Sort(CharacterModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                        Array.Sort(CharacterModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                         foreach (FileInfo character_path in CharacterModList) {
                             var CharacterInfo = new IniFile(character_path.FullName);
                             CharacterModModel CharacterEntry = new CharacterModModel() {
@@ -500,7 +500,7 @@ namespace NSC_ModManager.ViewModel {
 
                         //stage mod
                         FileInfo[] StageModList = mod_dir.GetFiles("stage_config.ini", SearchOption.AllDirectories);
-                        Array.Sort(StageModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                        Array.Sort(StageModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                         foreach (FileInfo stage_path in StageModList) {
                             var StageInfo = new IniFile(stage_path.FullName);
                             StageModModel StageEntry = new StageModModel() {
@@ -515,7 +515,7 @@ namespace NSC_ModManager.ViewModel {
 
                         //costume mod
                         FileInfo[] CostumeModList = mod_dir.GetFiles("model_config.ini", SearchOption.AllDirectories);
-                        Array.Sort(CostumeModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                        Array.Sort(CostumeModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                         foreach (FileInfo costume_path in CostumeModList) {
                             var CostumeInfo = new IniFile(costume_path.FullName);
                             CostumeModModel CostumeEntry = new CostumeModModel() {
@@ -528,13 +528,13 @@ namespace NSC_ModManager.ViewModel {
                         }
                         //CPKs
                         FileInfo[] CpkListInfo = mod_dir.GetFiles("*.cpk", SearchOption.AllDirectories);
-                        Array.Sort(CpkListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                        Array.Sort(CpkListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                         foreach (FileInfo cpk_path in CpkListInfo) {
                             CPKList.Add(cpk_path.FullName);
                         }
                         //Shaders
                         FileInfo[] ShaderListInfo = mod_dir.GetFiles("*.hlsl", SearchOption.AllDirectories);
-                        Array.Sort(ShaderListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                        Array.Sort(ShaderListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                         foreach (FileInfo shader_path in ShaderListInfo) {
                             ShaderList.Add(shader_path.FullName);
                         }
@@ -575,9 +575,9 @@ namespace NSC_ModManager.ViewModel {
                 SystemSounds.Exclamation.Play();
                 ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace + " \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", 20);
-        LoadingStatePlay = Visibility.Hidden;
+                LoadingStatePlay = Visibility.Hidden;
             }
-}
+        }
 
         public void CompileModProcess(string root_folder) {
             CleanGameAssets(false);
@@ -830,7 +830,7 @@ namespace NSC_ModManager.ViewModel {
 
 
                     if (replace_character) {
-                        if (playerSettingParam_mod.PlayerSettingParamList.Count > 0) {
+                        if (playerSettingParam_mod.PlayerSettingParamList.Count > 0 && File.Exists(characterSelectParamModPath)) {
                             //Remove old entries
                             for (int i = 0; i < playerSettingParam_vanilla.PlayerSettingParamList.Count; i++) {
                                 if (playerSettingParam_vanilla.PlayerSettingParamList[i].CharacodeID == mod_characodeID) {
@@ -913,7 +913,7 @@ namespace NSC_ModManager.ViewModel {
                 if (File.Exists(costumeParamModPath) && !character_mod.Partner) {
                     costumeParam_mod.OpenFile(costumeParamModPath);
                     if (replace_character) {
-                        if (costumeParam_mod.CostumeParamList.Count > 0) {
+                        if (costumeParam_mod.CostumeParamList.Count > 0 && File.Exists(characterSelectParamModPath)) {
                             //Remove old entries
                             for (int i = 0; i < costumeParam_vanilla.CostumeParamList.Count; i++) {
                                 if (RemovedPresetIds.Contains(costumeParam_vanilla.CostumeParamList[i].PlayerSettingParamID)) {
@@ -1363,7 +1363,7 @@ namespace NSC_ModManager.ViewModel {
 
                 DirectoryInfo mod_d = new DirectoryInfo(Path.GetDirectoryName(Path.GetDirectoryName(character_mod.RootPath)));
                 FileInfo[] characterPrmList = mod_d.GetFiles(mod_characode + "prm.bin.xfbin", SearchOption.AllDirectories);
-                Array.Sort(characterPrmList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                Array.Sort(characterPrmList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
 
                 string prm_path = "";
                 foreach (FileInfo prm_file in characterPrmList) {
@@ -1701,7 +1701,7 @@ namespace NSC_ModManager.ViewModel {
                     DirectoryInfo mod_d = new DirectoryInfo(mod.ModFolder);
                     //save shaders
                     FileInfo[] shaderList = mod_d.GetFiles("*.hlsl", SearchOption.AllDirectories);
-                    Array.Sort(shaderList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                    Array.Sort(shaderList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                     int ShaderCount = BinaryReader.b_ReadInt16(nuccMaterialFile, 0x0E);
                     List<string> UsedShaders = new List<string>();
                     foreach (FileInfo shader in shaderList) {
@@ -1718,7 +1718,7 @@ namespace NSC_ModManager.ViewModel {
                     
                     FileInfo[] cpkList = mod_d.GetFiles("*.cpk", SearchOption.AllDirectories);
 
-                    Array.Sort(cpkList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+                    Array.Sort(cpkList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
                     foreach (FileInfo cpk in cpkList) {
                         YaCpkTool.CPK_extract(@Path.GetFullPath(cpk.FullName));
                         string file_name = Path.GetFileNameWithoutExtension(cpk.FullName);
@@ -1750,7 +1750,7 @@ namespace NSC_ModManager.ViewModel {
 
             DirectoryInfo default_icons = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\ParamFiles\\DefaultIcons\\");
             FileInfo[] DefaultIconList = default_icons.GetFiles("*.xfbin", SearchOption.AllDirectories);
-            Array.Sort(DefaultIconList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(x.Name, y.Name));
+            Array.Sort(DefaultIconList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
             foreach (FileInfo icon in DefaultIconList) {
                 File.Copy(icon.FullName, root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\" + Path.GetFileNameWithoutExtension(icon.FullName) + ".xfbin", true);
                 CharselIconNamesList.Add(Path.GetFileNameWithoutExtension(icon.FullName).Replace("_charicon_s", ""));

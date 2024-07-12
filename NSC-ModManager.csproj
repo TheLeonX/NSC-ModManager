@@ -8,8 +8,8 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>white_MM.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
-    <AssemblyVersion>1.1.2.1</AssemblyVersion>
-    <FileVersion>1.1.2.1</FileVersion>
+    <AssemblyVersion>1.1.2.4</AssemblyVersion>
+    <FileVersion>1.1.2.4</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.30</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
