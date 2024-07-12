@@ -1,3 +1,5 @@
+# WORKS ONLY WITH STEAM VERSION OF GAME
+
 ![modmanager_logo](https://github.com/TheLeonX/NSC-ModManager/assets/92672927/4530b8cf-f540-4e52-a68e-082a46b01652)
 # Credits
 Big thanks to **justcamtro** for helping me with design.
