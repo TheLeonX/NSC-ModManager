@@ -558,8 +558,7 @@ namespace NSC_ModManager.ViewModel {
                 //MessageBox.Show(CharacterList[-1].Characode);
                 await Task.Run(() => CompileModProcess(root_folder));
                 LoadingStatePlay = Visibility.Hidden;
-                KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!",
-            20);
+                KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!", 20);
                 SystemSounds.Beep.Play();
 
                 ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -570,10 +569,10 @@ namespace NSC_ModManager.ViewModel {
                 process.StartInfo = startInfo;
                 process.Start();
 
-            //ModernWpf.MessageBox.Show("Mods were successfully compiled!");
-        } catch (Exception ex) {
+                ModernWpf.MessageBox.Show("Mods were successfully compiled!");
+            } catch (Exception ex) {
                 SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace + " \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.Message + " \n\n" + ex.StackTrace, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", 20);
                 LoadingStatePlay = Visibility.Hidden;
             }
@@ -948,7 +947,7 @@ namespace NSC_ModManager.ViewModel {
                             } else {
                                 //Remove old entries
                                 for (int i = 0; i < costumeParam_vanilla.CostumeParamList.Count; i++) {
-                                    if (RemovedPresetIds.Contains(costumeParam_mod.CostumeParamList[i].PlayerSettingParamID)) {
+                                    if (RemovedPresetIds.Contains(costumeParam_vanilla.CostumeParamList[i].PlayerSettingParamID)) {
                                         costumeParam_vanilla.CostumeParamList.RemoveAt(i);
                                         i--;
                                     }

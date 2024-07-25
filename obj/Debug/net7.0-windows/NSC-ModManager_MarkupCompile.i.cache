@@ -1,5 +1,5 @@
 ﻿NSC-ModManager
-1.4.0.0
+1.4.0.1
 
 winexe
 C#
@@ -16,5 +16,5 @@ E:\Desktop\C# Projects\NSC-ModManager\App.xaml
 232472636794
 Controls\KuramaControl.xaml;Controls\LoadingControl.xaml;Resources\Localization\lang.xaml;Resources\Styles\LightStyle.xaml;View\CharacterRosterEditorView.xaml;View\TitleView.xaml;
 
-False
+True
 
