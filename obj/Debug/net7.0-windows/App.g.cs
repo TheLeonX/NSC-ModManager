@@ -71,7 +71,7 @@ namespace NSC_ModManager {
         /// InitializeComponent
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "7.0.2.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "8.0.8.0")]
         public void InitializeComponent() {
             if (_contentLoaded) {
                 return;
@@ -103,7 +103,7 @@ namespace NSC_ModManager {
         /// </summary>
         [System.STAThreadAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "7.0.2.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "8.0.8.0")]
         public static void Main() {
             NSC_ModManager.App app = new NSC_ModManager.App();
             app.InitializeComponent();

@@ -386,7 +386,9 @@ namespace NSC_ModManager.ViewModel {
             }
         }
 
-        public TitleViewModel() {
+        public TitleViewModel()
+        {
+            bw.DoWork += bw_DoWork_CompileModProcess;
             ToolTabState = 1;
             KuramaName = "Kyuruto";
             MeouchCounter = 0;
@@ -551,34 +553,53 @@ namespace NSC_ModManager.ViewModel {
                 }
             }
         }
+        static BackgroundWorker bw = new BackgroundWorker();
+        //async void CompileModAsyncProcess(string root_folder) {
 
-        async void CompileModAsyncProcess(string root_folder) {
+        //    try {
+        //        //MessageBox.Show(CharacterList[-1].Characode);
+        //        await Task.Run(() => CompileModProcess(root_folder));
+        //        LoadingStatePlay = Visibility.Hidden;
+        //        KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!", 20);
+        //        SystemSounds.Beep.Play();
 
-            try {
+        //        ProcessStartInfo startInfo = new ProcessStartInfo();
+        //        startInfo.FileName = "steam://rungameid/1020790";
+        //        startInfo.UseShellExecute = true;
+        //        startInfo.CreateNoWindow = true;
+        //        Process process = new Process();
+        //        process.StartInfo = startInfo;
+        //        process.Start();
+
+        //    } catch (Exception ex) {
+        //        SystemSounds.Exclamation.Play();
+        //        ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.Message + " \n\n" + ex.StackTrace, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", 20);
+        //        LoadingStatePlay = Visibility.Hidden;
+        //    }
+        //}
+        void CompileModAsyncProcess(string root_folder)
+        {
+
+            try
+            {
                 //MessageBox.Show(CharacterList[-1].Characode);
-                await Task.Run(() => CompileModProcess(root_folder));
-                LoadingStatePlay = Visibility.Hidden;
-                KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!", 20);
-                SystemSounds.Beep.Play();
+                LoadingStatePlay = Visibility.Visible;
+                bw.RunWorkerAsync(root_folder);
+                
 
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = "steam://rungameid/1020790";
-                startInfo.UseShellExecute = true;
-                startInfo.CreateNoWindow = true;
-                Process process = new Process();
-                process.StartInfo = startInfo;
-                process.Start();
-
-                ModernWpf.MessageBox.Show("Mods were successfully compiled!");
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 SystemSounds.Exclamation.Play();
                 ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.Message + " \n\n" + ex.StackTrace, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 KyurutoDialogTextLoader("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", 20);
                 LoadingStatePlay = Visibility.Hidden;
             }
         }
+        void bw_DoWork_CompileModProcess(object sender, DoWorkEventArgs e) {
 
-        public void CompileModProcess(string root_folder) {
+            string root_folder = Convert.ToString(e.Argument);
             CleanGameAssets(false);
             KyurutoDialogTextLoader("Preparing all files!",
                 20);
@@ -1769,11 +1790,11 @@ namespace NSC_ModManager.ViewModel {
             byte[] charicon_s_filebytes = File.ReadAllBytes(chariconGfxPath);
             string charicon_s_updated_path = Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\charicon_s\\charicon_s.gfx";
             byte[] charicon_s_header = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0, 0xCB);
-            byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCB, 0x4539);
-            byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x4604, 0x1207);
-            byte[] charicon_s_end = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x580B, 0x15294); //0x08,0x15,0x7D,0x151E6 - change counts!
+            byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCB, 0x4580);
+            byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x464B, 0x120A);
+            byte[] charicon_s_end = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x5855, 0x1502B); //0x08,0x15,0x7D,0x14F7D - change counts!
             byte[] charicon_s_newFile = new byte[0];
-            int icon_count = 0x1CC;
+            int icon_count = 0x1CE;
             int icon_count2 = 0xE3;
             int external_image_count = 5;
             for (int i = 0; i < CharselIconNamesList.Count; i++) {
@@ -1807,7 +1828,7 @@ namespace NSC_ModManager.ViewModel {
             charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + 1 + (CharselIconNamesList.Count * 2)), 0x08, 0, 2);
             charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + (CharselIconNamesList.Count * 2)), 0x15, 0, 2);
             charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + 1 + (CharselIconNamesList.Count * 2)), 0x7D, 0, 2);
-            charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + (CharselIconNamesList.Count * 2)), 0x151E6, 0, 2);
+            charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + (CharselIconNamesList.Count * 2)), 0x14F7D, 0, 2);
             charicon_s_newFile = BinaryReader.b_AddBytes(charicon_s_newFile, charicon_s_header);
             charicon_s_newFile = BinaryReader.b_AddBytes(charicon_s_newFile, charicon_s_body1);
             charicon_s_newFile = BinaryReader.b_AddBytes(charicon_s_newFile, charicon_s_body2);
@@ -2035,6 +2056,18 @@ namespace NSC_ModManager.ViewModel {
                 Directory.Delete(root_folder + "\\data_win32_modmanager", true);
             if (Directory.Exists(root_folder + "\\param_files"))
                 Directory.Delete(root_folder + "\\param_files", true);
+
+            KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!", 20);
+            SystemSounds.Beep.Play();
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "steam://rungameid/1020790";
+            startInfo.UseShellExecute = true;
+            startInfo.CreateNoWindow = true;
+            Process process = new Process();
+            process.StartInfo = startInfo;
+            process.Start();
+            LoadingStatePlay = Visibility.Hidden;
         }
 
         public void CompileMods() {
@@ -2153,6 +2186,7 @@ namespace NSC_ModManager.ViewModel {
             }
             catch (Exception) {
                 SystemSounds.Exclamation.Play();
+                LoadingStatePlay = Visibility.Hidden;
                 ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }

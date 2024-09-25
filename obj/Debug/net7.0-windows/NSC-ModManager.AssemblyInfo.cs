@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TheLeonX")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.4.0.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.40")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.40+5ea780af0057d1c3d7c3096aad89506ac91aa6f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("NSC-ModManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NSC-ModManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.4.0.1")]
