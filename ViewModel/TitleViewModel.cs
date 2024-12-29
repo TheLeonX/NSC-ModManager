@@ -20,6 +20,7 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Octokit;
+using System.Windows.Controls;
 
 namespace NSC_ModManager.ViewModel {
     public class TitleViewModel : INotifyPropertyChanged {
@@ -585,8 +586,12 @@ namespace NSC_ModManager.ViewModel {
             {
                 //MessageBox.Show(CharacterList[-1].Characode);
                 LoadingStatePlay = Visibility.Visible;
-                bw.RunWorkerAsync(root_folder);
-                
+                if (!bw.IsBusy)
+                    bw.RunWorkerAsync(root_folder);
+                else
+                {
+                    MessageBox.Show("Wait till compiling process is finished!");
+                }
 
             }
             catch (Exception ex)

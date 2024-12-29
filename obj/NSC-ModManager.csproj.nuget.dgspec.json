@@ -8,7 +8,7 @@
       "version": "1.50.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
-        "projectName": "NSC-ModManager",
+        "projectName": "NSC_ModManager",
         "projectPath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
         "packagesPath": "C:\\Users\\ARDOR\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\obj\\",
@@ -39,7 +39,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net7.0-windows7.0": {
@@ -119,7 +120,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

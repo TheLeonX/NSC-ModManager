@@ -71,7 +71,7 @@ namespace NSC_ModManager {
         /// InitializeComponent
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "8.0.8.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "9.0.0.0")]
         public void InitializeComponent() {
             if (_contentLoaded) {
                 return;
@@ -89,7 +89,7 @@ namespace NSC_ModManager {
             
             #line default
             #line hidden
-            System.Uri resourceLocater = new System.Uri("/NSC-ModManager;V1.5.0.0;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/NSC_ModManager;V1.5.1.0;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
@@ -103,7 +103,7 @@ namespace NSC_ModManager {
         /// </summary>
         [System.STAThreadAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "8.0.8.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "9.0.0.0")]
         public static void Main() {
             NSC_ModManager.App app = new NSC_ModManager.App();
             app.InitializeComponent();
