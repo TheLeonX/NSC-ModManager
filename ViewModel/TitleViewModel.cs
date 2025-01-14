@@ -2028,6 +2028,9 @@ namespace NSC_ModManager.ViewModel {
             File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\partnerSlotParam.xfbin", partnerSlotParam_vanilla);
             File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\susanooCondParam.xfbin", susanooCondParam_vanilla);
 
+            if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\spc\\"))
+                Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\spc\\");
+            File.WriteAllBytes(root_folder + "\\cpk_assets\\data\\spc\\5kgyprm.bin.xfbin", File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\ParamFiles\\5kgyprm.bin.xfbin"));
 
             KyurutoDialogTextLoader("Removing all trash from root folder and packing everything in CPK archives.",
             20);
@@ -2062,6 +2065,7 @@ namespace NSC_ModManager.ViewModel {
             if (Directory.Exists(root_folder + "\\param_files"))
                 Directory.Delete(root_folder + "\\param_files", true);
 
+            //File.Copy(Directory.GetCurrentDirectory() + "\\ParamFiles\\freebtl_set.gfx", Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\freebtl_set\\freebtl_set.gfx", true);
             KyurutoDialogTextLoader("Your mods are ready to play! Your welcome!", 20);
             SystemSounds.Beep.Play();
 
@@ -2175,7 +2179,8 @@ namespace NSC_ModManager.ViewModel {
                         File.Copy(appFolder + "\\ParamFiles\\charsel.gfx", rootFolder + "\\charsel\\charsel.gfx", true);
                         File.Copy(appFolder + "\\ParamFiles\\charicon_s.gfx", rootFolder + "\\charicon_s\\charicon_s.gfx", true);
                         File.Copy(appFolder + "\\ParamFiles\\nuccMaterial_dx11.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccMaterial_dx11.nsh", true);
-                        
+                        File.Copy(appFolder + "\\ParamFiles\\freebtl_set_vanilla.gfx", Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\freebtl_set\\freebtl_set.gfx", true);
+
                         if (Properties.Settings.Default.EnableMotionBlur)
                             File.Copy(appFolder + "\\ParamFiles\\nuccPostEffect_dx11_S2.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccPostEffect_dx11.nsh", true);
                         else

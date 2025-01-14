@@ -2930,3 +2930,6 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\uz-Latn-UZ\
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\uz-Latn-UZ\ModernWpf.resources.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\vi-VN\ModernWpf.Controls.resources.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\vi-VN\ModernWpf.resources.dll
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ParamFiles\5kgyprm.bin.xfbin
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ParamFiles\freebtl_set.gfx
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ParamFiles\freebtl_set_vanilla.gfx
