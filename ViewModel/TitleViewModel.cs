@@ -618,7 +618,9 @@ namespace NSC_ModManager.ViewModel {
             string supportSkillRecoverySpeedParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\supportSkillRecoverySpeedParam.xfbin";
             string privateCameraPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\privateCamera.bin.xfbin";
             string characterSelectParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\characterSelectParam.xfbin";
+
             string costumeBreakColorParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\costumeBreakColorParam.xfbin";
+
             string costumeParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\costumeParam.bin.xfbin";
             string playerIconPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\player_icon.xfbin";
             string cmnparamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\cmnparam.xfbin";
@@ -663,8 +665,10 @@ namespace NSC_ModManager.ViewModel {
             privateCamera_vanilla.OpenFile(privateCameraPath);
             CharacterSelectParamViewModel characterSelectParam_vanilla = new CharacterSelectParamViewModel();
             characterSelectParam_vanilla.OpenFile(characterSelectParamPath);
+
             CostumeBreakColorParamViewModel costumeBreakColorParam_vanilla = new CostumeBreakColorParamViewModel();
             costumeBreakColorParam_vanilla.OpenFile(costumeBreakColorParamPath);
+
             CostumeParamViewModel costumeParam_vanilla = new CostumeParamViewModel();
             costumeParam_vanilla.OpenFile(costumeParamPath);
             PlayerIconViewModel playerIcon_vanilla = new PlayerIconViewModel();
@@ -737,13 +741,17 @@ namespace NSC_ModManager.ViewModel {
                 string skillIndexSettingParamModPath = character_mod.RootPath + "\\data\\spc\\skillIndexSettingParam.xfbin";
                 string supportSkillRecoverySpeedParamModPath = character_mod.RootPath + "\\data\\spc\\supportSkillRecoverySpeedParam.xfbin";
                 string privateCameraModPath = character_mod.RootPath + "\\data\\spc\\privateCamera.bin.xfbin";
-                string costumeBreakColorParamModPath = character_mod.RootPath + "\\data\\spc\\costumeBreakColorParam.xfbin";
+
+
                 string costumeParamModPath = character_mod.RootPath + "\\data\\rpg\\param\\costumeParam.bin.xfbin";
                 string playerIconModPath = character_mod.RootPath + "\\data\\spc\\player_icon.xfbin";
                 string cmnparamModPath = character_mod.RootPath + "\\data\\sound\\cmnparam.xfbin";
                 string characterSelectParamModPath = character_mod.RootPath + "\\data\\ui\\max\\select\\characterSelectParam.xfbin";
                 string supportActionParamModPath = character_mod.RootPath + "\\data\\spc\\supportActionParam.xfbin";
+
                 //Not required for adding
+
+                string costumeBreakColorParamModPath = character_mod.RootPath + "\\data\\spc\\costumeBreakColorParam.xfbin";
                 string awakeAuraModPath = character_mod.RootPath + "\\data\\spc\\awakeAura.xfbin";
                 string appearanceAnmModPath = character_mod.RootPath + "\\data\\spc\\appearanceAnm.xfbin";
                 string afterAttachObjectModPath = character_mod.RootPath + "\\data\\spc\\afterAttachObject.xfbin";
@@ -770,7 +778,6 @@ namespace NSC_ModManager.ViewModel {
                         !File.Exists(skillIndexSettingParamModPath) ||
                         !File.Exists(supportSkillRecoverySpeedParamModPath) ||
                         !File.Exists(privateCameraModPath) ||
-                        !File.Exists(costumeBreakColorParamModPath) ||
                         !File.Exists(costumeParamModPath) ||
                         !File.Exists(playerIconModPath) ||
                         !File.Exists(cmnparamModPath) ||
