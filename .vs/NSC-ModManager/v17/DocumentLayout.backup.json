@@ -3,11 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\properties\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}",
+      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\properties\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}",
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:properties\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}"
     },
     {
@@ -30,23 +34,35 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
+              "RelativeDocumentMoniker": "Properties\\Program.cs",
+              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
+              "RelativeToolTip": "Properties\\Program.cs",
+              "ViewState": "AgIAAKEAAAAAAAAAAAAAALEAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-04T08:44:27.988Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Settings.settings",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Settings.settings",
               "RelativeDocumentMoniker": "Properties\\Settings.settings",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Settings.settings",
               "RelativeToolTip": "Properties\\Settings.settings",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002767|",
-              "WhenOpened": "2025-02-04T08:34:34.327Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-04T08:34:34.327Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "NSC-ModManager.csproj",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeDocumentMoniker": "NSC-ModManager.csproj",
@@ -54,12 +70,11 @@
               "RelativeToolTip": "NSC-ModManager.csproj",
               "ViewState": "AgIAAA4AAAAAAAAAAAAAABwAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-01-25T08:43:43.328Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-25T08:43:43.328Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "TitleViewModel.cs",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeDocumentMoniker": "ViewModel\\TitleViewModel.cs",
@@ -72,7 +87,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CharacterRosterEditorView.xaml",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\View\\CharacterRosterEditorView.xaml",
               "RelativeDocumentMoniker": "View\\CharacterRosterEditorView.xaml",
@@ -83,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "CharacterRosterEditorViewModel.cs",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\CharacterRosterEditorViewModel.cs",
               "RelativeDocumentMoniker": "ViewModel\\CharacterRosterEditorViewModel.cs",

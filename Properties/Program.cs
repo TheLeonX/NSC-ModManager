@@ -175,7 +175,7 @@ namespace NSC_ModManager.Properties {
             }
         }
 
-        public static int StageBGMOffset = 0x2006720 + 0xC00; //Find "4C AF BC 3D 15 00 00 00 FF FF FF FF 00 00 00 00" in exe for getting offset. Use Memory Editor and patches to find 2nd offset, cuz its dynamic!
+        public static int StageBGMOffset = 0x2008F20 + 0xC00 + 0x800; //Find "4C AF BC 3D 15 00 00 00 FF FF FF FF 00 00 00 00" in exe for getting offset. Use Memory Editor and patches to find 2nd offset, cuz its dynamic!
         public static int[] StageBGMSlots = {
             StageBGMOffset+0x100,
             StageBGMOffset+0x4E0,
