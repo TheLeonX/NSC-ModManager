@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v7.0": {
-      "NSC_ModManager/1.50": {
+      "NSC_ModManager/1.60": {
         "dependencies": {
           "Extended.Wpf.Toolkit": "4.5.1",
           "ModernWpf.MessageBox": "0.5.2",
@@ -809,7 +809,7 @@
     }
   },
   "libraries": {
-    "NSC_ModManager/1.50": {
+    "NSC_ModManager/1.60": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

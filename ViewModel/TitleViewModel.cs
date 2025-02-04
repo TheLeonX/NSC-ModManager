@@ -389,6 +389,14 @@ namespace NSC_ModManager.ViewModel {
 
         public TitleViewModel()
         {
+            // Upgrade settings if necessary.
+            if (Properties.Settings.Default.MustUpgrade)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.MustUpgrade = false;
+                Properties.Settings.Default.Save();
+            }
+
             bw.DoWork += bw_DoWork_CompileModProcess;
             ToolTabState = 1;
             KuramaName = "Kyuruto";
@@ -402,7 +410,8 @@ namespace NSC_ModManager.ViewModel {
             MeouchEffectRepeat = RepeatBehavior.Forever;
             KyurutoDialogTextLoader("Hello! You can call me " + KuramaName + ".", 50);
 
-            switch (Properties.Settings.Default.StretchMode) {
+            switch (Properties.Settings.Default.StretchMode)
+            {
                 case "Fill":
                     StretchMode_field = 0;
                     break;
@@ -420,7 +429,8 @@ namespace NSC_ModManager.ViewModel {
             EnableMotionBlur_field = Properties.Settings.Default.EnableMotionBlur;
             if (File.Exists(Properties.Settings.Default.BackgroundImagePath))
                 BackgroundImagePath_field = Properties.Settings.Default.BackgroundImagePath;
-            else {
+            else
+            {
                 Properties.Settings.Default.BackgroundImagePath = "UI/background/bg_toolbox_main.png";
                 Properties.Settings.Default.Save();
                 BackgroundImagePath_field = Properties.Settings.Default.BackgroundImagePath;
@@ -434,6 +444,7 @@ namespace NSC_ModManager.ViewModel {
             RefreshModList();
             CheckGitHubNewerVersion();
         }
+
         private async System.Threading.Tasks.Task CheckGitHubNewerVersion() {
             //Get all releases from GitHub
             //Source: https://octokitnet.readthedocs.io/en/latest/getting-started/
