@@ -15,77 +15,96 @@ using DynamicData;
 
 namespace NSC_ModManager.ViewModel
 {
-    public class CostumeParamViewModel : INotifyPropertyChanged {
+    public class CostumeParamViewModel : INotifyPropertyChanged
+    {
         private int _searchIndex_field;
-        public int SearchIndex_field {
+        public int SearchIndex_field
+        {
             get { return _searchIndex_field; }
-            set {
+            set
+            {
                 _searchIndex_field = value;
                 OnPropertyChanged("SearchIndex_field");
             }
         }
 
         private Visibility _loadingStatePlay;
-        public Visibility LoadingStatePlay {
+        public Visibility LoadingStatePlay
+        {
             get { return _loadingStatePlay; }
-            set {
+            set
+            {
                 _loadingStatePlay = value;
                 OnPropertyChanged("LoadingStatePlay");
             }
         }
 
         private string _entryString;
-        public string EntryString_field {
+        public string EntryString_field
+        {
             get { return _entryString; }
-            set {
+            set
+            {
                 _entryString = value;
                 OnPropertyChanged("EntryString_field");
             }
         }
         private int _entryIndex;
-        public int EntryIndex_field {
+        public int EntryIndex_field
+        {
             get { return _entryIndex; }
-            set {
+            set
+            {
                 _entryIndex = value;
                 OnPropertyChanged("EntryIndex_field");
             }
         }
         private int _playerSettingParamID;
-        public int PlayerSettingParamID_field {
+        public int PlayerSettingParamID_field
+        {
             get { return _playerSettingParamID; }
-            set {
+            set
+            {
                 _playerSettingParamID = value;
                 OnPropertyChanged("PlayerSettingParamID_field");
             }
         }
         private string _characterName;
-        public string CharacterName_field {
+        public string CharacterName_field
+        {
             get { return _characterName; }
-            set {
+            set
+            {
                 _characterName = value;
                 OnPropertyChanged("CharacterName_field");
             }
         }
         private int _entryType;
-        public int EntryType_field {
+        public int EntryType_field
+        {
             get { return _entryType; }
-            set {
+            set
+            {
                 _entryType = value;
                 OnPropertyChanged("EntryType_field");
             }
         }
         private int _unlockCost;
-        public int UnlockCost_field {
+        public int UnlockCost_field
+        {
             get { return _unlockCost; }
-            set {
+            set
+            {
                 _unlockCost = value;
                 OnPropertyChanged("UnlockCost_field");
             }
         }
         private int _unlockCondition;
-        public int UnlockCondition_field {
+        public int UnlockCondition_field
+        {
             get { return _unlockCondition; }
-            set {
+            set
+            {
                 _unlockCondition = value;
                 OnPropertyChanged("UnlockCondition_field");
 
@@ -93,11 +112,14 @@ namespace NSC_ModManager.ViewModel
         }
         public ObservableCollection<CostumeParamModel> CostumeParamList { get; set; }
         private CostumeParamModel _selectedCostumeParam;
-        public CostumeParamModel SelectedCostumeParam {
+        public CostumeParamModel SelectedCostumeParam
+        {
             get { return _selectedCostumeParam; }
-            set {
+            set
+            {
                 _selectedCostumeParam = value;
-                if (value is not null) {
+                if (value is not null)
+                {
                     EntryString_field = value.EntryString;
                     EntryIndex_field = value.EntryIndex;
                     PlayerSettingParamID_field = value.PlayerSettingParamID;
@@ -111,9 +133,11 @@ namespace NSC_ModManager.ViewModel
             }
         }
         private int _selectedCostumeParamIndex;
-        public int SelectedCostumeParamIndex {
+        public int SelectedCostumeParamIndex
+        {
             get { return _selectedCostumeParamIndex; }
-            set {
+            set
+            {
                 _selectedCostumeParamIndex = value;
                 OnPropertyChanged("SelectedCostumeParamIndex");
             }
@@ -121,49 +145,60 @@ namespace NSC_ModManager.ViewModel
 
         public byte[] fileByte;
         public string filePath;
-        public CostumeParamViewModel() {
+        public CostumeParamViewModel()
+        {
 
             LoadingStatePlay = Visibility.Hidden;
             CostumeParamList = new ObservableCollection<CostumeParamModel>();
             filePath = "";
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             CostumeParamList.Clear();
         }
 
-        public void OpenFile(string basepath = "") {
+        public void OpenFile(string basepath = "")
+        {
             Clear();
-            if (basepath == "") {
+            if (basepath == "")
+            {
                 OpenFileDialog myDialog = new OpenFileDialog();
                 myDialog.Filter = "XFBIN Container (*.xfbin)|*.xfbin";
                 myDialog.CheckFileExists = true;
                 myDialog.Multiselect = false;
-                if (myDialog.ShowDialog() == true) {
+                if (myDialog.ShowDialog() == true)
+                {
                     filePath = myDialog.FileName;
-                } else {
+                } else
+                {
                     return;
                 }
-            } else {
+            } else
+            {
                 filePath = basepath;
             }
-            if (File.Exists(filePath)) {
+            if (File.Exists(filePath))
+            {
                 fileByte = File.ReadAllBytes(filePath);
                 int Index3 = 128;
                 string BinName = "";
                 string BinPath = BinaryReader.b_ReadString(fileByte, Index3);
                 Index3 = Index3 + BinPath.Length + 2;
-                for (int x = 0; x < 3; x++) {
+                for (int x = 0; x < 3; x++)
+                {
                     string name = BinaryReader.b_ReadString(fileByte, Index3);
                     if (x == 0)
                         BinName = name;
                     Index3 = Index3 + name.Length + 1;
                 }
                 int StartOfFile = 0x44 + BinaryReader.b_ReadIntRev(fileByte, 16);
-                if (BinName.Contains("costumeParam")) {
+                if (BinName.Contains("costumeParam"))
+                {
 
                     int entryCount = BinaryReader.b_ReadInt(fileByte, StartOfFile + 4);
-                    for (int c = 0; c < entryCount; c++) {
+                    for (int c = 0; c < entryCount; c++)
+                    {
                         int ptr = StartOfFile + 0x10 + (c * 0x28);
                         CostumeParamModel CostumeParamEntry = new CostumeParamModel();
                         CostumeParamEntry.EntryString = BinaryReader.b_ReadString(fileByte, ptr + BinaryReader.b_ReadInt(fileByte, ptr));
@@ -176,7 +211,8 @@ namespace NSC_ModManager.ViewModel
 
                         CostumeParamList.Add(CostumeParamEntry);
                     }
-                } else {
+                } else
+                {
                     ModernWpf.MessageBox.Show("You can't open that file with that tool. ");
                     return;
                 }
@@ -184,15 +220,20 @@ namespace NSC_ModManager.ViewModel
 
         }
 
-        public void RemoveEntry() {
-            if (SelectedCostumeParam is not null) {
+        public void RemoveEntry()
+        {
+            if (SelectedCostumeParam is not null)
+            {
                 CostumeParamList.Remove(SelectedCostumeParam);
-            } else {
+            } else
+            {
                 ModernWpf.MessageBox.Show("Select entry!");
             }
         }
-        public void SaveEntry() {
-            if (SelectedCostumeParam is not null) {
+        public void SaveEntry()
+        {
+            if (SelectedCostumeParam is not null)
+            {
                 SelectedCostumeParam.EntryString = EntryString_field;
                 SelectedCostumeParam.EntryIndex = EntryIndex_field;
                 SelectedCostumeParam.PlayerSettingParamID = PlayerSettingParamID_field;
@@ -201,14 +242,19 @@ namespace NSC_ModManager.ViewModel
                 SelectedCostumeParam.UnlockCost = UnlockCost_field;
                 SelectedCostumeParam.UnlockCondition = UnlockCondition_field;
                 ModernWpf.MessageBox.Show("Entry was saved!");
-            } else {
+            } else
+            {
                 ModernWpf.MessageBox.Show("Select entry!");
             }
         }
-        public int SearchByteIndex(ObservableCollection<CostumeParamModel> FunctionList, int member_index, int Selected) {
-            for (int x = 0; x < FunctionList.Count; x++) {
-                if (FunctionList[x].PlayerSettingParamID == member_index) {
-                    if (Selected < x) {
+        public int SearchByteIndex(ObservableCollection<CostumeParamModel> FunctionList, int member_index, int Selected)
+        {
+            for (int x = 0; x < FunctionList.Count; x++)
+            {
+                if (FunctionList[x].PlayerSettingParamID == member_index)
+                {
+                    if (Selected < x)
+                    {
                         return x;
                     }
                 }
@@ -217,31 +263,41 @@ namespace NSC_ModManager.ViewModel
             return -1;
         }
 
-        public void SearchEntry() {
-            if (SearchIndex_field > 0) {
-                if (SearchByteIndex(CostumeParamList, SearchIndex_field, SelectedCostumeParamIndex) != -1) {
+        public void SearchEntry()
+        {
+            if (SearchIndex_field > 0)
+            {
+                if (SearchByteIndex(CostumeParamList, SearchIndex_field, SelectedCostumeParamIndex) != -1)
+                {
                     SelectedCostumeParamIndex = SearchByteIndex(CostumeParamList, SearchIndex_field, SelectedCostumeParamIndex);
                     CollectionViewSource.GetDefaultView(CostumeParamList).MoveCurrentTo(SelectedCostumeParam);
-                } else {
-                    if (SearchByteIndex(CostumeParamList, SearchIndex_field, 0) != -1) {
+                } else
+                {
+                    if (SearchByteIndex(CostumeParamList, SearchIndex_field, 0) != -1)
+                    {
                         SelectedCostumeParamIndex = SearchByteIndex(CostumeParamList, SearchIndex_field, 0);
                         CollectionViewSource.GetDefaultView(CostumeParamList).MoveCurrentTo(SelectedCostumeParam);
-                    } else {
+                    } else
+                    {
                         ModernWpf.MessageBox.Show("There is no entry with that Characode ID.", "No result", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-            } else {
+            } else
+            {
                 ModernWpf.MessageBox.Show("Write ID in field!");
             }
         }
 
 
-        public void AddDupEntry() {
+        public void AddDupEntry()
+        {
             CostumeParamModel CostumeParamEntry = new CostumeParamModel();
-            if (SelectedCostumeParam is not null) {
+            if (SelectedCostumeParam is not null)
+            {
                 CostumeParamEntry = (CostumeParamModel)SelectedCostumeParam.Clone();
 
-            } else {
+            } else
+            {
                 CostumeParamEntry.EntryString = EntryString_field;
                 CostumeParamEntry.EntryIndex = EntryIndex_field;
                 CostumeParamEntry.PlayerSettingParamID = PlayerSettingParamID_field;
@@ -251,11 +307,13 @@ namespace NSC_ModManager.ViewModel
                 CostumeParamEntry.UnlockCondition = UnlockCondition_field;
             }
             List<int> Index_List = new List<int>();
-            for (int c = 0; c < CostumeParamList.Count; c++) {
+            for (int c = 0; c < CostumeParamList.Count; c++)
+            {
                 Index_List.Add(CostumeParamList[c].EntryIndex);
             }
             int new_Index = 0;
-            do {
+            do
+            {
                 new_Index++;
             }
             while (Index_List.Contains(new_Index));
@@ -264,39 +322,60 @@ namespace NSC_ModManager.ViewModel
             ModernWpf.MessageBox.Show("Entry was added!");
         }
 
-        public string LastCostume() {
+        // Modified LastCostume method to avoid parsing errors
+        public string LastCostume()
+        {
             List<int> CostumeIds = new List<int>();
 
-            for (int i = 0; i < CostumeParamList.Count; i++) {
-                CostumeIds.Add(Convert.ToInt32(CostumeParamList[i].EntryString.Remove(0, CostumeParamList[i].EntryString.IndexOf("_")+1)));
+            for (int i = 0; i < CostumeParamList.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(CostumeParamList[i].EntryString))
+                {
+                    int underscoreIndex = CostumeParamList[i].EntryString.IndexOf("_");
+                    if (underscoreIndex >= 0 && underscoreIndex < CostumeParamList[i].EntryString.Length - 1)
+                    {
+                        string numPart = CostumeParamList[i].EntryString.Substring(underscoreIndex + 1);
+                        if (int.TryParse(numPart, out int id))
+                        {
+                            CostumeIds.Add(id);
+                        }
+                    }
+                }
             }
-            int maxCostumeId = CostumeIds.Max() + 10;
+            int maxCostumeId = CostumeIds.Count > 0 ? CostumeIds.Max() + 10 : 10;
             return "COSTUME_" + maxCostumeId.ToString("D5");
         }
-        public int LastEntry() {
+        public int LastEntry()
+        {
             List<int> Ids = new List<int>();
 
-            for (int i = 0; i < CostumeParamList.Count; i++) {
+            for (int i = 0; i < CostumeParamList.Count; i++)
+            {
                 Ids.Add(CostumeParamList[i].EntryIndex);
             }
             int maxId = Ids.Max();
             return maxId + 1;
         }
-        public void SaveFile() {
-            if (filePath != "") {
+        public void SaveFile()
+        {
+            if (filePath != "")
+            {
 
-                if (File.Exists(filePath + ".backup")) {
+                if (File.Exists(filePath + ".backup"))
+                {
                     File.Delete(filePath + ".backup");
                 }
                 File.Copy(filePath, filePath + ".backup");
                 File.WriteAllBytes(filePath, ConvertToFile());
                 ModernWpf.MessageBox.Show("File saved to " + filePath + ".");
-            } else {
+            } else
+            {
                 SaveFileAs();
             }
         }
 
-        public void SaveFileAs(string basepath = "") {
+        public void SaveFileAs(string basepath = "")
+        {
             SaveFileDialog s = new SaveFileDialog();
             {
                 s.DefaultExt = ".xfbin";
@@ -306,15 +385,19 @@ namespace NSC_ModManager.ViewModel
                 s.FileName = basepath;
             else
                 s.ShowDialog();
-            if (s.FileName == "") {
+            if (s.FileName == "")
+            {
                 return;
             }
-            if (s.FileName == filePath) {
-                if (File.Exists(filePath + ".backup")) {
+            if (s.FileName == filePath)
+            {
+                if (File.Exists(filePath + ".backup"))
+                {
                     File.Delete(filePath + ".backup");
                 }
                 File.Copy(filePath, filePath + ".backup");
-            } else {
+            } else
+            {
                 filePath = s.FileName;
             }
             File.WriteAllBytes(filePath, ConvertToFile());
@@ -322,7 +405,8 @@ namespace NSC_ModManager.ViewModel
                 ModernWpf.MessageBox.Show("File saved to " + filePath + ".");
         }
 
-        public byte[] ConvertToFile() {
+        public byte[] ConvertToFile()
+        {
             // Build the header
             int totalLength4 = 0;
 
@@ -345,7 +429,8 @@ namespace NSC_ModManager.ViewModel
             totalLength4 = PtrName;
             int AddedBytes = 0;
 
-            while (fileBytes36.Length % 4 != 0) {
+            while (fileBytes36.Length % 4 != 0)
+            {
                 AddedBytes++;
                 fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, new byte[1]);
             }
@@ -426,17 +511,18 @@ namespace NSC_ModManager.ViewModel
 
 
 
-
             fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, new byte[CostumeParamList.Count * 0x28]);
 
             int addSize = 0;
 
             List<int> EntryString_pointer = new List<int>();
             List<int> CharacterName_pointer = new List<int>();
-            for (int x = 0; x < CostumeParamList.Count; x++) {
+            for (int x = 0; x < CostumeParamList.Count; x++)
+            {
                 int ptr = startPtr + (x * 0x28);
                 EntryString_pointer.Add(fileBytes36.Length);
-                if (CostumeParamList[x].EntryString != "" && CostumeParamList[x].EntryString is not null) {
+                if (CostumeParamList[x].EntryString != "" && CostumeParamList[x].EntryString is not null)
+                {
                     fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, Encoding.ASCII.GetBytes(CostumeParamList[x].EntryString));
                     fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, new byte[1]);
                     int newPointer3 = EntryString_pointer[x] - startPtr - x * 0x28;
@@ -444,7 +530,8 @@ namespace NSC_ModManager.ViewModel
                     addSize += CostumeParamList[x].EntryString.Length + 1;
                 }
                 CharacterName_pointer.Add(fileBytes36.Length);
-                if (CostumeParamList[x].CharacterName != "" && CostumeParamList[x].CharacterName is not null) {
+                if (CostumeParamList[x].CharacterName != "" && CostumeParamList[x].CharacterName is not null)
+                {
                     fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, Encoding.ASCII.GetBytes(CostumeParamList[x].CharacterName));
                     fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, new byte[1]);
                     int newPointer3 = CharacterName_pointer[x] - startPtr - x * 0x28 - 0x10;
@@ -467,8 +554,10 @@ namespace NSC_ModManager.ViewModel
         }
 
         private RelayCommand _saveFileAsCommand;
-        public RelayCommand SaveFileAsCommand {
-            get {
+        public RelayCommand SaveFileAsCommand
+        {
+            get
+            {
                 return _saveFileAsCommand ??
                   (_saveFileAsCommand = new RelayCommand(obj => {
                       SaveFileAsAsync();
@@ -476,8 +565,10 @@ namespace NSC_ModManager.ViewModel
             }
         }
         private RelayCommand _saveFileCommand;
-        public RelayCommand SaveFileCommand {
-            get {
+        public RelayCommand SaveFileCommand
+        {
+            get
+            {
                 return _saveFileCommand ??
                   (_saveFileCommand = new RelayCommand(obj => {
                       SaveFileAsync();
@@ -485,8 +576,10 @@ namespace NSC_ModManager.ViewModel
             }
         }
         private RelayCommand _openFileCommand;
-        public RelayCommand OpenFileCommand {
-            get {
+        public RelayCommand OpenFileCommand
+        {
+            get
+            {
                 return _openFileCommand ??
                   (_openFileCommand = new RelayCommand(obj => {
                       OpenFileAsync();
@@ -494,8 +587,10 @@ namespace NSC_ModManager.ViewModel
             }
         }
         private RelayCommand _deleteEntryCommand;
-        public RelayCommand DeleteEntryCommand {
-            get {
+        public RelayCommand DeleteEntryCommand
+        {
+            get
+            {
                 return _deleteEntryCommand ??
                   (_deleteEntryCommand = new RelayCommand(obj => {
                       RemoveEntryAsync();
@@ -504,8 +599,10 @@ namespace NSC_ModManager.ViewModel
         }
 
         private RelayCommand _addDupEntryCommand;
-        public RelayCommand AddDupEntryCommand {
-            get {
+        public RelayCommand AddDupEntryCommand
+        {
+            get
+            {
                 return _addDupEntryCommand ??
                   (_addDupEntryCommand = new RelayCommand(obj => {
                       AddDupEntryAsync();
@@ -513,8 +610,10 @@ namespace NSC_ModManager.ViewModel
             }
         }
         private RelayCommand _saveEntryCommand;
-        public RelayCommand SaveEntryCommand {
-            get {
+        public RelayCommand SaveEntryCommand
+        {
+            get
+            {
                 return _saveEntryCommand ??
                   (_saveEntryCommand = new RelayCommand(obj => {
                       SaveEntryAsync();
@@ -522,54 +621,64 @@ namespace NSC_ModManager.ViewModel
             }
         }
         private RelayCommand _searchEntryCommand;
-        public RelayCommand SearchEntryCommand {
-            get {
+        public RelayCommand SearchEntryCommand
+        {
+            get
+            {
                 return _searchEntryCommand ??
                   (_searchEntryCommand = new RelayCommand(obj => {
                       SearchEntryAsync();
                   }));
             }
         }
-        public async void SaveFileAsync() {
+        public async void SaveFileAsync()
+        {
             LoadingStatePlay = Visibility.Visible;
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => SaveFile()));
             LoadingStatePlay = Visibility.Hidden;
 
         }
-        public async void SaveFileAsAsync(string basepath = "") {
+        public async void SaveFileAsAsync(string basepath = "")
+        {
             LoadingStatePlay = Visibility.Visible;
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => SaveFileAs(basepath)));
             LoadingStatePlay = Visibility.Hidden;
 
         }
-        public async void OpenFileAsync(string basepath = "") {
+        public async void OpenFileAsync(string basepath = "")
+        {
             LoadingStatePlay = Visibility.Visible;
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => OpenFile(basepath)));
             LoadingStatePlay = Visibility.Hidden;
 
         }
-        public async void SearchEntryAsync() {
+        public async void SearchEntryAsync()
+        {
             LoadingStatePlay = Visibility.Visible;
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => SearchEntry()));
             LoadingStatePlay = Visibility.Hidden;
 
         }
-        public async void AddDupEntryAsync() {
+        public async void AddDupEntryAsync()
+        {
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => AddDupEntry()));
 
         }
-        public async void SaveEntryAsync() {
+        public async void SaveEntryAsync()
+        {
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => SaveEntry()));
 
         }
-        public async void RemoveEntryAsync() {
+        public async void RemoveEntryAsync()
+        {
             await Task.Run(() => App.Current.Dispatcher.Invoke(() => RemoveEntry()));
 
         }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "") {
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
