@@ -1,0 +1,9 @@
+Error: Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')
+
+StackTrace:    at System.Collections.Generic.List`1.get_Item(Int32 index)
+   at System.Collections.ObjectModel.Collection`1.get_Item(Int32 index)
+   at NSC_ModManager.ViewModel.TitleViewModel.bw_DoWork_CompileModProcess(Object sender, DoWorkEventArgs e) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 2232
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Time: 15.02.2025 0:25:32

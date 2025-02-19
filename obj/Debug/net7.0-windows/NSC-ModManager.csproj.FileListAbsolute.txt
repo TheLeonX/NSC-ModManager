@@ -2933,3 +2933,4 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\vi-VN\Moder
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ParamFiles\5kgyprm.bin.xfbin
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ParamFiles\freebtl_set.gfx
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ParamFiles\freebtl_set_vanilla.gfx
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net7.0-windows\ModdingAPIFiles\moddingapi\mods\base_game\pairSpSkillManagerParam.xfbin

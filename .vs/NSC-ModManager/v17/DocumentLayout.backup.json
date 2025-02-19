@@ -9,26 +9,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\characterrostereditorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\characterrostereditorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\costumeparamviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\costumeparamviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\properties\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:properties\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\view\\characterrostereditorview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:view\\characterrostereditorview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,56 +18,19 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "CostumeParamViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\CostumeParamViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\CostumeParamViewModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\CostumeParamViewModel.cs",
-              "RelativeToolTip": "ViewModel\\CostumeParamViewModel.cs",
-              "ViewState": "AgIAADQBAAAAAAAAAAAAAK4CAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-12T13:28:36.398Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
-              "RelativeDocumentMoniker": "Properties\\Program.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
-              "RelativeToolTip": "Properties\\Program.cs",
-              "ViewState": "AgIAAJUAAAAAAAAAAAAAALEAAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-04T08:44:27.988Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Settings.settings",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Settings.settings",
-              "RelativeDocumentMoniker": "Properties\\Settings.settings",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Settings.settings",
-              "RelativeToolTip": "Properties\\Settings.settings",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002767|",
-              "WhenOpened": "2025-02-04T08:34:34.327Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NSC-ModManager.csproj",
+              "Title": "NSC-ModManager",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeDocumentMoniker": "NSC-ModManager.csproj",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
-              "RelativeToolTip": "NSC-ModManager.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAYAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj*",
+              "RelativeToolTip": "NSC-ModManager.csproj*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-01-25T08:43:43.328Z",
+              "WhenOpened": "2025-02-19T15:39:28.658Z",
               "EditorCaption": ""
             },
             {
@@ -98,33 +41,9 @@
               "RelativeDocumentMoniker": "ViewModel\\TitleViewModel.cs",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeToolTip": "ViewModel\\TitleViewModel.cs",
-              "ViewState": "AgIAADYMAAAAAAAAAAAAAKUEAABQAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADwCAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-24T02:19:57.204Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CharacterRosterEditorView.xaml",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\View\\CharacterRosterEditorView.xaml",
-              "RelativeDocumentMoniker": "View\\CharacterRosterEditorView.xaml",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\View\\CharacterRosterEditorView.xaml",
-              "RelativeToolTip": "View\\CharacterRosterEditorView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-22T08:02:46.404Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CharacterRosterEditorViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\CharacterRosterEditorViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\CharacterRosterEditorViewModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\CharacterRosterEditorViewModel.cs",
-              "RelativeToolTip": "ViewModel\\CharacterRosterEditorViewModel.cs",
-              "ViewState": "AgIAAKEAAAAAAAAAAADwvx0AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T07:59:25.375Z",
               "EditorCaption": ""
             }
           ]

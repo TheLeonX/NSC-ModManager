@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DynamicData;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NSC_ModManager.Model;
 using NSC_ModManager.Properties;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -340,7 +342,7 @@ namespace NSC_ModManager.ViewModel
                     fileBytes = File.ReadAllBytes(value);
                 } else
                 {
-                    fileBytes = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory.ToString() + "\\Resources\\TemplateImages\\template_icon.png");
+                    fileBytes = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToString(), "Resources", "TemplateImages", "template_icon.png")); 
                 }
                 memoryStream.Write(fileBytes, 0, fileBytes.Length);
                 memoryStream.Position = 0;
@@ -446,6 +448,21 @@ namespace NSC_ModManager.ViewModel
                 OnPropertyChanged("CostumeList");
             }
         }
+
+        private ObservableCollection<TeamUltimateJutsuModModel> _TUJList = new ObservableCollection<TeamUltimateJutsuModModel>();
+        public ObservableCollection<TeamUltimateJutsuModModel> TUJList
+        {
+            get
+            {
+                return _TUJList;
+            }
+            set
+            {
+                _TUJList = value;
+                OnPropertyChanged("TUJList");
+            }
+        }
+
 
         private ObservableCollection<string> _CPKList = new ObservableCollection<string>();
         public ObservableCollection<string> CPKList
@@ -561,8 +578,12 @@ namespace NSC_ModManager.ViewModel
             CharacterList.Clear();
             StageList.Clear();
             CostumeList.Clear();
+            TUJList.Clear();
+            CPKList.Clear();
+            ShaderList.Clear();
+
             string root_folder = Properties.Settings.Default.RootGameFolder;
-            string modmanager_folder = root_folder + "\\modmanager\\"; // "\\\\?\\" was used for fixing long paths. Crashes sometimes
+            string modmanager_folder = Path.Combine(root_folder, "modmanager"); // "\\\\?\\" was used for fixing long paths. Crashes sometimes
             if (Directory.Exists(modmanager_folder))
             {
 
@@ -640,6 +661,34 @@ namespace NSC_ModManager.ViewModel
                             };
                             CostumeList.Add(CostumeEntry);
                         }
+
+                        //Team Ultimate Jutsu Mod
+
+                        FileInfo[] TUJModList = mod_dir.GetFiles("TUJ_config.ini", SearchOption.AllDirectories);
+                        Array.Sort(TUJModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
+                        foreach (FileInfo tuj_path in TUJModList)
+                        {
+                            var TUJInfo = new IniFile(tuj_path.FullName);
+                            string characodesString = TUJInfo.Read("Characodes", "ModManager");
+                            // Convert the split list of strings into ObservableCollection
+                            ObservableCollection<string> characodeList = new ObservableCollection<string>(
+                                characodesString.Split(',')
+                                                .Select(code => code.Trim())
+                            );
+
+                            TeamUltimateJutsuModModel TUJEntry = new TeamUltimateJutsuModModel()
+                            {
+                                Label = TUJInfo.Read("Label", "ModManager"),
+                                Name = TUJInfo.Read("Name", "ModManager"),
+                                Flag1 = Convert.ToBoolean(TUJInfo.Read("Flag1", "ModManager")),
+                                Flag2 = Convert.ToBoolean(TUJInfo.Read("Flag2", "ModManager")),
+                                MemberCount = Convert.ToInt32(TUJInfo.Read("MemberCount", "ModManager")),
+                                CharacodeList = characodeList,
+                                RootPath = Path.GetDirectoryName(tuj_path.FullName)
+                            };
+                            TUJList.Add(TUJEntry);
+                        }
+
                         //CPKs
                         FileInfo[] CpkListInfo = mod_dir.GetFiles("*.cpk", SearchOption.AllDirectories);
                         Array.Sort(CpkListInfo, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
@@ -714,42 +763,47 @@ namespace NSC_ModManager.ViewModel
 
 
                 //vanilla files
-                string characodePath = Directory.GetCurrentDirectory() + "\\ParamFiles\\characode.bin.xfbin";
-                string duelPlayerParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\duelPlayerParam.xfbin";
-                string playerSettingParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\playerSettingParam.bin.xfbin";
-                string skillCustomizeParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\skillCustomizeParam.xfbin";
-                string spSkillCustomizeParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\spSkillCustomizeParam.xfbin";
-                string skillIndexSettingParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\skillIndexSettingParam.xfbin";
-                string supportSkillRecoverySpeedParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\supportSkillRecoverySpeedParam.xfbin";
-                string privateCameraPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\privateCamera.bin.xfbin";
-                string characterSelectParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\characterSelectParam.xfbin";
+                string characodePath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "characode.bin.xfbin");
+                string duelPlayerParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "duelPlayerParam.xfbin");
+                string playerSettingParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "playerSettingParam.bin.xfbin");
+                string skillCustomizeParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "skillCustomizeParam.xfbin");
+                string spSkillCustomizeParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "spSkillCustomizeParam.xfbin");
+                string skillIndexSettingParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "skillIndexSettingParam.xfbin");
+                string supportSkillRecoverySpeedParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "supportSkillRecoverySpeedParam.xfbin");
+                string privateCameraPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "privateCamera.bin.xfbin");
+                string characterSelectParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "characterSelectParam.xfbin");
 
-                string costumeBreakColorParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\costumeBreakColorParam.xfbin";
+                string costumeBreakColorParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "costumeBreakColorParam.xfbin");
 
-                string costumeParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\costumeParam.bin.xfbin";
-                string playerIconPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\player_icon.xfbin";
-                string cmnparamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\cmnparam.xfbin";
-                string supportActionParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\supportActionParam.xfbin";
-                string awakeAuraPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\awakeAura.xfbin";
-                string appearanceAnmPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\appearanceAnm.xfbin";
-                string afterAttachObjectPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\afterAttachObject.xfbin";
-                string playerDoubleEffectParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\playerDoubleEffectParam.xfbin";
-                string spTypeSupportParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\spTypeSupportParam.xfbin";
-                string costumeBreakParamPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\costumeBreakParam.xfbin";
-                string messageInfoPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\message";
-                string damageeffPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\damageeff.bin.xfbin";
-                string effectprmPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\effectprm.bin.xfbin";
-                string damageprmPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\damageprm.bin.xfbin";
-                string stageInfoPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\StageInfo.bin.xfbin";
-                string nuccMaterialDx11Path = Directory.GetCurrentDirectory() + "\\ParamFiles\\nuccMaterial_dx11.nsh";
-                string stageselGfxPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\stagesel.gfx";
-                string stageselImageGfxPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\stagesel_image.gfx";
-                string charselGfxPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\charsel.gfx";
-                string chariconGfxPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\charicon_s.gfx";
-                string stage_selectPath = Directory.GetCurrentDirectory() + "\\ParamFiles\\select_stage.xfbin";
+                string costumeParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "costumeParam.bin.xfbin");
+                string playerIconPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "player_icon.xfbin");
+                string cmnparamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "cmnparam.xfbin");
+                string supportActionParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "supportActionParam.xfbin");
+                string awakeAuraPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "awakeAura.xfbin");
+                string appearanceAnmPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "appearanceAnm.xfbin");
+                string afterAttachObjectPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "afterAttachObject.xfbin");
+                string playerDoubleEffectParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "playerDoubleEffectParam.xfbin");
+                string spTypeSupportParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "spTypeSupportParam.xfbin");
+                string costumeBreakParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "costumeBreakParam.xfbin");
+                string messageInfoPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "message");
+                string damageeffPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "damageeff.bin.xfbin");
+                string effectprmPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "effectprm.bin.xfbin");
+                string damageprmPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "damageprm.bin.xfbin");
+                string stageInfoPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "StageInfo.bin.xfbin");
+                string nuccMaterialDx11Path = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "nuccMaterial_dx11.nsh");
+                string stageselGfxPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "stagesel.gfx");
+                string stageselImageGfxPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "stagesel_image.gfx");
+                string charselGfxPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "charsel.gfx");
+                string chariconGfxPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "charicon_s.gfx");
+                string stage_selectPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "select_stage.xfbin");
+
                 string specialCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "specialCondParam.xfbin");
                 string partnerSlotParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin");
                 string susanooCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "susanooCondParam.xfbin");
+
+                //TUJ Only
+                string pairSpSkillCombinationParam = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "pairSpSkillCombinationParam.xfbin");
+                string pairSpSkillManagerParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "pairSpSkillManagerParam.xfbin");
 
                 //vanilla file editors
                 CharacodeEditorViewModel characode_vanilla = new CharacodeEditorViewModel();
@@ -806,6 +860,12 @@ namespace NSC_ModManager.ViewModel
                 StageInfoViewModel stageInfo_vanilla = new StageInfoViewModel();
                 stageInfo_vanilla.OpenFile(stageInfoPath);
 
+                //TUJ Vanilla Files
+                PairSpSkillCombinationParamViewModel pairSpSkillComb_vanilla = new PairSpSkillCombinationParamViewModel();
+                pairSpSkillComb_vanilla.OpenFile(pairSpSkillCombinationParam);
+                byte[] pairManagerParam_vanilla = File.ReadAllBytes(pairSpSkillManagerParamPath);
+
+
                 if (!File.Exists(specialCondParamPath))
                 {
                     throw new FileNotFoundException($"File not found: {specialCondParamPath}");
@@ -857,38 +917,38 @@ namespace NSC_ModManager.ViewModel
 
 
                     // Required for adding
-                    string duelPlayerParamModPath = character_mod.RootPath + "\\data\\spc\\duelPlayerParam.xfbin";
-                    string playerSettingParamModPath = character_mod.RootPath + "\\data\\spc\\playerSettingParam.bin.xfbin";
-                    string skillCustomizeParamModPath = character_mod.RootPath + "\\data\\spc\\skillCustomizeParam.xfbin";
-                    string spSkillCustomizeParamModPath = character_mod.RootPath + "\\data\\spc\\spSkillCustomizeParam.xfbin";
-                    string skillIndexSettingParamModPath = character_mod.RootPath + "\\data\\spc\\skillIndexSettingParam.xfbin";
-                    string supportSkillRecoverySpeedParamModPath = character_mod.RootPath + "\\data\\spc\\supportSkillRecoverySpeedParam.xfbin";
-                    string privateCameraModPath = character_mod.RootPath + "\\data\\spc\\privateCamera.bin.xfbin";
+                    string duelPlayerParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "duelPlayerParam.xfbin");
+                    string playerSettingParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "playerSettingParam.bin.xfbin");
+                    string skillCustomizeParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "skillCustomizeParam.xfbin");
+                    string spSkillCustomizeParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "spSkillCustomizeParam.xfbin");
+                    string skillIndexSettingParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "skillIndexSettingParam.xfbin");
+                    string supportSkillRecoverySpeedParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "supportSkillRecoverySpeedParam.xfbin");
+                    string privateCameraModPath = Path.Combine(character_mod.RootPath, "data", "spc", "privateCamera.bin.xfbin");
 
+                    string costumeParamModPath = Path.Combine(character_mod.RootPath, "data", "rpg", "param", "costumeParam.bin.xfbin");
+                    string playerIconModPath = Path.Combine(character_mod.RootPath, "data", "spc", "player_icon.xfbin");
+                    string cmnparamModPath = Path.Combine(character_mod.RootPath, "data", "sound", "cmnparam.xfbin");
+                    string characterSelectParamModPath = Path.Combine(character_mod.RootPath, "data", "ui", "max", "select", "characterSelectParam.xfbin");
+                    string supportActionParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "supportActionParam.xfbin");
 
-                    string costumeParamModPath = character_mod.RootPath + "\\data\\rpg\\param\\costumeParam.bin.xfbin";
-                    string playerIconModPath = character_mod.RootPath + "\\data\\spc\\player_icon.xfbin";
-                    string cmnparamModPath = character_mod.RootPath + "\\data\\sound\\cmnparam.xfbin";
-                    string characterSelectParamModPath = character_mod.RootPath + "\\data\\ui\\max\\select\\characterSelectParam.xfbin";
-                    string supportActionParamModPath = character_mod.RootPath + "\\data\\spc\\supportActionParam.xfbin";
 
                     //Not required for adding
 
-                    string costumeBreakColorParamModPath = character_mod.RootPath + "\\data\\spc\\costumeBreakColorParam.xfbin";
-                    string awakeAuraModPath = character_mod.RootPath + "\\data\\spc\\awakeAura.xfbin";
-                    string appearanceAnmModPath = character_mod.RootPath + "\\data\\spc\\appearanceAnm.xfbin";
-                    string afterAttachObjectModPath = character_mod.RootPath + "\\data\\spc\\afterAttachObject.xfbin";
-                    string playerDoubleEffectParamModPath = character_mod.RootPath + "\\data\\spc\\playerDoubleEffectParam.xfbin";
-                    string spTypeSupportParamModPath = character_mod.RootPath + "\\data\\spc\\spTypeSupportParam.xfbin";
-                    string costumeBreakParamModPath = character_mod.RootPath + "\\data\\spc\\costumeBreakParam.xfbin";
-                    string messageInfoModPath = character_mod.RootPath + "\\data\\message";
-                    string damageeffModPath = character_mod.RootPath + "\\data\\spc\\damageeff.bin.xfbin";
-                    string effectprmModPath = character_mod.RootPath + "\\data\\spc\\effectprm.bin.xfbin";
-                    string damageprmModPath = character_mod.RootPath + "\\data\\spc\\damageprm.bin.xfbin";
+                    string costumeBreakColorParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "costumeBreakColorParam.xfbin");
+                    string awakeAuraModPath = Path.Combine(character_mod.RootPath, "data", "spc", "awakeAura.xfbin");
+                    string appearanceAnmModPath = Path.Combine(character_mod.RootPath, "data", "spc", "appearanceAnm.xfbin");
+                    string afterAttachObjectModPath = Path.Combine(character_mod.RootPath, "data", "spc", "afterAttachObject.xfbin");
+                    string playerDoubleEffectParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "playerDoubleEffectParam.xfbin");
+                    string spTypeSupportParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "spTypeSupportParam.xfbin");
+                    string costumeBreakParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "costumeBreakParam.xfbin");
+                    string messageInfoModPath = Path.Combine(character_mod.RootPath, "data", "message");
+                    string damageeffModPath = Path.Combine(character_mod.RootPath, "data", "spc", "damageeff.bin.xfbin");
+                    string effectprmModPath = Path.Combine(character_mod.RootPath, "data", "spc", "effectprm.bin.xfbin");
+                    string damageprmModPath = Path.Combine(character_mod.RootPath, "data", "spc", "damageprm.bin.xfbin");
 
-                    string specialCondParamModPath = character_mod.RootPath + "\\moddingapi\\mods\\base_game\\specialCondParam.xfbin";
-                    string partnerSlotParamModPath = character_mod.RootPath + "\\moddingapi\\mods\\base_game\\partnerSlotParam.xfbin";
-                    string susanooCondParamModPath = character_mod.RootPath + "\\moddingapi\\mods\\base_game\\susanooCondParam.xfbin";
+                    string specialCondParamModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "specialCondParam.xfbin");
+                    string partnerSlotParamModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin");
+                    string susanooCondParamModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "susanooCondParam.xfbin");
 
                     //characode file
                     if (!replace_character)
@@ -1759,8 +1819,8 @@ namespace NSC_ModManager.ViewModel
                 foreach (StageModModel stage_mod in StageList)
                 {
 
-                    string messageInfoModPath = stage_mod.RootPath + "\\data\\message";
-                    string stageInfoModPath = stage_mod.RootPath + "\\data\\stage\\StageInfo.bin.xfbin";
+                    string messageInfoModPath = Path.Combine(stage_mod.RootPath, "data", "message");
+                    string stageInfoModPath = Path.Combine(stage_mod.RootPath, "data", "stage", "StageInfo.bin.xfbin");
 
                     string mod_stagename = stage_mod.StageName;
                     int mod_stageID = -1;
@@ -1832,14 +1892,15 @@ namespace NSC_ModManager.ViewModel
                         continue;
 
 
-                    string playerSettingParamModPath = costume_mod.RootPath + "\\data\\spc\\playerSettingParam.bin.xfbin";
-                    string characterSelectParamModPath = costume_mod.RootPath + "\\data\\ui\\max\\select\\characterSelectParam.xfbin";
-                    string costumeBreakColorParamModPath = costume_mod.RootPath + "\\data\\spc\\costumeBreakColorParam.xfbin";
-                    string costumeParamModPath = costume_mod.RootPath + "\\data\\rpg\\param\\costumeParam.bin.xfbin";
-                    string costumeBreakParamModPath = costume_mod.RootPath + "\\data\\spc\\costumeBreakParam.xfbin";
-                    string afterAttachObjectModPath = costume_mod.RootPath + "\\data\\spc\\afterAttachObject.xfbin";
-                    string playerIconModPath = costume_mod.RootPath + "\\data\\spc\\player_icon.xfbin";
-                    string messageInfoModPath = costume_mod.RootPath + "\\data\\message";
+                    string playerSettingParamModPath = Path.Combine(costume_mod.RootPath, "data", "spc", "playerSettingParam.bin.xfbin");
+                    string characterSelectParamModPath = Path.Combine(costume_mod.RootPath, "data", "ui", "max", "select", "characterSelectParam.xfbin");
+                    string costumeBreakColorParamModPath = Path.Combine(costume_mod.RootPath, "data", "spc", "costumeBreakColorParam.xfbin");
+                    string costumeParamModPath = Path.Combine(costume_mod.RootPath, "data", "rpg", "param", "costumeParam.bin.xfbin");
+                    string costumeBreakParamModPath = Path.Combine(costume_mod.RootPath, "data", "spc", "costumeBreakParam.xfbin");
+                    string afterAttachObjectModPath = Path.Combine(costume_mod.RootPath, "data", "spc", "afterAttachObject.xfbin");
+                    string playerIconModPath = Path.Combine(costume_mod.RootPath, "data", "spc", "player_icon.xfbin");
+                    string messageInfoModPath = Path.Combine(costume_mod.RootPath, "data", "message");
+
 
                     //check if any costume exist for character
                     foreach (PlayerSettingParamModel psp_entry in playerSettingParam_vanilla.PlayerSettingParamList)
@@ -2036,12 +2097,206 @@ namespace NSC_ModManager.ViewModel
                     }
 
                 }
+                List<string> skippedLabels = new List<string>();
+                //Compile Team Ultimate Jutsu Mods
+                foreach (TeamUltimateJutsuModModel tuj_mod in TUJList)
+                {
+                    string cmnparamModPath = Path.Combine(tuj_mod.RootPath, "data", "sound", "cmnparam.xfbin");
+                    string messageInfoModPath = Path.Combine(tuj_mod.RootPath, "data", "message");
 
-                string param_modmanager_path = root_folder + "\\param_files\\";
-                byte[] nuccMaterialFile = File.ReadAllBytes(nuccMaterialDx11Path); // This function reading all bytes from nuccMaterial_dx11 file
-                                                                                   //unpack CPKs
-                if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\"))
-                    Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\");
+
+
+
+                    string mod_tuj = tuj_mod.Label;
+                    int mod_tuj_id = -1;
+                    bool replace_tuj = false;
+
+                    // ---------------------------------------- Pair Sp Skill Manager Param ---------------------------------------------------------------
+                    // Read all bytes from the file.
+                    int entryLength = 0x18; // Each entry is 24 bytes.
+
+                    // Check if any entry already has TUJ_label_field as its name.
+                    int tuj_entryCount = pairManagerParam_vanilla.Length / entryLength;
+                    for (int i = 0; i < tuj_entryCount; i++)
+                    {
+                        int offset = i * entryLength;
+                        byte[] nameBytes = new byte[0x10]; // 16 bytes for the name.
+                        Array.Copy(pairManagerParam_vanilla, offset, nameBytes, 0, 0x10);
+
+                        // Convert the 16-byte string (assumed ASCII) and trim null terminators.
+                        string entryName = Encoding.ASCII.GetString(nameBytes).TrimEnd('\0');
+
+                        if (entryName.Equals(mod_tuj, StringComparison.Ordinal))
+                        {
+                            replace_tuj = true;
+                            mod_tuj_id = i;
+                            break;
+                        }
+                    }
+                    // Create a new collection to hold the matching characode indices.
+                    ObservableCollection<int> characodeIndices = new ObservableCollection<int>();
+                    bool allFound = true;
+
+                    // Iterate through each characode (string) in the TUJ mod.
+                    foreach (string code in tuj_mod.CharacodeList)
+                    {
+                        // Look up the characode entry in characode_vanilla (which contains CharacodeName and CharacodeIndex).
+                        var match = characode_vanilla.CharacodeList
+                                        .FirstOrDefault(x => x.CharacodeName.Equals(code, StringComparison.OrdinalIgnoreCase));
+                        if (match != null)
+                        {
+                            // Add the found CharacodeIndex.
+                            characodeIndices.Add(match.CharacodeIndex);
+                        } else
+                        {
+                            // If any code isn't found, mark as incomplete and exit the loop.
+                            allFound = false;
+                            break;
+                        }
+                    }
+                    if (!allFound)
+                    {
+                        skippedLabels.Add(tuj_mod.Label);
+                        continue;
+                    }
+
+                    List<int> SkipEntriesList = new List<int> { 55, 56, 58 };
+                    if (!replace_tuj)
+                    {
+                        mod_tuj_id = tuj_entryCount;
+                        // Add placeholder entries only if the current count is in SkipEntriesList.
+                        byte[] newPairManagerEntry = new byte[entryLength];
+                        while (SkipEntriesList.Contains(tuj_entryCount))
+                        {
+                            newPairManagerEntry = new byte[entryLength];
+                            // Replace name with "placeholder"
+                            newPairManagerEntry = BinaryReader.b_ReplaceString(newPairManagerEntry, "placeholder", 0x00);
+                            // Replace Unlock Value with -1
+                            newPairManagerEntry = BinaryReader.b_ReplaceBytes(newPairManagerEntry, BitConverter.GetBytes(-1), 0x10);
+                            // Append the placeholder entry
+                            pairManagerParam_vanilla = BinaryReader.b_AddBytes(pairManagerParam_vanilla, newPairManagerEntry);
+
+                            // Update the count after appending the entry.
+                            tuj_entryCount = pairManagerParam_vanilla.Length / entryLength;
+                        }
+                        // Now add the new entry with tuj_mod.Label as its name.
+                        {
+                            newPairManagerEntry = new byte[entryLength];
+                            newPairManagerEntry = BinaryReader.b_ReplaceString(newPairManagerEntry, tuj_mod.Label, 0x00);
+                            newPairManagerEntry = BinaryReader.b_ReplaceBytes(newPairManagerEntry, BitConverter.GetBytes(-1), 0x10);
+                            pairManagerParam_vanilla = BinaryReader.b_AddBytes(pairManagerParam_vanilla, newPairManagerEntry);
+                        }
+                        // ---------------------------------------- Pair Sp Skill Combination Param ---------------------------------------------------------------
+
+                        int entryPairComb = pairSpSkillComb_vanilla.pairSpSkillList.Count;
+                        PairSpSkillCombinationParamModel pairSpSkillCombEntry = new PairSpSkillCombinationParamModel();
+                        while (SkipEntriesList.Contains(entryPairComb))
+                        {
+                            pairSpSkillCombEntry.TUJ_ID = entryPairComb;
+                            pairSpSkillCombEntry.CharacodeList = new ObservableCollection<int> { 0 };
+                            pairSpSkillCombEntry.Unk1 = 30;
+                            pairSpSkillCombEntry.Unk2 = 30;
+                            pairSpSkillCombEntry.TUJ_Name = "c_union_000";
+                            pairSpSkillCombEntry.Condition1 = true;
+                            pairSpSkillCombEntry.Condition2 = false;
+                            pairSpSkillComb_vanilla.pairSpSkillList.Add(pairSpSkillCombEntry);
+                            entryPairComb = pairSpSkillComb_vanilla.pairSpSkillList.Count;
+                            pairSpSkillCombEntry = new PairSpSkillCombinationParamModel();
+
+                        }
+                        {
+                            pairSpSkillCombEntry.TUJ_ID = entryPairComb;
+                            pairSpSkillCombEntry.CharacodeList = new ObservableCollection<int>(characodeIndices);
+                            pairSpSkillCombEntry.Unk1 = 30;
+                            pairSpSkillCombEntry.Unk2 = 30;
+                            pairSpSkillCombEntry.TUJ_Name = tuj_mod.Name;
+                            pairSpSkillCombEntry.MemberCount = tuj_mod.MemberCount;
+                            pairSpSkillCombEntry.Condition1 = tuj_mod.Flag1;
+                            pairSpSkillCombEntry.Condition2 = tuj_mod.Flag2;
+                            pairSpSkillComb_vanilla.pairSpSkillList.Add(pairSpSkillCombEntry);
+                        }
+
+
+                        //---------------------------------- Cmn Param ---------------------------------------------------------------------------------------------
+
+                        int entrycmnParam = cmnparam_vanilla.PairSplList.Count;
+                        pair_spl_sndModel tuj_cmnparam_entry = new pair_spl_sndModel();
+                        while (SkipEntriesList.Contains(entrycmnParam))
+                        {
+                            tuj_cmnparam_entry.PairSplID = entrycmnParam;
+                            tuj_cmnparam_entry.PairSplName1 = "placeholder";
+                            cmnparam_vanilla.PairSplList.Add(tuj_cmnparam_entry);
+                            tuj_cmnparam_entry = new pair_spl_sndModel();
+                            entrycmnParam = cmnparam_vanilla.PairSplList.Count;
+
+                        }
+                        {
+                            cmnparamViewModel cmnparam_mod = new cmnparamViewModel();
+                            cmnparam_mod.OpenFile(cmnparamModPath);
+                            pair_spl_sndModel pairSndEntry = (pair_spl_sndModel)cmnparam_mod.PairSplList[0].Clone();
+                            pairSndEntry.PairSplID = entrycmnParam;
+                            cmnparam_vanilla.PairSplList.Add(pairSndEntry);
+                        }
+
+                        
+
+                    } else
+                    {
+                        // ---------------------------------------- Pair Sp Skill Combination Param ---------------------------------------------------------------
+
+                        PairSpSkillCombinationParamModel pairSpSkillCombEntry = new PairSpSkillCombinationParamModel();
+                        pairSpSkillCombEntry.TUJ_ID = mod_tuj_id;
+                        pairSpSkillCombEntry.CharacodeList = new ObservableCollection<int>(characodeIndices);
+                        pairSpSkillCombEntry.Unk1 = 30;
+                        pairSpSkillCombEntry.Unk2 = 30;
+                        pairSpSkillCombEntry.TUJ_Name = tuj_mod.Name;
+                        pairSpSkillCombEntry.MemberCount = tuj_mod.MemberCount;
+                        pairSpSkillCombEntry.Condition1 = tuj_mod.Flag1;
+                        pairSpSkillCombEntry.Condition2 = tuj_mod.Flag2;
+
+                        // Find the existing entry with matching TUJ_ID
+                        PairSpSkillCombinationParamModel existingPairSpCombEntry = pairSpSkillComb_vanilla.pairSpSkillList.FirstOrDefault(entry => entry.TUJ_ID == mod_tuj_id);
+                        int tuj_index = pairSpSkillComb_vanilla.pairSpSkillList.IndexOf(existingPairSpCombEntry);
+                        pairSpSkillComb_vanilla.pairSpSkillList[tuj_index] = pairSpSkillCombEntry;
+
+                        //---------------------------------- Cmn Param ---------------------------------------------------------------------------------------------
+                        if (File.Exists(cmnparamModPath))
+                        {
+                             cmnparamViewModel cmnparam_mod = new cmnparamViewModel();
+                            cmnparam_mod.OpenFile(cmnparamModPath);
+                            pair_spl_sndModel pairSndEntry = (pair_spl_sndModel)cmnparam_mod.PairSplList[0].Clone();
+                            pairSndEntry.PairSplID = mod_tuj_id;
+
+                            pair_spl_sndModel existingCmnParmaEntry = cmnparam_vanilla.PairSplList.FirstOrDefault(entry => entry.PairSplID == mod_tuj_id);
+                            int tuj_cmnparam_index = cmnparam_vanilla.PairSplList.IndexOf(existingCmnParmaEntry);
+                            cmnparam_vanilla.PairSplList[tuj_cmnparam_index] = pairSndEntry;
+                        }
+                        
+                    }
+                    //---------------------------------- MessageInfo Files ---------------------------------------------------------------------------------------------
+                    MessageInfoViewModel messageInfo_mod = new MessageInfoViewModel();
+                    if (Directory.Exists(messageInfoModPath))
+                    {
+                        messageInfo_mod.OpenFiles(messageInfoModPath);
+                        for (int l = 0; l < messageInfo_vanilla.MessageInfo_List.Count; l++)
+                        {
+                            for (int i = 0; i < messageInfo_mod.MessageInfo_List[l].Count; i++)
+                            {
+                                messageInfo_vanilla.MessageInfo_List[l].Add((MessageInfoModel)messageInfo_mod.MessageInfo_List[l][i].Clone());
+                            }
+                        }
+
+                        messageInfoModified = true;
+                    }
+
+                }
+
+                string param_modmanager_path = Path.Combine(root_folder, "param_files") + Path.DirectorySeparatorChar;
+                byte[] nuccMaterialFile = File.ReadAllBytes(nuccMaterialDx11Path); // nuccMaterialDx11Path should already be set with Path.Combine
+
+                string chariconDirectory = Path.Combine(root_folder, "cpk_assets", "data", "ui", "flash", "OTHER", "charicon_s");
+                if (!Directory.Exists(chariconDirectory))
+                    Directory.CreateDirectory(chariconDirectory);
                 foreach (ModManagerModel mod in ModManagerList)
                 {
 
@@ -2069,62 +2324,82 @@ namespace NSC_ModManager.ViewModel
 
                         FileInfo[] cpkList = mod_d.GetFiles("*.cpk", SearchOption.AllDirectories);
 
-                        Array.Sort(cpkList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
+                        Array.Sort(cpkList, (x, y) =>
+                            StringComparer.OrdinalIgnoreCase.Compare(
+                            Path.GetFileName(x.DirectoryName),
+                            Path.GetFileName(y.DirectoryName)));
+
                         foreach (FileInfo cpk in cpkList)
                         {
-                            YaCpkTool.CPK_extract(@Path.GetFullPath(cpk.FullName));
-                            string file_name = Path.GetFileNameWithoutExtension(cpk.FullName);
+                            YaCpkTool.CPK_extract(Path.GetFullPath(cpk.FullName));
+                            string fileName = Path.GetFileNameWithoutExtension(cpk.FullName);
+                            string sourcePath = Path.Combine(Path.GetDirectoryName(cpk.FullName), fileName);
+                            string destinationPath = Path.Combine(root_folder, "cpk_assets");
 
-                            Program.CopyFilesRecursively(Path.GetDirectoryName(cpk.FullName) + "\\" + file_name, root_folder + "\\cpk_assets");
-                            if (Directory.Exists(Path.GetDirectoryName(cpk.FullName) + "\\" + file_name))
-                                Directory.Delete(Path.GetDirectoryName(cpk.FullName) + "\\" + file_name, true);
+                            Program.CopyFilesRecursively(sourcePath, destinationPath);
+
+                            if (Directory.Exists(sourcePath))
+                                Directory.Delete(sourcePath, true);
                         }
 
-                        //copy data_win32 files
-                        if (!Directory.Exists(root_folder + "\\data_win32_modmanager"))
+                        // Copy data_win32 files
+                        string dataWin32ModManagerPath = Path.Combine(root_folder, "data_win32_modmanager");
+                        if (!Directory.Exists(dataWin32ModManagerPath))
                         {
-                            Directory.CreateDirectory(root_folder + "\\data_win32_modmanager");
+                            Directory.CreateDirectory(dataWin32ModManagerPath);
                         }
-                        if (Directory.Exists(mod.ModFolder + "\\Resources\\Files\\"))
-                            Program.CopyFilesRecursivelyModManager(mod.ModFolder + "\\Resources\\Files\\", root_folder + "\\data_win32_modmanager\\");
+
+                        string modResourcesPath = Path.Combine(mod.ModFolder, "Resources", "Files");
+                        if (Directory.Exists(modResourcesPath))
+                            Program.CopyFilesRecursivelyModManager(modResourcesPath, dataWin32ModManagerPath);
+
 
                     }
                 }
-                File.WriteAllBytes(root_folder + "\\data\\system\\nuccMaterial_dx11.nsh", nuccMaterialFile);
+                // Write nuccMaterial file
+                string nuccMaterialPath = Path.Combine(root_folder, "data", "system", "nuccMaterial_dx11.nsh");
+                File.WriteAllBytes(nuccMaterialPath, nuccMaterialFile);
 
-                //charsel.gfx - dont really need to be changed with updates
+                // Update charsel.gfx
                 byte[] charsel_gfx = File.ReadAllBytes(charselGfxPath);
-                //int charsel_offset_1 = 0x21672; // 8 + 1 + count of pages
                 int charsel_offset_2 = 0x419EF; // 1 + count of pages
-                                                //charsel_gfx[charsel_offset_1] = (byte)(8 + 1 + characterSelectParam_vanilla.MaxPage());
                 charsel_gfx[charsel_offset_2] = (byte)(1 + characterSelectParam_vanilla.MaxPage());
-                string charsel_updated_path = Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\charsel\\charsel.gfx";
+                string charsel_updated_path = Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "ui", "flash", "OTHER", "charsel", "charsel.gfx");
                 File.WriteAllBytes(charsel_updated_path, charsel_gfx);
 
-                DirectoryInfo default_icons = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\ParamFiles\\DefaultIcons\\");
+                // Process Default Icons
+                DirectoryInfo default_icons = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "DefaultIcons"));
                 FileInfo[] DefaultIconList = default_icons.GetFiles("*.xfbin", SearchOption.AllDirectories);
-                Array.Sort(DefaultIconList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
+                Array.Sort(DefaultIconList, (x, y) =>
+                    StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
+
                 foreach (FileInfo icon in DefaultIconList)
                 {
-                    File.Copy(icon.FullName, root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\" + Path.GetFileNameWithoutExtension(icon.FullName) + ".xfbin", true);
+                    string destIconPath = Path.Combine(root_folder, "cpk_assets", "data", "ui", "flash", "OTHER", "charicon_s",
+                                            Path.GetFileNameWithoutExtension(icon.FullName) + ".xfbin");
+                    File.Copy(icon.FullName, destIconPath, true);
                     CharselIconNamesList.Add(Path.GetFileNameWithoutExtension(icon.FullName).Replace("_charicon_s", ""));
                 }
 
+                // Validate icon file existence and remove missing ones from the list
                 for (int i = 0; i < CharselIconNamesList.Count; i++)
                 {
-                    if (!File.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\charicon_s\\" + CharselIconNamesList[i] + "_charicon_s.xfbin") &&
-                        !File.Exists(root_folder + "\\data_win32_modmanager\\data\\ui\\flash\\OTHER\\charicon_s\\" + CharselIconNamesList[i] + "_charicon_s.xfbin") &&
-                        !File.Exists(Directory.GetCurrentDirectory() + "\\ParamFiles\\DefaultIcons\\" + CharselIconNamesList[i] + "_charicon_s.xfbin"))
+                    string iconName = CharselIconNamesList[i] + "_charicon_s.xfbin";
+                    string path1 = Path.Combine(root_folder, "cpk_assets", "data", "ui", "flash", "OTHER", "charicon_s", iconName);
+                    string path2 = Path.Combine(root_folder, "data_win32_modmanager", "data", "ui", "flash", "OTHER", "charicon_s", iconName);
+                    string path3 = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "DefaultIcons", iconName);
+
+                    if (!File.Exists(path1) && !File.Exists(path2) && !File.Exists(path3))
                     {
                         CharselIconNamesList.RemoveAt(i);
                         i--;
                     }
                 }
 
-
-                //charicon_s.gfx
+                // Update charicon_s.gfx
                 byte[] charicon_s_filebytes = File.ReadAllBytes(chariconGfxPath);
-                string charicon_s_updated_path = Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\charicon_s\\charicon_s.gfx";
+                string charicon_s_updated_path = Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "ui", "flash", "OTHER", "charicon_s", "charicon_s.gfx");
+
                 byte[] charicon_s_header = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0, 0xCB);
                 byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCB, 0x4580);
                 byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x464B, 0x120A);
@@ -2174,16 +2449,17 @@ namespace NSC_ModManager.ViewModel
                 File.WriteAllBytes(charicon_s_updated_path, charicon_s_newFile);
 
 
+                // Create directories using Path.Combine
                 Directory.CreateDirectory(param_modmanager_path);
-                Directory.CreateDirectory(param_modmanager_path + "data\\spc");
-                Directory.CreateDirectory(param_modmanager_path + "data\\rpg\\param");
-                Directory.CreateDirectory(param_modmanager_path + "data\\ui\\max\\select");
-                Directory.CreateDirectory(param_modmanager_path + "data\\stage");
-                Directory.CreateDirectory(param_modmanager_path + "data\\sound");
+                Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "spc"));
+                Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "rpg", "param"));
+                Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "ui", "max", "select"));
+                Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "stage"));
+                Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "sound"));
 
                 if (stageInfoModified)
                 {
-                    //select_stage
+                    // select_stage
                     int stage_count = 67;
                     byte[] stageSel_file = File.ReadAllBytes(stage_selectPath);
                     byte[] stagesel_header = BinaryReader.b_ReadByteArray(stageSel_file, 0, 0x13C);
@@ -2191,76 +2467,103 @@ namespace NSC_ModManager.ViewModel
                     byte[] stagesel_end = BinaryReader.b_ReadByteArray(stageSel_file, 0x13DE, 0x14);
                     byte[] stagesel_xml_add = new byte[0];
                     byte[] stagesel_new_file = new byte[0];
+
                     for (int st = 0; st < StagesToAdd.Count; st++)
                     {
-
-                        //BGMs
+                        // BGMs
                         if (st < Program.StageBGMSlots.Length)
                         {
                             byte[] stageBGM_slot = new byte[0];
                             stageBGM_slot = BinaryReader.b_AddBytes(stageBGM_slot, BinaryReader.crc32(StagesToAdd[st].StageName));
                             stageBGM_slot = BinaryReader.b_AddBytes(stageBGM_slot, BitConverter.GetBytes(StagesToAdd[st].BgmID));
-                            File.WriteAllBytes(root_folder + "//moddingapi//mods//base_game//" + Program.StageBGMSlots[st].ToString("X") + ".ns4p", stageBGM_slot);
+                            string bgmFile = Path.Combine(root_folder, "moddingapi", "mods", "base_game",
+                                Program.StageBGMSlots[st].ToString("X") + ".ns4p");
+                            File.WriteAllBytes(bgmFile, stageBGM_slot);
                         }
 
-
-                        byte[] xml_line = new byte[0x0E] { 0x0D, 0x0A, 0x09, 0x3C, 0x73, 0x74, 0x61, 0x67, 0x65, 0x20, 0x69, 0x64, 0x3D, 0x22 };
+                        byte[] xml_line = new byte[0x0E]
+                        {
+            0x0D, 0x0A, 0x09, 0x3C, 0x73, 0x74, 0x61, 0x67, 0x65, 0x20, 0x69, 0x64, 0x3D, 0x22
+                        };
                         xml_line = BinaryReader.b_AddBytes(xml_line, Encoding.ASCII.GetBytes((stage_count + st).ToString()));
-                        xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x0A] { 0x22, 0x20, 0x6E, 0x61, 0x6D, 0x65, 0x69, 0x64, 0x3D, 0x22 });
+                        xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x0A]
+                            { 0x22, 0x20, 0x6E, 0x61, 0x6D, 0x65, 0x69, 0x64, 0x3D, 0x22 });
                         xml_line = BinaryReader.b_AddBytes(xml_line, Encoding.ASCII.GetBytes(StagesToAdd[st].MessageID));
-                        xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x0B] { 0x22, 0x20, 0x73, 0x74, 0x61, 0x67, 0x65, 0x69, 0x64, 0x3D, 0x22 });
+                        xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x0B]
+                            { 0x22, 0x20, 0x73, 0x74, 0x61, 0x67, 0x65, 0x69, 0x64, 0x3D, 0x22 });
                         xml_line = BinaryReader.b_AddBytes(xml_line, Encoding.ASCII.GetBytes(StagesToAdd[st].StageName));
-                        int hellID = 0;
-                        if (StagesToAdd[st].Hell)
-                            hellID = 1;
-
-                        xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x08] { 0x22, 0x20, 0x68, 0x65, 0x6C, 0x6C, 0x3D, 0x22 });
+                        int hellID = StagesToAdd[st].Hell ? 1 : 0;
+                        xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x08]
+                            { 0x22, 0x20, 0x68, 0x65, 0x6C, 0x6C, 0x3D, 0x22 });
                         xml_line = BinaryReader.b_AddBytes(xml_line, Encoding.ASCII.GetBytes(hellID.ToString()));
                         xml_line = BinaryReader.b_AddBytes(xml_line, new byte[0x03] { 0x22, 0x2F, 0x3E });
                         stagesel_xml_add = BinaryReader.b_AddBytes(stagesel_xml_add, xml_line);
+
+                        // Stage preview image
                         byte[] st_img_body = new byte[0];
-                        if (File.Exists(StagesToAdd[st].RootPath + "\\stage_preview.png"))
+                        string stagePreviewPath = Path.Combine(StagesToAdd[st].RootPath, "stage_preview.png");
+                        if (File.Exists(stagePreviewPath))
                         {
-                            st_img_body = File.ReadAllBytes(StagesToAdd[st].RootPath + "\\stage_preview.png");
+                            st_img_body = File.ReadAllBytes(stagePreviewPath);
                         } else
                         {
-                            st_img_body = File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\Resources\\TemplateImages\\stage_tex.png");
+                            string defaultStageTex = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "TemplateImages", "stage_tex.png");
+                            st_img_body = File.ReadAllBytes(defaultStageTex);
                         }
-                        byte[] st_img_new_file = BinaryReader.MakeXfbinBinary("Z:/char/x/stagesel/tex/tex_l/st_img_l_" + (stage_count - 1 + st).ToString() + ".png", "st_img_l_" + (stage_count - 1 + st).ToString(), st_img_body);
-                        if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\stagesel\\tex_l"))
+                        string xfbinStageImagePath = Path.Combine("Z:/char/x/stagesel/tex/tex_l",
+                            "st_img_l_" + (stage_count - 1 + st).ToString() + ".png");
+                        byte[] st_img_new_file = BinaryReader.MakeXfbinBinary(xfbinStageImagePath,
+                            "st_img_l_" + (stage_count - 1 + st).ToString(), st_img_body);
+
+                        string stageselTexLDir = Path.Combine(root_folder, "cpk_assets", "data", "ui", "flash", "OTHER", "stagesel", "tex_l");
+                        if (!Directory.Exists(stageselTexLDir))
                         {
-                            Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\stagesel\\tex_l");
+                            Directory.CreateDirectory(stageselTexLDir);
                         }
-                        File.WriteAllBytes(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\stagesel\\tex_l\\st_img_l_" + (stage_count - 1 + st).ToString() + ".xfbin", st_img_new_file);
+                        string outputStageImagePath = Path.Combine(stageselTexLDir, "st_img_l_" + (stage_count - 1 + st).ToString() + ".xfbin");
+                        File.WriteAllBytes(outputStageImagePath, st_img_new_file);
 
-
-                        if (File.Exists(StagesToAdd[st].RootPath + "\\stage_icon.dds"))
+                        // Stage icon image
+                        string stageIconPath = Path.Combine(StagesToAdd[st].RootPath, "stage_icon.dds");
+                        if (File.Exists(stageIconPath))
                         {
-                            st_img_body = File.ReadAllBytes(StagesToAdd[st].RootPath + "\\stage_icon.dds");
+                            st_img_body = File.ReadAllBytes(stageIconPath);
                         } else
                         {
-                            st_img_body = File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\Resources\\TemplateImages\\stage_icon.dds");
+                            string defaultStageIcon = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "TemplateImages", "stage_icon.dds");
+                            st_img_body = File.ReadAllBytes(defaultStageIcon);
                         }
-                        st_img_new_file = BinaryReader.MakeXfbinBinary("D:/usr/flash/char/x/stagesel/" + StagesToAdd[st].StageName + ".dds", "stagesel_image_" + StagesToAdd[st].StageName, st_img_body);
-                        if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\stagesel"))
-                        {
-                            Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\stagesel");
-                        }
-                        File.WriteAllBytes(root_folder + "\\cpk_assets\\data\\ui\\flash\\OTHER\\stagesel\\" + "stagesel_image_" + StagesToAdd[st].StageName + ".xfbin", st_img_new_file);
+                        string xfbinStageIconPath = Path.Combine("D:/usr/flash/char/x/stagesel", StagesToAdd[st].StageName + ".dds");
+                        st_img_new_file = BinaryReader.MakeXfbinBinary(xfbinStageIconPath,
+                            "stagesel_image_" + StagesToAdd[st].StageName, st_img_body);
 
+                        string stageselDir = Path.Combine(root_folder, "cpk_assets", "data", "ui", "flash", "OTHER", "stagesel");
+                        if (!Directory.Exists(stageselDir))
+                        {
+                            Directory.CreateDirectory(stageselDir);
+                        }
+                        string outputStageIconPath = Path.Combine(stageselDir, "stagesel_image_" + StagesToAdd[st].StageName + ".xfbin");
+                        File.WriteAllBytes(outputStageIconPath, st_img_new_file);
                     }
-                    stagesel_xml_add = BinaryReader.b_AddBytes(stagesel_xml_add, new byte[0x0A] { 0x0D, 0x0A, 0x3C, 0x2F, 0x5F, 0x72, 0x6F, 0x6F, 0x74, 0x3E });
+
+                    stagesel_xml_add = BinaryReader.b_AddBytes(stagesel_xml_add, new byte[0x0A]
+                        { 0x0D, 0x0A, 0x3C, 0x2F, 0x5F, 0x72, 0x6F, 0x6F, 0x74, 0x3E });
                     stagesel_new_file = BinaryReader.b_AddBytes(stagesel_new_file, stagesel_header);
-                    stagesel_new_file = BinaryReader.b_ReplaceBytes(stagesel_new_file, BitConverter.GetBytes(stagesel_body.Length + stagesel_xml_add.Length), 0x138, 1);
-                    stagesel_new_file = BinaryReader.b_ReplaceBytes(stagesel_new_file, BitConverter.GetBytes(stagesel_body.Length + stagesel_xml_add.Length + 4), 0x12C, 1);
+                    stagesel_new_file = BinaryReader.b_ReplaceBytes(stagesel_new_file,
+                        BitConverter.GetBytes(stagesel_body.Length + stagesel_xml_add.Length), 0x138, 1);
+                    stagesel_new_file = BinaryReader.b_ReplaceBytes(stagesel_new_file,
+                        BitConverter.GetBytes(stagesel_body.Length + stagesel_xml_add.Length + 4), 0x12C, 1);
                     stagesel_new_file = BinaryReader.b_AddBytes(stagesel_new_file, stagesel_body);
                     stagesel_new_file = BinaryReader.b_AddBytes(stagesel_new_file, stagesel_xml_add);
                     stagesel_new_file = BinaryReader.b_AddBytes(stagesel_new_file, stagesel_end);
-                    if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\ui\\max\\select\\"))
-                        Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\ui\\max\\select\\");
-                    File.WriteAllBytes(root_folder + "\\cpk_assets\\data\\ui\\max\\select\\select_stage.xfbin", stagesel_new_file);
 
-                    //stagesel_image.gfx
+                    string selectStageDir = Path.Combine(root_folder, "cpk_assets", "data", "ui", "max", "select");
+                    if (!Directory.Exists(selectStageDir))
+                        Directory.CreateDirectory(selectStageDir);
+                    string selectStagePath = Path.Combine(selectStageDir, "select_stage.xfbin");
+                    File.WriteAllBytes(selectStagePath, stagesel_new_file);
+
+                    // stagesel_image.gfx
                     byte[] stagesel_image_original = File.ReadAllBytes(stageselImageGfxPath);
                     byte[] stagesel_image_header = BinaryReader.b_ReadByteArray(stagesel_image_original, 0x00, 0x78);
                     byte[] stagesel_image_header_add = new byte[0];
@@ -2274,34 +2577,58 @@ namespace NSC_ModManager.ViewModel
                     int image_count_1 = 0x83;
                     for (int st = 0; st < StagesToAdd.Count; st++)
                     {
-                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add, new byte[2] { (byte)(0x4C + ("stagesel_image_" + StagesToAdd[st].StageName + ".dds").Length), 0xFC });
-                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add, BitConverter.GetBytes(st + image_count), 0, 0, 2);
-                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add, new byte[] { 0x09, 0x00, 0x0E, 0x00, 0xB8, 0x00, 0x68, 0x00, 0x00 });
-                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add, new byte[1] { (byte)("stagesel_image_" + StagesToAdd[st].StageName + ".dds").Length });
-                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add, Encoding.ASCII.GetBytes("stagesel_image_" + StagesToAdd[st].StageName + ".dds"));
+                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add, new byte[2]
+                            { (byte)(0x4C + ("stagesel_image_" + StagesToAdd[st].StageName + ".dds").Length), 0xFC });
+                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add,
+                            BitConverter.GetBytes(st + image_count), 0, 0, 2);
+                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add,
+                            new byte[] { 0x09, 0x00, 0x0E, 0x00, 0xB8, 0x00, 0x68, 0x00, 0x00 });
+                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add,
+                            new byte[1] { (byte)("stagesel_image_" + StagesToAdd[st].StageName + ".dds").Length });
+                        stagesel_image_header_add = BinaryReader.b_AddBytes(stagesel_image_header_add,
+                            Encoding.ASCII.GetBytes("stagesel_image_" + StagesToAdd[st].StageName + ".dds"));
                         stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[2] { 0x0C, 0xFC });
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, BitConverter.GetBytes(image_count_1 + ((st + 1) * 2)), 0, 0, 2);
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, BitConverter.GetBytes(st + image_count), 0, 0, 2);
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[0x0E] { 0x00, 0x00, 0x00, 0x00, 0xB8, 0x00, 0x68, 0x00, 0xBF, 0x00, 0x33, 0x00, 0x00, 0x00 });
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, BitConverter.GetBytes((image_count_1 + 1) + ((st + 1) * 2)), 0, 0, 2);
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[0x13] { 0x64, 0x54, 0x3A, 0xC5, 0xF8, 0x20, 0x80, 0x02, 0x41, 0xFF, 0xFF, 0xD9, 0x40, 0x00, 0x05, 0x00, 0x00, 0x00, 0x41 });
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, BitConverter.GetBytes(image_count_1 + ((st + 1) * 2)), 0, 0, 2);
-                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[0x1C] { 0xD9, 0x40, 0x00, 0x05, 0x00, 0x00, 0x0C, 0x8A, 0x8B, 0xF0, 0x00, 0x20, 0x15, 0x91, 0x51, 0x7E, 0x17, 0x63, 0xAC, 0x3B, 0x50, 0x41, 0xD9, 0x15, 0x0E, 0xDB, 0xF0, 0x00 });
-                        stagesel_image_body2_add = BinaryReader.b_AddBytes(stagesel_image_body2_add, new byte[0x0C] { 0xFF, 0x0A, (byte)(("img_s_" + (stage_count - 1 + st).ToString()).Length + 1), 0x00, 0x00, 0x00, 0x69, 0x6D, 0x67, 0x5F, 0x73, 0x5F });
-                        stagesel_image_body2_add = BinaryReader.b_AddBytes(stagesel_image_body2_add, Encoding.ASCII.GetBytes((stage_count - 1 + st).ToString()));
-                        stagesel_image_body2_add = BinaryReader.b_AddBytes(stagesel_image_body2_add, new byte[0x0A] { 0x00, 0x85, 0x06, 0x03, 0x01, 0x00, (byte)(image_count_1 + 1 + ((st + 1) * 2)), 0x00, 0x40, 0x00 });
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add,
+                            BitConverter.GetBytes(image_count_1 + ((st + 1) * 2)), 0, 0, 2);
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add,
+                            BitConverter.GetBytes(st + image_count), 0, 0, 2);
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[0x0E]
+                            { 0x00, 0x00, 0x00, 0x00, 0xB8, 0x00, 0x68, 0x00, 0xBF, 0x00, 0x33, 0x00, 0x00, 0x00 });
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add,
+                            BitConverter.GetBytes((image_count_1 + 1) + ((st + 1) * 2)), 0, 0, 2);
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[0x13]
+                            { 0x64, 0x54, 0x3A, 0xC5, 0xF8, 0x20, 0x80, 0x02, 0x41, 0xFF, 0xFF, 0xD9, 0x40, 0x00, 0x05, 0x00, 0x00, 0x00, 0x41 });
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add,
+                            BitConverter.GetBytes(image_count_1 + ((st + 1) * 2)), 0, 0, 2);
+                        stagesel_image_body1_add = BinaryReader.b_AddBytes(stagesel_image_body1_add, new byte[0x1C]
+                            { 0xD9, 0x40, 0x00, 0x05, 0x00, 0x00, 0x0C, 0x8A, 0x8B, 0xF0, 0x00, 0x20, 0x15, 0x91, 0x51, 0x7E, 0x17, 0x63, 0xAC, 0x3B, 0x50, 0x41, 0xD9, 0x15, 0x0E, 0xDB, 0xF0, 0x00 });
+                        stagesel_image_body2_add = BinaryReader.b_AddBytes(stagesel_image_body2_add, new byte[0x0C]
+                            { 0xFF, 0x0A, (byte)(("img_s_" + (stage_count - 1 + st).ToString()).Length + 1), 0x00, 0x00, 0x00, 0x69, 0x6D, 0x67, 0x5F, 0x73, 0x5F });
+                        stagesel_image_body2_add = BinaryReader.b_AddBytes(stagesel_image_body2_add,
+                            Encoding.ASCII.GetBytes((stage_count - 1 + st).ToString()));
+                        stagesel_image_body2_add = BinaryReader.b_AddBytes(stagesel_image_body2_add, new byte[0x0A]
+                            { 0x00, 0x85, 0x06, 0x03, 0x01, 0x00, (byte)(image_count_1 + 1 + ((st + 1) * 2)), 0x00, 0x40, 0x00 });
                     }
-                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end, BitConverter.GetBytes(image_count_1 + 3 + (StagesToAdd.Count * 2)), 0x15, 0, 2);
-                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end, BitConverter.GetBytes(stage_count - 1 + StagesToAdd.Count), 0x59, 0, 2);
-                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end, BitConverter.GetBytes(image_count_1 + 4 + (StagesToAdd.Count * 2)), 0x64, 0, 2);
-                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end, BitConverter.GetBytes(image_count_1 + 4 + (StagesToAdd.Count * 2)), 0xC63, 0, 2);
-
-                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2, BitConverter.GetBytes(image_count_1 + 2 + (StagesToAdd.Count * 2)), 0x06, 0, 2);
-                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2, BitConverter.GetBytes(image_count_1 + 3 + (StagesToAdd.Count * 2)), 0x82, 0, 2);
-                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2, BitConverter.GetBytes(image_count_1 + 2 + (StagesToAdd.Count * 2)), 0x8B, 0, 2);
-                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2, BitConverter.GetBytes(0x694 + stagesel_image_body2_add.Length), 0xB7, 0, 2);
-                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2, BitConverter.GetBytes(image_count_1 + 4 + (StagesToAdd.Count * 2)), 0xBB, 0, 2);
-                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2, BitConverter.GetBytes(stage_count - 1 + StagesToAdd.Count), 0xBD, 0, 2);
+                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end,
+                        BitConverter.GetBytes(image_count_1 + 3 + (StagesToAdd.Count * 2)), 0x15, 0, 2);
+                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end,
+                        BitConverter.GetBytes(stage_count - 1 + StagesToAdd.Count), 0x59, 0, 2);
+                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end,
+                        BitConverter.GetBytes(image_count_1 + 4 + (StagesToAdd.Count * 2)), 0x64, 0, 2);
+                    stagesel_image_end = BinaryReader.b_ReplaceBytes(stagesel_image_end,
+                        BitConverter.GetBytes(image_count_1 + 4 + (StagesToAdd.Count * 2)), 0xC63, 0, 2);
+                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2,
+                        BitConverter.GetBytes(image_count_1 + 2 + (StagesToAdd.Count * 2)), 0x06, 0, 2);
+                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2,
+                        BitConverter.GetBytes(image_count_1 + 3 + (StagesToAdd.Count * 2)), 0x82, 0, 2);
+                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2,
+                        BitConverter.GetBytes(image_count_1 + 2 + (StagesToAdd.Count * 2)), 0x8B, 0, 2);
+                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2,
+                        BitConverter.GetBytes(0x694 + stagesel_image_body2_add.Length), 0xB7, 0, 2);
+                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2,
+                        BitConverter.GetBytes(image_count_1 + 4 + (StagesToAdd.Count * 2)), 0xBB, 0, 2);
+                    stagesel_image_body2 = BinaryReader.b_ReplaceBytes(stagesel_image_body2,
+                        BitConverter.GetBytes(stage_count - 1 + StagesToAdd.Count), 0xBD, 0, 2);
 
                     stagesel_image_new_file = BinaryReader.b_AddBytes(stagesel_image_new_file, stagesel_image_header);
                     stagesel_image_new_file = BinaryReader.b_AddBytes(stagesel_image_new_file, stagesel_image_header_add);
@@ -2310,133 +2637,175 @@ namespace NSC_ModManager.ViewModel
                     stagesel_image_new_file = BinaryReader.b_AddBytes(stagesel_image_new_file, stagesel_image_body2);
                     stagesel_image_new_file = BinaryReader.b_AddBytes(stagesel_image_new_file, stagesel_image_body2_add);
                     stagesel_image_new_file = BinaryReader.b_AddBytes(stagesel_image_new_file, stagesel_image_end);
-                    stagesel_image_new_file = BinaryReader.b_ReplaceBytes(stagesel_image_new_file, BitConverter.GetBytes(stagesel_image_new_file.Length), 0x04);
-                    File.WriteAllBytes(root_folder + "\\data\\ui\\flash\\OTHER\\stagesel\\stagesel_image.gfx", stagesel_image_new_file);
+                    stagesel_image_new_file = BinaryReader.b_ReplaceBytes(stagesel_image_new_file,
+                        BitConverter.GetBytes(stagesel_image_new_file.Length), 0x04);
+                    string stageselImageOutputPath = Path.Combine(root_folder, "data", "ui", "flash", "OTHER", "stagesel", "stagesel_image.gfx");
+                    File.WriteAllBytes(stageselImageOutputPath, stagesel_image_new_file);
 
-                    //stagesel.gfx
-
+                    // stagesel.gfx
                     int pageCount = (stage_count - 2 + StagesToAdd.Count) / 36;
                     byte[] stagesel_gfx_original = File.ReadAllBytes(stageselGfxPath);
                     if (36 * pageCount != stage_count + StagesToAdd.Count)
                         pageCount++;
                     stagesel_gfx_original[0x28170] = (byte)pageCount;
 
-                    if ((stage_count - 2 + StagesToAdd.Count) < 255)
-                        stagesel_gfx_original[0x28176] = (byte)(stage_count - 2 + StagesToAdd.Count);
-                    else
-                        stagesel_gfx_original[0x28176] = (byte)255;
-                    File.WriteAllBytes(root_folder + "\\data\\ui\\flash\\OTHER\\stagesel\\stagesel.gfx", stagesel_gfx_original);
-
+                    stagesel_gfx_original[0x28176] = (stage_count - 2 + StagesToAdd.Count) < 255
+                        ? (byte)(stage_count - 2 + StagesToAdd.Count)
+                        : (byte)255;
+                    string stageselGfxOutputPath = Path.Combine(root_folder, "data", "ui", "flash", "OTHER", "stagesel", "stagesel.gfx");
+                    File.WriteAllBytes(stageselGfxOutputPath, stagesel_gfx_original);
                 }
+
 
                 KyurutoDialogTextLoader("Saving your character and costume mods!",
                     20);
                 //save all param files
-                characode_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\characode.bin.xfbin");
-                duelPlayerParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\duelPlayerParam.xfbin");
-                playerSettingParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\playerSettingParam.bin.xfbin");
-                skillCustomizeParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\skillCustomizeParam.xfbin");
-                spSkillCustomizeParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\spSkillCustomizeParam.xfbin");
-                skillIndexSettingParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\skillIndexSettingParam.xfbin");
-                supportSkillRecoverySpeedParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\supportSkillRecoverySpeedParam.xfbin");
-                privateCamera_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\privateCamera.bin.xfbin");
-                characterSelectParam_vanilla.SaveFileAs(param_modmanager_path + "data\\ui\\max\\select\\characterSelectParam.xfbin");
-                costumeBreakParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\costumeBreakParam.xfbin");
-                costumeBreakColorParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\costumeBreakColorParam.xfbin");
-                costumeParam_vanilla.SaveFileAs(param_modmanager_path + "data\\rpg\\param\\costumeParam.bin.xfbin");
-                playerIcon_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\player_icon.xfbin");
-                cmnparam_vanilla.SaveFileAs(param_modmanager_path + "data\\sound\\cmnparam.xfbin");
-                supportActionParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\supportActionParam.xfbin");
-                awakeAura_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\awakeAura.xfbin");
-                appearanceAnm_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\appearanceAnm.xfbin");
-                afterAttachObject_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\afterAttachObject.xfbin");
-                playerDoubleEffectParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\playerDoubleEffectParam.xfbin");
-                spTypeSupportParam_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\spTypeSupportParam.xfbin");
+                // Save vanilla parameter files to the modmanager folder
+                characode_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "characode.bin.xfbin"));
+                duelPlayerParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "duelPlayerParam.xfbin"));
+                playerSettingParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "playerSettingParam.bin.xfbin"));
+                skillCustomizeParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "skillCustomizeParam.xfbin"));
+                spSkillCustomizeParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "spSkillCustomizeParam.xfbin"));
+                skillIndexSettingParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "skillIndexSettingParam.xfbin"));
+                supportSkillRecoverySpeedParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "supportSkillRecoverySpeedParam.xfbin"));
+                privateCamera_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "privateCamera.bin.xfbin"));
+                characterSelectParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "ui", "max", "select", "characterSelectParam.xfbin"));
+                costumeBreakParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "costumeBreakParam.xfbin"));
+                costumeBreakColorParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "costumeBreakColorParam.xfbin"));
+                costumeParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "rpg", "param", "costumeParam.bin.xfbin"));
+                playerIcon_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "player_icon.xfbin"));
+                cmnparam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "sound", "cmnparam.xfbin"));
+                supportActionParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "supportActionParam.xfbin"));
+                awakeAura_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "awakeAura.xfbin"));
+                appearanceAnm_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "appearanceAnm.xfbin"));
+                afterAttachObject_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "afterAttachObject.xfbin"));
+                playerDoubleEffectParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "playerDoubleEffectParam.xfbin"));
+                spTypeSupportParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "spTypeSupportParam.xfbin"));
+                pairSpSkillComb_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "pairSpSkillCombinationParam.xfbin"));
 
-                damageeff_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\damageeff.bin.xfbin");
-                effectprm_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\effectprm.bin.xfbin");
-                damageprm_vanilla.SaveFileAs(param_modmanager_path + "data\\spc\\damageprm.bin.xfbin");
+                damageeff_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "damageeff.bin.xfbin"));
+                effectprm_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "effectprm.bin.xfbin"));
+                damageprm_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "damageprm.bin.xfbin"));
+
                 if (stageInfoModified)
                 {
-                    KyurutoDialogTextLoader("Saving your stage mods!",
-                    20);
-                    stageInfo_vanilla.SaveFileAs(param_modmanager_path + "data\\stage\\StageInfo.bin.xfbin");
+                    KyurutoDialogTextLoader("Saving your stage mods!", 20);
+                    stageInfo_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "stage", "StageInfo.bin.xfbin"));
                 }
                 if (messageInfoModified)
                 {
-                    KyurutoDialogTextLoader("Making localization!",
-                    20);
-                    messageInfo_vanilla.SaveFileAs(param_modmanager_path + "data\\");
+                    KyurutoDialogTextLoader("Making localization!", 20);
+                    messageInfo_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data"));
                 }
-                File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\specialCondParam.xfbin", specialCondParam_vanilla);
-                File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\partnerSlotParam.xfbin", partnerSlotParam_vanilla);
-                File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\susanooCondParam.xfbin", susanooCondParam_vanilla);
 
-                if (!Directory.Exists(root_folder + "\\cpk_assets\\data\\spc\\"))
-                    Directory.CreateDirectory(root_folder + "\\cpk_assets\\data\\spc\\");
-                File.WriteAllBytes(root_folder + "\\cpk_assets\\data\\spc\\5kgyprm.bin.xfbin", File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\ParamFiles\\5kgyprm.bin.xfbin"));
+                // Write additional modding API files
+                File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "specialCondParam.xfbin"), specialCondParam_vanilla);
+                File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin"), partnerSlotParam_vanilla);
+                File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "susanooCondParam.xfbin"), susanooCondParam_vanilla);
+                File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "pairSpSkillManagerParam.xfbin"), pairManagerParam_vanilla);
 
-                KyurutoDialogTextLoader("Removing all trash from root folder and packing everything in CPK archives.",
-                20);
+                // Ensure the destination directory for 5kgyprm exists, then write the file
+                string spcDir = Path.Combine(root_folder, "cpk_assets", "data", "spc");
+                if (!Directory.Exists(spcDir))
+                    Directory.CreateDirectory(spcDir);
+                File.WriteAllBytes(
+                    Path.Combine(spcDir, "5kgyprm.bin.xfbin"),
+                    File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "5kgyprm.bin.xfbin"))
+                );
+
+                // Repack CPK archives
+                KyurutoDialogTextLoader("Removing all trash from root folder and packing everything in CPK archives.", 20);
                 try
                 {
-                    //pack all CPKs
-                    if (Directory.Exists(@Path.GetFullPath(root_folder + "\\cpk_assets")))
-                {
-                    if (Directory.EnumerateFiles(@Path.GetFullPath(root_folder + "\\cpk_assets"), "*.*", SearchOption.AllDirectories).Any())
+                    // Repack cpk_assets folder
+                    string cpkAssetsPath = Path.GetFullPath(Path.Combine(root_folder, "cpk_assets"));
+                    if (Directory.Exists(cpkAssetsPath) &&
+                        Directory.EnumerateFiles(cpkAssetsPath, "*.*", SearchOption.AllDirectories).Any())
                     {
-                        YaCpkTool.CPK_repack(@Path.GetFullPath(root_folder + "\\cpk_assets"));
-                        File.Move(root_folder + "\\cpk_assets.cpk", root_folder + "\\moddingapi\\mods\\base_game\\cpk_assets.cpk");
-                        File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\cpk_assets.cpk.info", new byte[4] { 0x20, 0, 0, 0 });
+                        YaCpkTool.CPK_repack(cpkAssetsPath);
+                        File.Move(
+                            Path.Combine(root_folder, "cpk_assets.cpk"),
+                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "cpk_assets.cpk"));
+                        File.WriteAllBytes(
+                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "cpk_assets.cpk.info"),
+                            new byte[4] { 0x20, 0, 0, 0 });
                     }
-                }
-                if (Directory.Exists(@Path.GetFullPath(root_folder + "\\data_win32_modmanager")))
-                {
-                    if (Directory.EnumerateFiles(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"), "*.*", SearchOption.AllDirectories).Any())
-                    {
 
-                        YaCpkTool.CPK_repack(@Path.GetFullPath(root_folder + "\\data_win32_modmanager"));
-                        File.Move(root_folder + "\\data_win32_modmanager.cpk", root_folder + "\\moddingapi\\mods\\base_game\\data_win32_modmanager.cpk");
-                        File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\data_win32_modmanager.cpk.info", new byte[4] { 0x21, 0, 0, 0 });
-                        }
+                    // Repack data_win32_modmanager folder
+                    string dataWin32Path = Path.GetFullPath(Path.Combine(root_folder, "data_win32_modmanager"));
+                    if (Directory.Exists(dataWin32Path) &&
+                        Directory.EnumerateFiles(dataWin32Path, "*.*", SearchOption.AllDirectories).Any())
+                    {
+                        YaCpkTool.CPK_repack(dataWin32Path);
+                        File.Move(
+                            Path.Combine(root_folder, "data_win32_modmanager.cpk"),
+                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk"));
+                        File.WriteAllBytes(
+                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk.info"),
+                            new byte[4] { 0x21, 0, 0, 0 });
                     }
-                    if (Directory.Exists(@Path.GetFullPath(param_modmanager_path)))
-                    {
-                        if (Directory.EnumerateFiles(@Path.GetFullPath(param_modmanager_path), "*.*", SearchOption.AllDirectories).Any())
-                        {
 
-                            YaCpkTool.CPK_repack(@Path.GetFullPath(param_modmanager_path));
-                            File.Move(param_modmanager_path + ".cpk", root_folder + "\\moddingapi\\mods\\base_game\\param_files.cpk");
-                            File.WriteAllBytes(root_folder + "\\moddingapi\\mods\\base_game\\param_files.cpk.info", new byte[4] { 0x22, 0, 0, 0 });
-                        }
+                    // Repack param_modmanager_path folder
+                    string paramModmanagerFullPath = Path.GetFullPath(param_modmanager_path);
+                    if (Directory.Exists(paramModmanagerFullPath) &&
+                        Directory.EnumerateFiles(paramModmanagerFullPath, "*.*", SearchOption.AllDirectories).Any())
+                    {
+                        YaCpkTool.CPK_repack(paramModmanagerFullPath);
+                        File.Move(
+                            param_modmanager_path + ".cpk",
+                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk"));
+                        File.WriteAllBytes(
+                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk.info"),
+                            new byte[4] { 0x22, 0, 0, 0 });
                     }
                 } catch (Exception ex)
                 {
                     throw new Exception("Failed to repack CPK: " + ex.Message, ex);
                 }
-                if (Directory.Exists(root_folder + "\\cpk_assets"))
-                    Directory.Delete(root_folder + "\\cpk_assets", true);
-                if (Directory.Exists(root_folder + "\\data_win32_modmanager"))
-                    Directory.Delete(root_folder + "\\data_win32_modmanager", true);
-                if (Directory.Exists(root_folder + "\\param_files"))
-                    Directory.Delete(root_folder + "\\param_files", true);
+
+                // Clean up temporary directories
+                if (Directory.Exists(Path.Combine(root_folder, "cpk_assets")))
+                    Directory.Delete(Path.Combine(root_folder, "cpk_assets"), true);
+                if (Directory.Exists(Path.Combine(root_folder, "data_win32_modmanager")))
+                    Directory.Delete(Path.Combine(root_folder, "data_win32_modmanager"), true);
+                if (Directory.Exists(Path.Combine(root_folder, "param_files")))
+                    Directory.Delete(Path.Combine(root_folder, "param_files"), true);
 
                 //File.Copy(Directory.GetCurrentDirectory() + "\\ParamFiles\\freebtl_set.gfx", Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\freebtl_set\\freebtl_set.gfx", true);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     KyurutoDialogTextLoader("Your mods are ready!", 20);
-                }); 
+                });
                 SystemSounds.Beep.Play();
 
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = "steam://rungameid/1020790";
-                startInfo.UseShellExecute = true;
-                startInfo.CreateNoWindow = true;
-                Process process = new Process();
-                process.StartInfo = startInfo;
+                //ProcessStartInfo startInfo = new ProcessStartInfo();
+                //startInfo.FileName = "steam://rungameid/1020790";
+                //startInfo.UseShellExecute = true;
+                //startInfo.CreateNoWindow = true;
+                //Process process = new Process();
+                //process.StartInfo = startInfo;
+                //process.Start();
+
+                string exePath = Path.Combine(root_folder, "NSUNSC.exe");
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = exePath,
+                    WorkingDirectory = Path.GetDirectoryName(exePath),
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                };
+                Process process = new Process { StartInfo = startInfo };
                 process.Start();
+
+
                 LoadingStatePlay = Visibility.Hidden;
                 Debug.WriteLine("Completed processing.");
+                if (skippedLabels.Any())
+                {
+                    string message = "Unable to find characodes for Team Ultimate Jutsus. These Team Ultimate Jutsus were skipped:\n" +
+                                     string.Join("\n", skippedLabels);
+                    MessageBox.Show(message);
+                }
             } catch (Exception ex)
             {
                 e.Result = ex;
@@ -2478,7 +2847,7 @@ namespace NSC_ModManager.ViewModel
         {
             try
             {
-                if (mod_path == "")
+                if (string.IsNullOrEmpty(mod_path))
                 {
                     OpenFileDialog myDialog = new OpenFileDialog();
                     myDialog.Filter = "Naruto Storm Connection Mod (*.nsc)|*.nsc";
@@ -2492,6 +2861,7 @@ namespace NSC_ModManager.ViewModel
                         return;
                     }
                 }
+
                 string root_folder = Properties.Settings.Default.RootGameFolder;
                 string modmanager_folder = Path.Combine(root_folder, "modmanager");
                 if (Directory.Exists(root_folder))
@@ -2500,27 +2870,26 @@ namespace NSC_ModManager.ViewModel
                     {
                         Directory.CreateDirectory(modmanager_folder);
                     }
-                    string InstallMod_folder = modmanager_folder + Path.GetFileNameWithoutExtension(mod_path);
+                    // Use Path.Combine to ensure proper path building.
+                    string InstallMod_folder = Path.Combine(modmanager_folder, Path.GetFileNameWithoutExtension(mod_path));
                     if (Directory.Exists(InstallMod_folder))
                     {
                         Directory.Delete(InstallMod_folder, true);
                     }
                     Directory.CreateDirectory(InstallMod_folder);
-                    System.IO.Compression.ZipFile.ExtractToDirectory(mod_path, @InstallMod_folder);
+                    System.IO.Compression.ZipFile.ExtractToDirectory(mod_path, InstallMod_folder);
                     RefreshModList();
-
                 } else
                 {
                     ModernWpf.MessageBox.Show("Select Root folder for game.");
                 }
             } catch (Exception ex)
             {
-                SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Report issue on GitHub \n\n" + ex.StackTrace + " \n\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
+                HandleError(ex);
             }
-
         }
+
 
         public void DeleteMod()
         {
@@ -2531,6 +2900,7 @@ namespace NSC_ModManager.ViewModel
                 {
                     Directory.Delete(mod_path, true);
                     ModManagerList.Remove(SelectedMod);
+                    RefreshModList();
                 }
             }
         }
@@ -2560,52 +2930,95 @@ namespace NSC_ModManager.ViewModel
 
         public void CleanGameAssets(bool OpenMessage = true)
         {
+            // Ensure we're on the UI thread.
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => CleanGameAssets(OpenMessage));
+                return;
+            }
+
             try
             {
                 if (Directory.Exists(Properties.Settings.Default.RootGameFolder))
                 {
-                    //This function was used for cleaning data_win32 and moddingapi folders
                     MessageBoxResult result = MessageBoxResult.No;
                     if (OpenMessage)
                     {
-                        result = (MessageBoxResult)ModernWpf.MessageBox.Show("Are you sure you want to clean your game from mods?", "", MessageBoxButton.YesNo);
-
+                        result = (MessageBoxResult)ModernWpf.MessageBox.Show(
+                            "Are you sure you want to clean your game from mods?",
+                            "",
+                            MessageBoxButton.YesNo);
                     }
+
                     if (result == MessageBoxResult.Yes || !OpenMessage)
                     {
                         string appFolder = Directory.GetCurrentDirectory();
-                        string rootFolder = Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER";
+                        // Build the target folder using Path.Combine.
+                        string rootFolder = Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "ui", "flash", "OTHER");
 
-                        if (Directory.Exists(Properties.Settings.Default.RootGameFolder + "\\moddingapi"))
-                            Directory.Delete(Properties.Settings.Default.RootGameFolder + "\\moddingapi", true);
+                        // Delete moddingapi folder if it exists.
+                        string moddingApiPath = Path.Combine(Properties.Settings.Default.RootGameFolder, "moddingapi");
+                        if (Directory.Exists(moddingApiPath))
+                            Directory.Delete(moddingApiPath, true);
+
                         InstallModdingAPI(false);
 
-                        File.Copy(appFolder + "\\ParamFiles\\stagesel.gfx", rootFolder + "\\stagesel\\stagesel.gfx", true);
-                        File.Copy(appFolder + "\\ParamFiles\\stagesel_image.gfx", rootFolder + "\\stagesel\\stagesel_image.gfx", true);
-                        File.Copy(appFolder + "\\ParamFiles\\charsel.gfx", rootFolder + "\\charsel\\charsel.gfx", true);
-                        File.Copy(appFolder + "\\ParamFiles\\charicon_s.gfx", rootFolder + "\\charicon_s\\charicon_s.gfx", true);
-                        File.Copy(appFolder + "\\ParamFiles\\nuccMaterial_dx11.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccMaterial_dx11.nsh", true);
-                        File.Copy(appFolder + "\\ParamFiles\\freebtl_set_vanilla.gfx", Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\freebtl_set\\freebtl_set.gfx", true);
+                        File.Copy(
+                            Path.Combine(appFolder, "ParamFiles", "stagesel.gfx"),
+                            Path.Combine(rootFolder, "stagesel", "stagesel.gfx"),
+                            true);
+
+                        File.Copy(
+                            Path.Combine(appFolder, "ParamFiles", "stagesel_image.gfx"),
+                            Path.Combine(rootFolder, "stagesel", "stagesel_image.gfx"),
+                            true);
+
+                        File.Copy(
+                            Path.Combine(appFolder, "ParamFiles", "charsel.gfx"),
+                            Path.Combine(rootFolder, "charsel", "charsel.gfx"),
+                            true);
+
+                        File.Copy(
+                            Path.Combine(appFolder, "ParamFiles", "charicon_s.gfx"),
+                            Path.Combine(rootFolder, "charicon_s", "charicon_s.gfx"),
+                            true);
+
+                        File.Copy(
+                            Path.Combine(appFolder, "ParamFiles", "nuccMaterial_dx11.nsh"),
+                            Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "system", "nuccMaterial_dx11.nsh"),
+                            true);
+
+                        File.Copy(
+                            Path.Combine(appFolder, "ParamFiles", "freebtl_set_vanilla.gfx"),
+                            Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "ui", "flash", "OTHER", "freebtl_set", "freebtl_set.gfx"),
+                            true);
 
                         if (Properties.Settings.Default.EnableMotionBlur)
-                            File.Copy(appFolder + "\\ParamFiles\\nuccPostEffect_dx11_S2.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccPostEffect_dx11.nsh", true);
-                        else
-                            File.Copy(appFolder + "\\ParamFiles\\nuccPostEffect_dx11.nsh", Properties.Settings.Default.RootGameFolder + "\\data\\system\\nuccPostEffect_dx11.nsh", true);
+                        {
+                            File.Copy(
+                                Path.Combine(appFolder, "ParamFiles", "nuccPostEffect_dx11_S2.nsh"),
+                                Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "system", "nuccPostEffect_dx11.nsh"),
+                                true);
+                        } else
+                        {
+                            File.Copy(
+                                Path.Combine(appFolder, "ParamFiles", "nuccPostEffect_dx11.nsh"),
+                                Path.Combine(Properties.Settings.Default.RootGameFolder, "data", "system", "nuccPostEffect_dx11.nsh"),
+                                true);
+                        }
 
                         if (OpenMessage)
                             ModernWpf.MessageBox.Show("Game was cleaned!");
                     }
-
                 } else
                 {
-                    System.Windows.MessageBox.Show("Select root folder of game");
+                    ModernWpf.MessageBox.Show("Select root folder of game");
                 }
-            } catch (Exception)
+            } catch (Exception ex)
             {
-                SystemSounds.Exclamation.Play();
                 LoadingStatePlay = Visibility.Hidden;
-                ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
+                HandleError(ex);
             }
         }
 
@@ -2725,17 +3138,19 @@ namespace NSC_ModManager.ViewModel
             }
         }
 
-        public void InstallModdingAPI(bool Message = true, string root_path = "")
+        public void InstallModdingAPI(bool showMessage = true, string root_path = "")
         {
             try
             {
-                if (root_path == "")
+                if (string.IsNullOrEmpty(root_path))
                 {
-                    if (Properties.Settings.Default.RootGameFolder == "")
+                    if (string.IsNullOrEmpty(Properties.Settings.Default.RootGameFolder))
                     {
-                        var dialog = new CommonOpenFileDialog();
-                        dialog.IsFolderPicker = true;
-                        dialog.Title = "Select root folder of game";
+                        var dialog = new CommonOpenFileDialog
+                        {
+                            IsFolderPicker = true,
+                            Title = "Select root folder of game"
+                        };
                         CommonFileDialogResult result = dialog.ShowDialog();
                         root_path = dialog.FileName;
                         Properties.Settings.Default.RootGameFolder = dialog.FileName;
@@ -2745,53 +3160,65 @@ namespace NSC_ModManager.ViewModel
                         root_path = Properties.Settings.Default.RootGameFolder;
                     }
                 }
+
                 if (Directory.Exists(root_path))
                 {
-                    Program.CopyFilesRecursively(AppDomain.CurrentDomain.BaseDirectory.ToString() + "\\ModdingAPIFiles", root_path);
-                    if (Message)
-                        ModernWpf.MessageBox.Show("ModdingAPI was installed!");
-                } else
-                {
-                    return;
-                }
-            } catch (Exception)
-            {
-                SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            }
-        }
-        public void DeleteModdingAPI()
-        {
-            try
-            {
-                if (Directory.Exists(Properties.Settings.Default.RootGameFolder + "\\moddingapi"))
-                {
-
-                    MessageBoxResult warning = (MessageBoxResult)ModernWpf.MessageBox.Show("Are you sure that you want to delete ModdingAPI? All mods inside of it will be deleted too.", "Do you want to delete it?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (warning == MessageBoxResult.Yes)
+                    string moddingAPIFilesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToString(), "ModdingAPIFiles");
+                    Program.CopyFilesRecursively(moddingAPIFilesPath, root_path);
+                    if (showMessage)
                     {
-
-                        Directory.Delete(Properties.Settings.Default.RootGameFolder + "\\moddingapi", true);
-                        if (File.Exists(Properties.Settings.Default.RootGameFolder + "\\xinput9_1_0.dll"))
-                            File.Delete(Properties.Settings.Default.RootGameFolder + "\\xinput9_1_0.dll");
-                        if (File.Exists(Properties.Settings.Default.RootGameFolder + "\\xinput9_1_0_o.dll"))
-                            File.Delete(Properties.Settings.Default.RootGameFolder + "\\xinput9_1_0_o.dll");
-                        ModernWpf.MessageBox.Show("ModdingAPI was deleted!");
-                        KyurutoDialogTextLoader("Mod manager will install ModdingAPI anyway.",
-                20);
+                        ModernWpf.MessageBox.Show("ModdingAPI was installed!");
                     }
                 } else
                 {
                     return;
                 }
-            } catch (Exception)
+            } catch (Exception ex)
             {
-                SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show("Something went wrong.. Make sure game is closed and you don't have anywhere opened file which mod manager might use during compile process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
+                HandleError(ex);
             }
         }
+
+        public void DeleteModdingAPI()
+        {
+            try
+            {
+                string rootFolder = Properties.Settings.Default.RootGameFolder;
+                string moddingAPIPath = Path.Combine(rootFolder, "moddingapi");
+
+                if (Directory.Exists(moddingAPIPath))
+                {
+                    MessageBoxResult warning = (MessageBoxResult)ModernWpf.MessageBox.Show(
+                        "Are you sure that you want to delete ModdingAPI? All mods inside of it will be deleted too.",
+                        "Do you want to delete it?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                    if (warning == MessageBoxResult.Yes)
+                    {
+                        Directory.Delete(moddingAPIPath, true);
+
+                        string xinputPath = Path.Combine(rootFolder, "xinput9_1_0.dll");
+                        if (File.Exists(xinputPath))
+                            File.Delete(xinputPath);
+
+                        string xinputAlternatePath = Path.Combine(rootFolder, "xinput9_1_0_o.dll");
+                        if (File.Exists(xinputAlternatePath))
+                            File.Delete(xinputAlternatePath);
+
+                        ModernWpf.MessageBox.Show("ModdingAPI was deleted!");
+                        KyurutoDialogTextLoader("Mod manager will install ModdingAPI anyway.", 20);
+                    }
+                } else
+                {
+                    return;
+                }
+            } catch (Exception ex)
+            {
+
+                HandleError(ex);
+            }
+        }
+
         // команда добавления нового объекта
         private RelayCommand addMeouch;
         public RelayCommand AddMeouch
@@ -3121,6 +3548,18 @@ namespace NSC_ModManager.ViewModel
 
         private void HandleError(Exception ex)
         {
+            string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+            string logFilePath = Path.Combine(appFolder, "error.log");
+            string errorContent = $"Error: {ex.Message}\n\nStackTrace: {ex.StackTrace}\n\nTime: {DateTime.Now}";
+
+            try
+            {
+                File.WriteAllText(logFilePath, errorContent);
+            } catch (Exception logEx)
+            {
+                // Optional: handle log write errors if needed
+            }
+
             Application.Current.Dispatcher.Invoke(() =>
             {
                 SystemSounds.Exclamation.Play();
