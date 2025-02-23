@@ -4,6 +4,8 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using NSC_ModManager.Model;
 using NSC_ModManager.Properties;
 using NSC_ModManager.View;
+using NSC_ModManager.Model;
+using NSC_ModManager.ViewModel;
 using Octokit;
 using System;
 using System.Collections.Generic;
@@ -462,7 +464,19 @@ namespace NSC_ModManager.ViewModel
                 OnPropertyChanged("TUJList");
             }
         }
-
+        private ObservableCollection<SpecialInteractionModModel> _specialInteractionList = new ObservableCollection<SpecialInteractionModModel>();
+        public ObservableCollection<SpecialInteractionModModel> SpecialInteractionList
+        {
+            get
+            {
+                return _specialInteractionList;
+            }
+            set
+            {
+                _specialInteractionList = value;
+                OnPropertyChanged("SpecialInteractionList");
+            }
+        }
 
         private ObservableCollection<string> _CPKList = new ObservableCollection<string>();
         public ObservableCollection<string> CPKList
@@ -581,7 +595,7 @@ namespace NSC_ModManager.ViewModel
             TUJList.Clear();
             CPKList.Clear();
             ShaderList.Clear();
-
+            SpecialInteractionList.Clear();
             string root_folder = Properties.Settings.Default.RootGameFolder;
             string modmanager_folder = Path.Combine(root_folder, "modmanager"); // "\\\\?\\" was used for fixing long paths. Crashes sometimes
             if (Directory.Exists(modmanager_folder))
@@ -687,6 +701,28 @@ namespace NSC_ModManager.ViewModel
                                 RootPath = Path.GetDirectoryName(tuj_path.FullName)
                             };
                             TUJList.Add(TUJEntry);
+                        }
+
+                        //special interaction
+                        FileInfo[] SpecialInteractionModList = mod_dir.GetFiles("specialInteraction_config.ini", SearchOption.AllDirectories);
+                        Array.Sort(SpecialInteractionModList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
+                        foreach (FileInfo specialInteraction_path in SpecialInteractionModList)
+                        {
+                            var SpecialInteractionInfo = new IniFile(specialInteraction_path.FullName);
+                            string characodesString = SpecialInteractionInfo.Read("TriggerList", "ModManager");
+                            // Convert the split list of strings into ObservableCollection
+                            ObservableCollection<string> characodeList = new ObservableCollection<string>(
+                                characodesString.Split(',')
+                                                .Select(code => code.Trim())
+                            );
+
+                            SpecialInteractionModModel SpecialInteractionEntry = new SpecialInteractionModModel()
+                            {
+                                MainCharacode = Path.GetFileName(Path.GetDirectoryName(specialInteraction_path.FullName)),
+                                TriggerList = characodeList,
+                                RootPath = Path.GetDirectoryName(specialInteraction_path.FullName)
+                            };
+                            SpecialInteractionList.Add(SpecialInteractionEntry);
                         }
 
                         //CPKs
@@ -800,6 +836,7 @@ namespace NSC_ModManager.ViewModel
                 string specialCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "specialCondParam.xfbin");
                 string partnerSlotParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin");
                 string susanooCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "susanooCondParam.xfbin");
+                string specialInteractionPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "specialInteractionManager.xfbin");
 
                 //TUJ Only
                 string pairSpSkillCombinationParam = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "pairSpSkillCombinationParam.xfbin");
@@ -865,6 +902,8 @@ namespace NSC_ModManager.ViewModel
                 pairSpSkillComb_vanilla.OpenFile(pairSpSkillCombinationParam);
                 byte[] pairManagerParam_vanilla = File.ReadAllBytes(pairSpSkillManagerParamPath);
 
+                SpecialInteractionManagerViewModel specialInteraction_vanilla = new SpecialInteractionManagerViewModel();
+                specialInteraction_vanilla.OpenFile(specialInteractionPath);
 
                 if (!File.Exists(specialCondParamPath))
                 {
@@ -878,7 +917,10 @@ namespace NSC_ModManager.ViewModel
                 {
                     throw new FileNotFoundException($"File not found: {susanooCondParamPath}");
                 }
-
+                if (!File.Exists(specialInteractionPath))
+                {
+                    throw new FileNotFoundException($"File not found: {specialInteractionPath}");
+                }
                 byte[] specialCondParam_vanilla = File.ReadAllBytes(specialCondParamPath);
                 byte[] partnerSlotParam_vanilla = File.ReadAllBytes(partnerSlotParamPath);
                 byte[] susanooCondParam_vanilla = File.ReadAllBytes(susanooCondParamPath);
@@ -2291,6 +2333,50 @@ namespace NSC_ModManager.ViewModel
 
                 }
 
+                //Compile Special Interaction
+                foreach (SpecialInteractionModModel specialInteractionEntry in SpecialInteractionList)
+                {
+                    // Find the main character entry in characode_vanilla (case-insensitive comparison).
+                    CharacodeEditorModel mainEntry = characode_vanilla.CharacodeList.FirstOrDefault(c =>
+                        c.CharacodeName.Equals(specialInteractionEntry.MainCharacode, StringComparison.OrdinalIgnoreCase));
+                    if (mainEntry == null)
+                    {
+                        MessageBox.Show($"Main character '{specialInteractionEntry.MainCharacode}' not found in characode_vanilla.");
+                        continue;
+                    }
+                    int mainCharIndex = mainEntry.CharacodeIndex;
+
+                    // Create a new vanilla entry.
+                    SpecialInteractionManagerModel newEntry = new SpecialInteractionManagerModel();
+                    newEntry.MainCharacodeID = mainCharIndex;
+                    newEntry.TriggerList = new ObservableCollection<int>();
+
+                    // Convert each trigger name to its corresponding index.
+                    foreach (string triggerName in specialInteractionEntry.TriggerList)
+                    {
+                        var triggerEntry = characode_vanilla.CharacodeList.FirstOrDefault(c =>
+                            c.CharacodeName.Equals(triggerName, StringComparison.OrdinalIgnoreCase));
+                        if (triggerEntry == null)
+                        {
+                            MessageBox.Show($"Trigger character '{triggerName}' not found in characode_vanilla.");
+                            continue;
+                        }
+                        newEntry.TriggerList.Add(triggerEntry.CharacodeIndex);
+                    }
+
+                    // Check if an entry for this main character already exists.
+                    var existingEntry = specialInteraction_vanilla.SpecialInteractionList
+                                          .FirstOrDefault(e => e.MainCharacodeID == mainCharIndex);
+                    if (existingEntry != null)
+                    {
+                        // Remove the existing vanilla entry.
+                        specialInteraction_vanilla.SpecialInteractionList.Remove(existingEntry);
+                    }
+                    if(newEntry.TriggerList.Count > 0)
+                    // Add the new entry to the vanilla list.
+                        specialInteraction_vanilla.SpecialInteractionList.Add(newEntry);
+                }
+
                 string param_modmanager_path = Path.Combine(root_folder, "param_files") + Path.DirectorySeparatorChar;
                 byte[] nuccMaterialFile = File.ReadAllBytes(nuccMaterialDx11Path); // nuccMaterialDx11Path should already be set with Path.Combine
 
@@ -2703,6 +2789,7 @@ namespace NSC_ModManager.ViewModel
                 File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin"), partnerSlotParam_vanilla);
                 File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "susanooCondParam.xfbin"), susanooCondParam_vanilla);
                 File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "pairSpSkillManagerParam.xfbin"), pairManagerParam_vanilla);
+                specialInteraction_vanilla.SaveFileAs(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "specialInteractionManager.xfbin"));
 
                 // Ensure the destination directory for 5kgyprm exists, then write the file
                 string spcDir = Path.Combine(root_folder, "cpk_assets", "data", "spc");
