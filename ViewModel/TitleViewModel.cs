@@ -832,11 +832,13 @@ namespace NSC_ModManager.ViewModel
                 string charselGfxPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "charsel.gfx");
                 string chariconGfxPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "charicon_s.gfx");
                 string stage_selectPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "select_stage.xfbin");
+                string conditionprmPath = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "conditionprm.bin.xfbin");
 
                 string specialCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "specialCondParam.xfbin");
                 string partnerSlotParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin");
                 string susanooCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "susanooCondParam.xfbin");
                 string specialInteractionPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "specialInteractionManager.xfbin");
+                string conditionprmManagerPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "conditionprmManager.xfbin");
 
                 //TUJ Only
                 string pairSpSkillCombinationParam = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "pairSpSkillCombinationParam.xfbin");
@@ -896,6 +898,14 @@ namespace NSC_ModManager.ViewModel
 
                 StageInfoViewModel stageInfo_vanilla = new StageInfoViewModel();
                 stageInfo_vanilla.OpenFile(stageInfoPath);
+
+
+                ConditionPrmViewModel conditionprm_vanilla = new ConditionPrmViewModel();
+                conditionprm_vanilla.OpenFile(conditionprmPath);
+
+                ConditionManagerViewModel conditionprmManager_vanilla = new ConditionManagerViewModel();
+                conditionprmManager_vanilla.OpenFile(conditionprmManagerPath);
+
 
                 //TUJ Vanilla Files
                 PairSpSkillCombinationParamViewModel pairSpSkillComb_vanilla = new PairSpSkillCombinationParamViewModel();
@@ -960,6 +970,7 @@ namespace NSC_ModManager.ViewModel
 
                     // Required for adding
                     string duelPlayerParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "duelPlayerParam.xfbin");
+                    string conditionprmModPath = Path.Combine(character_mod.RootPath, "data", "spc", "conditionprm.bin.xfbin");
                     string playerSettingParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "playerSettingParam.bin.xfbin");
                     string skillCustomizeParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "skillCustomizeParam.xfbin");
                     string spSkillCustomizeParamModPath = Path.Combine(character_mod.RootPath, "data", "spc", "spSkillCustomizeParam.xfbin");
@@ -991,6 +1002,7 @@ namespace NSC_ModManager.ViewModel
                     string specialCondParamModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "specialCondParam.xfbin");
                     string partnerSlotParamModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "partnerSlotParam.xfbin");
                     string susanooCondParamModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "susanooCondParam.xfbin");
+                    string conditionprmManagerModPath = Path.Combine(character_mod.RootPath, "moddingapi", "mods", "base_game", "conditionprmManager.xfbin");
 
                     //characode file
                     if (!replace_character)
@@ -1066,6 +1078,55 @@ namespace NSC_ModManager.ViewModel
                         }
 
                     }
+
+                    ConditionPrmViewModel conditionprm_mod = new ConditionPrmViewModel();
+                    ConditionManagerViewModel conditionprmManager_mod = new ConditionManagerViewModel();
+                    //conditionprm and conditionprmManager
+                    if (File.Exists(conditionprmPath) && File.Exists(conditionprmManagerPath))
+                    {
+                        conditionprm_mod.OpenFile(conditionprmModPath);
+                        conditionprmManager_mod.OpenFile(conditionprmManagerModPath);
+
+
+                        // Loop through all entries in the mod's ConditionList
+                        foreach (ConditionPrmModel condition in conditionprm_mod.ConditionList)
+                        {
+                            // Check if the condition already exists in the vanilla list
+                            var existingCondition = conditionprm_vanilla.ConditionList
+                                .FirstOrDefault(c => c.ConditionName == condition.ConditionName);
+
+                            if (existingCondition != null)
+                            {
+                                // Replace the existing condition with the new one
+                                int index = conditionprm_vanilla.ConditionList.IndexOf(existingCondition);
+                                conditionprm_vanilla.ConditionList[index] = (ConditionPrmModel)condition.Clone();
+                            } else
+                            {
+                                // Add the condition if it does not exist
+                                conditionprm_vanilla.ConditionList.Add((ConditionPrmModel)condition.Clone());
+                            }
+                        }
+
+                        // Loop through all entries in the mod's ConditionManagerList
+                        foreach (ConditionManagerModel conditionManager in conditionprmManager_mod.ConditionList)
+                        {
+                            // Check if the condition manager already exists in the vanilla list
+                            var existingConditionManager = conditionprmManager_vanilla.ConditionList
+                                .FirstOrDefault(c => c.ConditionName == conditionManager.ConditionName);
+
+                            if (existingConditionManager != null)
+                            {
+                                // Replace the existing condition manager with the new one
+                                int index = conditionprmManager_vanilla.ConditionList.IndexOf(existingConditionManager);
+                                conditionprmManager_vanilla.ConditionList[index] = (ConditionManagerModel)conditionManager.Clone();
+                            } else
+                            {
+                                // Add the condition manager if it does not exist
+                                conditionprmManager_vanilla.ConditionList.Add((ConditionManagerModel)conditionManager.Clone());
+                            }
+                        }
+                    }
+
 
                     //playerSettingParam file
                     List<int> RemovedPresetIds = new List<int>();
@@ -2768,6 +2829,7 @@ namespace NSC_ModManager.ViewModel
                 playerDoubleEffectParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "playerDoubleEffectParam.xfbin"));
                 spTypeSupportParam_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "spTypeSupportParam.xfbin"));
                 pairSpSkillComb_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "pairSpSkillCombinationParam.xfbin"));
+                conditionprm_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "conditionprm.bin.xfbin"));
 
                 damageeff_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "damageeff.bin.xfbin"));
                 effectprm_vanilla.SaveFileAs(Path.Combine(param_modmanager_path, "data", "spc", "effectprm.bin.xfbin"));
@@ -2790,6 +2852,7 @@ namespace NSC_ModManager.ViewModel
                 File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "susanooCondParam.xfbin"), susanooCondParam_vanilla);
                 File.WriteAllBytes(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "pairSpSkillManagerParam.xfbin"), pairManagerParam_vanilla);
                 specialInteraction_vanilla.SaveFileAs(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "specialInteractionManager.xfbin"));
+                conditionprmManager_vanilla.SaveFileAs(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "conditionprmManager.xfbin"));
 
                 // Ensure the destination directory for 5kgyprm exists, then write the file
                 string spcDir = Path.Combine(root_folder, "cpk_assets", "data", "spc");

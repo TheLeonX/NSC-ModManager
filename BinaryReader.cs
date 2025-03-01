@@ -68,6 +68,10 @@ namespace NSC_ModManager {
         {
             return b_ReadInt(fileBytes, index) != 0;
         }
+        public static bool b_ReadBool16(byte[] fileBytes, int index)
+        {
+            return b_ReadInt16(fileBytes, index) != 0;
+        }
         public static float b_ReadFloat(byte[] actual, int index) {
 
             return BitConverter.ToSingle(actual, index);

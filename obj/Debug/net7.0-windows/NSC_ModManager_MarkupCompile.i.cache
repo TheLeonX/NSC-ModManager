@@ -1,5 +1,5 @@
 ﻿NSC_ModManager
-1.6.2.0
+1.6.3.0
 
 winexe
 C#
@@ -12,7 +12,7 @@ TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\App.xaml
 6390980019
 21274133158
-931589042024
+97-2077819520
 232826565573
 Controls\KuramaControl.xaml;Controls\LoadingControl.xaml;Resources\Localization\lang.xaml;Resources\Styles\LightStyle.xaml;View\CharacterRosterEditorView.xaml;View\TitleView.xaml;
 
