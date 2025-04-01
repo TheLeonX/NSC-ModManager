@@ -1,7 +1,7 @@
 # WORKS ONLY WITH STEAM VERSION OF GAME
 
 # REQUIREMENTS
-- [NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)  
+- [NET 9.0](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
 - [VC Redist 2005-2015](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 
 ![modmanager_logo](https://github.com/TheLeonX/NSC-ModManager/assets/92672927/4530b8cf-f540-4e52-a68e-082a46b01652)
