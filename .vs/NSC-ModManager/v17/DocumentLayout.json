@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\nsc-modmanager.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:nsc-modmanager.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\nsc-modmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:nsc-modmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
@@ -11,56 +15,16 @@
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\conditionprmviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\conditionprmviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\conditionmanagerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\conditionmanagerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\binaryreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:binaryreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\conditionprmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\conditionprmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\conditionmanagermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\conditionmanagermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\cmnparammodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\cmnparammodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\specialinteractionmanagermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\specialinteractionmanagermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\stageinfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\stageinfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\specialinteractionmanagerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\specialinteractionmanagerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\specialinteractionmodmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\specialinteractionmodmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\characodeeditormodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\characodeeditormodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\charactermodmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\charactermodmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\model\\pairspskillcombinationparammodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:model\\pairspskillcombinationparammodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\effectprmviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\effectprmviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,188 +34,81 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 13,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "BinaryReader.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\BinaryReader.cs",
-              "RelativeDocumentMoniker": "BinaryReader.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\BinaryReader.cs",
-              "RelativeToolTip": "BinaryReader.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAAAYwEkAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T10:13:57.856Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ConditionPrmViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\ConditionPrmViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\ConditionPrmViewModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\ConditionPrmViewModel.cs",
-              "RelativeToolTip": "ViewModel\\ConditionPrmViewModel.cs",
-              "ViewState": "AgIAAOgBAAAAAAAAAAAAAPQBAABwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T10:13:37.341Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ConditionManagerViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\ConditionManagerViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\ConditionManagerViewModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\ConditionManagerViewModel.cs",
-              "RelativeToolTip": "ViewModel\\ConditionManagerViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T10:13:31.556Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ConditionPrmModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\ConditionPrmModel.cs",
-              "RelativeDocumentMoniker": "Model\\ConditionPrmModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\ConditionPrmModel.cs",
-              "RelativeToolTip": "Model\\ConditionPrmModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T10:13:15.108Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "cmnparamModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\cmnparamModel.cs",
-              "RelativeDocumentMoniker": "Model\\cmnparamModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\cmnparamModel.cs",
-              "RelativeToolTip": "Model\\cmnparamModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T10:13:12.848Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ConditionManagerModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\ConditionManagerModel.cs",
-              "RelativeDocumentMoniker": "Model\\ConditionManagerModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\ConditionManagerModel.cs",
-              "RelativeToolTip": "Model\\ConditionManagerModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T10:13:04.85Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
-              "RelativeDocumentMoniker": "Properties\\Program.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
-              "RelativeToolTip": "Properties\\Program.cs",
-              "ViewState": "AgIAAJ0AAAAAAAAAAAAAALEAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-28T20:14:25.482Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "SpecialInteractionManagerViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\SpecialInteractionManagerViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\SpecialInteractionManagerViewModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\SpecialInteractionManagerViewModel.cs",
-              "RelativeToolTip": "ViewModel\\SpecialInteractionManagerViewModel.cs",
-              "ViewState": "AgIAADcAAAAAAAAAAAAQwEsAAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T14:07:37.097Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "CharacodeEditorModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\CharacodeEditorModel.cs",
-              "RelativeDocumentMoniker": "Model\\CharacodeEditorModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\CharacodeEditorModel.cs",
-              "RelativeToolTip": "Model\\CharacodeEditorModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T13:51:28.93Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "SpecialInteractionModModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\SpecialInteractionModModel.cs",
-              "RelativeDocumentMoniker": "Model\\SpecialInteractionModModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\SpecialInteractionModModel.cs",
-              "RelativeToolTip": "Model\\SpecialInteractionModModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T13:44:43.73Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "CharacterModModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\CharacterModModel.cs",
-              "RelativeDocumentMoniker": "Model\\CharacterModModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\CharacterModModel.cs",
-              "RelativeToolTip": "Model\\CharacterModModel.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwDcAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T13:44:16.625Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "PairSpSkillCombinationParamModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\PairSpSkillCombinationParamModel.cs",
-              "RelativeDocumentMoniker": "Model\\PairSpSkillCombinationParamModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\PairSpSkillCombinationParamModel.cs",
-              "RelativeToolTip": "Model\\PairSpSkillCombinationParamModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T13:43:58.205Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "SpecialInteractionManagerModel.cs",
-              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\SpecialInteractionManagerModel.cs",
-              "RelativeDocumentMoniker": "Model\\SpecialInteractionManagerModel.cs",
-              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Model\\SpecialInteractionManagerModel.cs",
-              "RelativeToolTip": "Model\\SpecialInteractionManagerModel.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAAAkAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T13:32:33.496Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NSC-ModManager.csproj",
+              "Title": "NSC-ModManager",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeDocumentMoniker": "NSC-ModManager.csproj",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeToolTip": "NSC-ModManager.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-02-19T15:39:28.658Z",
+              "WhenOpened": "2025-03-30T09:15:43.56Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "NSC-ModManager.csproj",
+              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
+              "RelativeDocumentMoniker": "NSC-ModManager.csproj",
+              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
+              "RelativeToolTip": "NSC-ModManager.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-29T17:24:41.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EffectPrmViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\EffectPrmViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModel\\EffectPrmViewModel.cs",
+              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\EffectPrmViewModel.cs",
+              "RelativeToolTip": "ViewModel\\EffectPrmViewModel.cs",
+              "ViewState": "AgIAAFABAAAAAAAAAAAAAHIBAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T15:44:55.645Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "StageInfoViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\StageInfoViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModel\\StageInfoViewModel.cs",
+              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\StageInfoViewModel.cs",
+              "RelativeToolTip": "ViewModel\\StageInfoViewModel.cs",
+              "ViewState": "AgIAAHkDAAAAAAAAAAAqwAoHAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T15:44:24.74Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
+              "RelativeDocumentMoniker": "Properties\\Program.cs",
+              "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\Properties\\Program.cs",
+              "RelativeToolTip": "Properties\\Program.cs",
+              "ViewState": "AgIAAKQJAAAAAAAAAAAAAA4AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-18T15:22:04.398Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "TitleViewModel.cs",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeDocumentMoniker": "ViewModel\\TitleViewModel.cs",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeToolTip": "ViewModel\\TitleViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJYKAABLAAAAAAAAAA==",
+              "ViewState": "AgIAAEwLAAAAAAAAAAAAAGgLAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-24T02:19:57.204Z",
+              "WhenOpened": "2025-03-04T08:49:24.036Z",
               "EditorCaption": ""
             }
           ]

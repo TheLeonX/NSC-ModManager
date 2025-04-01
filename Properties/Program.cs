@@ -1,78 +1,132 @@
 ﻿using CriCpkMaker;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Windows;
 
 namespace NSC_ModManager.Properties {
     public class YaCpkTool {
 
         public static void CPK_extract(string extractWhat) {
-            CpkMaker cpkMaker = new CpkMaker();
-            CAsyncFile cManager = new CAsyncFile();
-            if (!cpkMaker.AnalyzeCpkFile(extractWhat)) {
-                ModernWpf.MessageBox.Show("Error: AnalyzeCpkFile returned false!");
-                return;
-            }
-            CFileData cpkFileData = cpkMaker.FileData;
-
-            string outFileName = Path.GetDirectoryName(extractWhat).Replace('/', '\\') + "\\" + Path.GetFileNameWithoutExtension(extractWhat);
-            Directory.CreateDirectory(outFileName);
-            cpkMaker.StartToExtract(outFileName); // Continues at STEP 4
-
-            int last_p = -1;
-            int percent = 0;
-            CriCpkMaker.Status status = cpkMaker.Execute();
-            while ((status > CriCpkMaker.Status.Stop) && (percent < 100)) {
-                percent = (int)Math.Floor(cpkMaker.GetProgress());
-                if (percent > last_p) {
-                    last_p = percent;
+            try
+            {
+                CpkMaker cpkMaker = new CpkMaker();
+                CAsyncFile cManager = new CAsyncFile();
+                if (!cpkMaker.AnalyzeCpkFile(extractWhat))
+                {
+                    ModernWpf.MessageBox.Show("Error: AnalyzeCpkFile returned false!");
+                    return;
                 }
-                status = cpkMaker.Execute();
+                CFileData cpkFileData = cpkMaker.FileData;
+
+                string outFileName = Path.GetDirectoryName(extractWhat).Replace('/', '\\') + "\\" + Path.GetFileNameWithoutExtension(extractWhat);
+                Directory.CreateDirectory(outFileName);
+                cpkMaker.StartToExtract(outFileName); // Continues at STEP 4
+
+                int last_p = -1;
+                int percent = 0;
+                CriCpkMaker.Status status = cpkMaker.Execute();
+                while ((status > CriCpkMaker.Status.Stop) && (percent < 100))
+                {
+                    percent = (int)Math.Floor(cpkMaker.GetProgress());
+                    if (percent > last_p)
+                    {
+                        last_p = percent;
+                    }
+                    status = cpkMaker.Execute();
+                }
+            } catch (Exception ex)
+            {
+
+                HandleError(ex);
+               
+
             }
-
-
         }
 
-        public static void CPK_repack(string directory, string save_directory = "") {
-            CpkMaker cpkMaker = new CpkMaker();
-            CAsyncFile cManager = new CAsyncFile();
-            EnumCompressCodec compressCodec = EnumCompressCodec.CodecDpk;
-            uint dataAlign = 2048;
+        public static void CPK_repack(string directory, string save_directory = "")
+        {
+            try
+            {
+                CpkMaker cpkMaker = new CpkMaker();
+                EnumCompressCodec compressCodec = EnumCompressCodec.CodecDpk;
+                uint dataAlign = 2048;
 
-            cpkMaker.CpkFileMode = CpkMaker.EnumCpkFileMode.ModeFilename;
-            cpkMaker.CompressCodec = compressCodec;
-            cpkMaker.DataAlign = dataAlign;
+                cpkMaker.CpkFileMode = CpkMaker.EnumCpkFileMode.ModeFilename;
+                cpkMaker.CompressCodec = compressCodec;
+                cpkMaker.DataAlign = dataAlign;
 
-            uint i = 0;
-            string[] files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
-            foreach (string file in files) {
-                if (File.Exists(file)) {
-                    string localpath = file.Replace(directory, "");
-                    localpath = localpath.Replace('\\', '/');
-                    if (localpath[0] == '/') { localpath = localpath.Substring(1); }
-                    cpkMaker.AddFile(file, localpath, i++, (((int)compressCodec == 1) ? false : true), "", "", dataAlign);
+                uint fileIndex = 0;
+                string[] files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+                foreach (string file in files)
+                {
+                    if (File.Exists(file))
+                    {
+                        string localPath = file.Replace(directory, "").Replace('\\', '/');
+                        if (localPath.Length > 0 && localPath[0] == '/')
+                            localPath = localPath.Substring(1);
+                        cpkMaker.AddFile(file, localPath, fileIndex++, (compressCodec != EnumCompressCodec.CodecDpk), "", "", dataAlign);
+                    }
                 }
-            }
 
-            if (save_directory == "") {
-                save_directory = directory.Replace('/', '\\') + ".cpk";
-            }
+                if (string.IsNullOrEmpty(save_directory))
+                    save_directory = directory.TrimEnd('/', '\\') + ".cpk";
+                save_directory = save_directory.Replace('/', '\\');
+                File.Create(save_directory).Close();
 
-            File.Create(save_directory).Close();
-            cpkMaker.StartToBuild(save_directory); // Continues at STEP 4
+                // Запускаем сборку CPK
+                cpkMaker.StartToBuild(save_directory);
 
-            int last_p = -1;
-            int percent = 0;
-            CriCpkMaker.Status status = cpkMaker.Execute();
-            while ((status > CriCpkMaker.Status.Stop) && (percent < 100)) {
-                percent = (int)Math.Floor(cpkMaker.GetProgress());
-                if (percent > last_p) {
-                    last_p = percent;
+                int lastPercent = -1;
+                while (true)
+                {
+                    CriCpkMaker.Status status = cpkMaker.Execute();
+                    int percent = (int)Math.Floor(cpkMaker.GetProgress());
+                    if (percent > lastPercent)
+                    {
+                        Debug.WriteLine($"{percent}% packed...");
+                        lastPercent = percent;
+                    }
+                    if (percent >= 100 || status <= CriCpkMaker.Status.Stop)
+                    {
+                        if (status <= CriCpkMaker.Status.Stop)
+                            Debug.WriteLine("Error: CPK repack stopped with status: " + status);
+                        break;
+                    }
                 }
-                status = cpkMaker.Execute();
+
+                cpkMaker.WaitForComplete();
+            } catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex.Message);
             }
+        }
+
+
+        private static void HandleError(Exception ex)
+        {
+            string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+            string logFilePath = Path.Combine(appFolder, "error.log");
+            string errorContent = $"Error: {ex.Message}\n\nStackTrace: {ex.StackTrace}\n\nTime: {DateTime.Now}";
+
+            try
+            {
+                File.WriteAllText(logFilePath, errorContent);
+            } catch (Exception logEx)
+            {
+                // Optional: handle log write errors if needed
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                SystemSounds.Exclamation.Play();
+                ModernWpf.MessageBox.Show($"Error: {ex.Message}\n\n{ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            });
         }
     }
 
@@ -127,53 +181,90 @@ namespace NSC_ModManager.Properties {
                 File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
         }
-        public static void CopyFilesRecursivelyModManager(string sourcePath, string targetPath) {
-            //Now Create all of the directories
-            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories)) {
-                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
-            }
+        public static void CopyFilesRecursivelyModManager(string sourcePath, string targetPath)
+{
+    try
+    {
+        // Создаем все необходимые директории
+        foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+        {
+            Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+        }
 
-            //Copy all the files & Replaces any files with the same name
-            foreach (string newPath in Directory.GetFiles(sourcePath, "*.xfbin", SearchOption.AllDirectories)) {
-                if (!newPath.Contains("characode") &&
-                    !newPath.Contains("damageprm") &&
-                    !newPath.Contains("duelPlayerParam") &&
-                    !newPath.Contains("playerSettingParam") &&
-                    !newPath.Contains("skillCustomizeParam") &&
-                    !newPath.Contains("spSkillCustomizeParam") &&
-                    !newPath.Contains("characterSelectParam") &&
-                    !newPath.Contains("afterAttachObject") &&
-                    !newPath.Contains("costumeParam") &&
-                    !newPath.Contains("playerDoubleEffectParam") &&
-                    !newPath.Contains("cmnparam") &&
-                    !newPath.Contains("supportActionParam") &&
-                    !newPath.Contains("player_icon") &&
-                    !newPath.Contains("awakeAura") &&
-                    !newPath.Contains("appearanceAnm") &&
-                    !newPath.Contains("skillIndexSettingParam") &&
-                    !newPath.Contains("spTypeSipportParam") &&
-                    !newPath.Contains("privateCamera") &&
-                    !newPath.Contains("costumeBreakParam") &&
-                    !newPath.Contains("costumeBreakColorParam") &&
-                    !newPath.Contains("supportSkillRecoverySpeedParam") &&
-                    !newPath.Contains("supportActionParam") &&
-                    !newPath.Contains("damageeff") &&
-                    !newPath.Contains("effectprm") &&
-                    !newPath.Contains("StageInfo") &&
-                    !newPath.Contains("messageInfo") &&
-                    !newPath.Contains("commandListParam") &&
-                    !newPath.Contains("Dictionary") &&
-                    !newPath.Contains("finalSpSkillCutIn") &&
-                    !newPath.Contains("flagprm") &&
-                    !newPath.Contains("hugeAwakeComboCameraParam") &&
-                    !newPath.Contains("meDecalParam") &&
-                    !newPath.Contains("situationVoice") &&
-                    !newPath.Contains("playerDecalSetting") &&
-                    !newPath.Contains("pairSpSkillCombinationParam")
-                    )
-                    File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+        // Фильтруемые расширения для копирования
+        string[] extensions = { "*.xfbin", "*.acb", "*.awb" };
+
+        // Ключевые слова для фильтрации файлов .xfbin – с сохранением регистра!
+        string[] skipKeywords = new string[]
+        {
+            "characode", "damageprm", "duelPlayerParam", "playerSettingParam", "skillCustomizeParam",
+            "spSkillCustomizeParam", "characterSelectParam", "afterAttachObject", "costumeParam",
+            "playerDoubleEffectParam", "cmnparam", "supportActionParam", "player_icon", "awakeAura",
+            "appearanceAnm", "skillIndexSettingParam", "spTypeSipportParam", "privateCamera",
+            "costumeBreakParam", "costumeBreakColorParam", "supportSkillRecoverySpeedParam",
+            "damageeff", "effectprm", "StageInfo", "messageInfo", "commandListParam",
+            "Dictionary", "finalSpSkillCutIn", "flagprm", "hugeAwakeComboCameraParam",
+            "meDecalParam", "situationVoice", "playerDecalSetting", "pairSpSkillCombinationParam"
+        };
+
+        foreach (string ext in extensions)
+        {
+            foreach (string filePath in Directory.GetFiles(sourcePath, ext, SearchOption.AllDirectories))
+            {
+                bool skip = false;
+                // Для файлов .xfbin применяем фильтрацию
+                if (Path.GetExtension(filePath).Equals(".xfbin", StringComparison.Ordinal))
+                {
+                    foreach (string keyword in skipKeywords)
+                    {
+                        if (filePath.Contains(keyword))
+                        {
+                            skip = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!skip)
+                {
+                    string targetFilePath = filePath.Replace(sourcePath, targetPath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
+                    try
+                    {
+                        CopyFileBuffered(filePath, targetFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Ошибка копирования файла {filePath}: {ex.Message}");
+                    }
+                }
             }
         }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Ошибка в CopyFilesRecursivelyModManager: " + ex.Message);
+    }
+}
+
+public static void CopyFileBuffered(string sourceFile, string destFile)
+{
+    // Уменьшенный размер буфера – 256 КБ
+    const int bufferSize = 256 * 1024;
+    using (var sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+    using (var destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
+    {
+        byte[] buffer = new byte[bufferSize];
+        int bytesRead;
+        while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            destStream.Write(buffer, 0, bytesRead);
+        }
+    }
+}
+
+
+
 
         public static int StageBGMOffset = 0x2008F20 + 0xC00 + 0x800; //Find "4C AF BC 3D 15 00 00 00 FF FF FF FF 00 00 00 00" in exe for getting offset. Use Memory Editor and patches to find 2nd offset, cuz its dynamic!
         public static int[] StageBGMSlots = {

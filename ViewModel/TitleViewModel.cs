@@ -1,11 +1,8 @@
-﻿using DynamicData;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NSC_ModManager.Model;
 using NSC_ModManager.Properties;
 using NSC_ModManager.View;
-using NSC_ModManager.Model;
-using NSC_ModManager.ViewModel;
 using Octokit;
 using System;
 using System.Collections.Generic;
@@ -15,9 +12,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -26,6 +23,86 @@ using Application = System.Windows.Application;
 
 namespace NSC_ModManager.ViewModel
 {
+    public class RepackHelper
+    {
+        public static int RunRepackProcess(string inputFolder, string outputCpk)
+        {
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "YACpkTool.exe");
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = $"\"{inputFolder}\"",
+                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                CreateNoWindow = true,  // Отключает создание нового окна
+                UseShellExecute = true, // Включает выполнение через оболочку (важно для работы упаковщика)
+                WindowStyle = ProcessWindowStyle.Hidden // Скрывает процесс
+            };
+
+            using (Process process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+                process.WaitForExit();
+
+                // Проверяем, создался ли CPK-файл перед перемещением
+                string generatedCpk = inputFolder + ".cpk";
+                if (File.Exists(generatedCpk))
+                {
+                    File.Move(generatedCpk, outputCpk, true);
+                }
+
+                return process.ExitCode;
+            }
+        }
+
+        public static int RunExtractProcess(string inputCpk, string outputFolder = "")
+        {
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "YACpkTool.exe");
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = $"\"{inputCpk}\"",
+                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                CreateNoWindow = true,
+                UseShellExecute = true,
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
+
+            using (Process process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+                process.WaitForExit();
+
+                // Убираем ".cpk" для получения папки с извлечёнными данными
+                /*string extractedFolder = inputCpk;
+                if (extractedFolder.EndsWith(".cpk", StringComparison.OrdinalIgnoreCase))
+                {
+                    extractedFolder = extractedFolder.Substring(0, extractedFolder.Length - 4);
+                }
+
+                if (Directory.Exists(extractedFolder))
+                {
+                    // Перемещаем содержимое папки в outputFolder
+                    foreach (string file in Directory.GetFiles(extractedFolder))
+                    {
+                        string destFile = Path.Combine(outputFolder, Path.GetFileName(file));
+                        File.Move(file, destFile);
+                    }
+                    foreach (string dir in Directory.GetDirectories(extractedFolder))
+                    {
+                        string destDir = Path.Combine(outputFolder, Path.GetFileName(dir));
+                        Directory.Move(dir, destDir);
+                    }
+                    // Удаляем пустую папку
+                    Directory.Delete(extractedFolder);
+                }*/
+
+                return process.ExitCode;
+            }
+        }
+
+    }
+
+
     public class TitleViewModel : INotifyPropertyChanged
     {
 
@@ -344,7 +421,7 @@ namespace NSC_ModManager.ViewModel
                     fileBytes = File.ReadAllBytes(value);
                 } else
                 {
-                    fileBytes = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToString(), "Resources", "TemplateImages", "template_icon.png")); 
+                    fileBytes = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToString(), "Resources", "TemplateImages", "template_icon.png"));
                 }
                 memoryStream.Write(fileBytes, 0, fileBytes.Length);
                 memoryStream.Position = 0;
@@ -839,6 +916,7 @@ namespace NSC_ModManager.ViewModel
                 string susanooCondParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "susanooCondParam.xfbin");
                 string specialInteractionPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "specialInteractionManager.xfbin");
                 string conditionprmManagerPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "conditionprmManager.xfbin");
+                string bgmManagerParamPath = Path.Combine(Directory.GetCurrentDirectory(), "ModdingAPIFiles", "moddingapi", "mods", "base_game", "bgmManagerParam.xfbin");
 
                 //TUJ Only
                 string pairSpSkillCombinationParam = Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "pairSpSkillCombinationParam.xfbin");
@@ -1919,6 +1997,7 @@ namespace NSC_ModManager.ViewModel
 
                 }
                 //Compile Stage Mods
+
                 foreach (StageModModel stage_mod in StageList)
                 {
 
@@ -1945,8 +2024,33 @@ namespace NSC_ModManager.ViewModel
                     {
                         stageInfo_mod.OpenFile(stageInfoModPath);
                         stageInfoModified = true;
+                        // Assume xmlStageIDs is an ObservableCollection<string> containing stageIDs from the XML.
+                            var xmlStageIDs = new ObservableCollection<string>
+                                {
+                            "STAGE_SI00A", "STAGE_SD30A", "STAGE_SD14A", "STAGE_SD01D", "STAGE_SD01B",
+                            "STAGE_SD03B", "STAGE_SD03E", "STAGE_SD03A", "STAGE_SD03D", "STAGE_SD18A",
+                            "STAGE_SD04B", "STAGE_SD04C", "STAGE_SD05C", "STAGE_SD05A", "STAGE_SD05D",
+                            "STAGE_SD05B", "STAGE_SD31A", "STAGE_SI43A", "STAGE_SD00B", "STAGE_SI01A",
+                            "STAGE_SD08A", "STAGE_SD06A", "STAGE_SI02A", "STAGE_SD07A", "STAGE_SD07B",
+                            "STAGE_SI06A", "STAGE_SD33A", "STAGE_SD10A", "STAGE_SI09A_NR", "STAGE_SI08A",
+                            "STAGE_SD32A", "STAGE_SD16A", "STAGE_SD11A", "STAGE_SD12A", "STAGE_SI10A",
+                            "STAGE_SI10B", "STAGE_SD24A", "STAGE_SD13A", "STAGE_SD15A_NOSNOW", "STAGE_SD17A",
+                            "STAGE_SD17B", "STAGE_SD22A", "STAGE_SD22B", "STAGE_SD25A", "STAGE_SD19A",
+                            "STAGE_SD23A", "STAGE_SD21A", "STAGE_SD26A", "STAGE_SI33A", "STAGE_SI35A",
+                            "STAGE_SI42B", "STAGE_SI42A", "STAGE_SI44A", "STAGE_SD60A", "STAGE_SI45A",
+                            "STAGE_SI50E", "STAGE_SI51C", "STAGE_SD62B", "STAGE_SD62A", "STAGE_SD70B",
+                            "STAGE_SI70A", "STAGE_SI71A", "STAGE_SI80A", "STAGE_SI81A", "STAGE_SI81B",
+                            "STAGE_SD51A"
+                                                    };
+
                         if (replace_stage)
                         {
+                            // Check if the stage already exists in the XML list.
+                            string stageName = stageInfo_mod.StageInfoList[0].StageName;
+                            if (!xmlStageIDs.Contains(stageName))
+                            {
+                                StagesToAdd.Add(stage_mod);
+                            }
                             stageInfo_vanilla.StageInfoList[mod_stageID] = (StageInfoModel)stageInfo_mod.StageInfoList[0].Clone();
                         } else
                         {
@@ -2341,7 +2445,7 @@ namespace NSC_ModManager.ViewModel
                             cmnparam_vanilla.PairSplList.Add(pairSndEntry);
                         }
 
-                        
+
 
                     } else
                     {
@@ -2365,7 +2469,7 @@ namespace NSC_ModManager.ViewModel
                         //---------------------------------- Cmn Param ---------------------------------------------------------------------------------------------
                         if (File.Exists(cmnparamModPath))
                         {
-                             cmnparamViewModel cmnparam_mod = new cmnparamViewModel();
+                            cmnparamViewModel cmnparam_mod = new cmnparamViewModel();
                             cmnparam_mod.OpenFile(cmnparamModPath);
                             pair_spl_sndModel pairSndEntry = (pair_spl_sndModel)cmnparam_mod.PairSplList[0].Clone();
                             pairSndEntry.PairSplID = mod_tuj_id;
@@ -2374,7 +2478,7 @@ namespace NSC_ModManager.ViewModel
                             int tuj_cmnparam_index = cmnparam_vanilla.PairSplList.IndexOf(existingCmnParmaEntry);
                             cmnparam_vanilla.PairSplList[tuj_cmnparam_index] = pairSndEntry;
                         }
-                        
+
                     }
                     //---------------------------------- MessageInfo Files ---------------------------------------------------------------------------------------------
                     MessageInfoViewModel messageInfo_mod = new MessageInfoViewModel();
@@ -2433,8 +2537,8 @@ namespace NSC_ModManager.ViewModel
                         // Remove the existing vanilla entry.
                         specialInteraction_vanilla.SpecialInteractionList.Remove(existingEntry);
                     }
-                    if(newEntry.TriggerList.Count > 0)
-                    // Add the new entry to the vanilla list.
+                    if (newEntry.TriggerList.Count > 0)
+                        // Add the new entry to the vanilla list.
                         specialInteraction_vanilla.SpecialInteractionList.Add(newEntry);
                 }
 
@@ -2475,10 +2579,11 @@ namespace NSC_ModManager.ViewModel
                             StringComparer.OrdinalIgnoreCase.Compare(
                             Path.GetFileName(x.DirectoryName),
                             Path.GetFileName(y.DirectoryName)));
-
                         foreach (FileInfo cpk in cpkList)
                         {
-                            YaCpkTool.CPK_extract(Path.GetFullPath(cpk.FullName));
+
+
+                            RepackHelper.RunExtractProcess(Path.GetFullPath(cpk.FullName));
                             string fileName = Path.GetFileNameWithoutExtension(cpk.FullName);
                             string sourcePath = Path.Combine(Path.GetDirectoryName(cpk.FullName), fileName);
                             string destinationPath = Path.Combine(root_folder, "cpk_assets");
@@ -2488,6 +2593,8 @@ namespace NSC_ModManager.ViewModel
                             if (Directory.Exists(sourcePath))
                                 Directory.Delete(sourcePath, true);
                         }
+
+                        
 
                         // Copy data_win32 files
                         string dataWin32ModManagerPath = Path.Combine(root_folder, "data_win32_modmanager");
@@ -2604,6 +2711,7 @@ namespace NSC_ModManager.ViewModel
                 Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "stage"));
                 Directory.CreateDirectory(Path.Combine(param_modmanager_path, "data", "sound"));
 
+                string bgmManagerParamModPath = Path.Combine(root_folder, "moddingapi", "mods", "base_game", "bgmManagerParam.xfbin");
                 if (stageInfoModified)
                 {
                     // select_stage
@@ -2614,19 +2722,33 @@ namespace NSC_ModManager.ViewModel
                     byte[] stagesel_end = BinaryReader.b_ReadByteArray(stageSel_file, 0x13DE, 0x14);
                     byte[] stagesel_xml_add = new byte[0];
                     byte[] stagesel_new_file = new byte[0];
-
+                    // BGMs
+                    byte[] BGM_vanilla = new byte[0];
+                    if (File.Exists(bgmManagerParamPath))
+                    {
+                        BGM_vanilla = File.ReadAllBytes(bgmManagerParamPath);
+                    }
                     for (int st = 0; st < StagesToAdd.Count; st++)
                     {
-                        // BGMs
-                        if (st < Program.StageBGMSlots.Length)
-                        {
-                            byte[] stageBGM_slot = new byte[0];
-                            stageBGM_slot = BinaryReader.b_AddBytes(stageBGM_slot, BinaryReader.crc32(StagesToAdd[st].StageName));
-                            stageBGM_slot = BinaryReader.b_AddBytes(stageBGM_slot, BitConverter.GetBytes(StagesToAdd[st].BgmID));
-                            string bgmFile = Path.Combine(root_folder, "moddingapi", "mods", "base_game",
-                                Program.StageBGMSlots[st].ToString("X") + ".ns4p");
-                            File.WriteAllBytes(bgmFile, stageBGM_slot);
-                        }
+                        byte[] BGM_entry = new byte[0x68];
+                        BGM_entry = BinaryReader.b_ReplaceString(BGM_entry, StagesToAdd[st].StageName, 0);
+                        BGM_entry = BinaryReader.b_ReplaceBytes(BGM_entry, BitConverter.GetBytes(StagesToAdd[st].BgmID), 0x60);
+                        BGM_entry = BinaryReader.b_ReplaceBytes(BGM_entry, BitConverter.GetBytes(-1), 0x64);
+                        BGM_vanilla = BinaryReader.b_AddBytes(BGM_vanilla, BGM_entry);
+
+
+                        //if (st < Program.StageBGMSlots.Length)
+                        //{
+                        //    byte[] stageBGM_slot = new byte[0];
+                        //    stageBGM_slot = BinaryReader.b_AddBytes(stageBGM_slot, BinaryReader.crc32(StagesToAdd[st].StageName));
+                        //    stageBGM_slot = BinaryReader.b_AddBytes(stageBGM_slot, BitConverter.GetBytes(StagesToAdd[st].BgmID));
+                        //    string bgmFile = Path.Combine(root_folder, "moddingapi", "mods", "base_game",
+                        //        Program.StageBGMSlots[st].ToString("X") + ".ns4p");
+                        //    File.WriteAllBytes(bgmFile, stageBGM_slot);
+
+
+
+                        //}
 
                         byte[] xml_line = new byte[0x0E]
                         {
@@ -2704,7 +2826,7 @@ namespace NSC_ModManager.ViewModel
                     stagesel_new_file = BinaryReader.b_AddBytes(stagesel_new_file, stagesel_xml_add);
                     stagesel_new_file = BinaryReader.b_AddBytes(stagesel_new_file, stagesel_end);
 
-                    string selectStageDir = Path.Combine(root_folder, "cpk_assets", "data", "ui", "max", "select");
+                    string selectStageDir = Path.Combine(root_folder, "param_files", "data", "ui", "max", "select");
                     if (!Directory.Exists(selectStageDir))
                         Directory.CreateDirectory(selectStageDir);
                     string selectStagePath = Path.Combine(selectStageDir, "select_stage.xfbin");
@@ -2794,13 +2916,16 @@ namespace NSC_ModManager.ViewModel
                     byte[] stagesel_gfx_original = File.ReadAllBytes(stageselGfxPath);
                     if (36 * pageCount != stage_count + StagesToAdd.Count)
                         pageCount++;
-                    stagesel_gfx_original[0x28170] = (byte)pageCount;
+                    stagesel_gfx_original[0x291C7] = (byte)pageCount;
 
-                    stagesel_gfx_original[0x28176] = (stage_count - 2 + StagesToAdd.Count) < 255
+                    stagesel_gfx_original[0x291CD] = (stage_count - 2 + StagesToAdd.Count) < 255
                         ? (byte)(stage_count - 2 + StagesToAdd.Count)
                         : (byte)255;
                     string stageselGfxOutputPath = Path.Combine(root_folder, "data", "ui", "flash", "OTHER", "stagesel", "stagesel.gfx");
                     File.WriteAllBytes(stageselGfxOutputPath, stagesel_gfx_original);
+                    File.WriteAllBytes(bgmManagerParamModPath, BGM_vanilla);
+
+
                 }
 
 
@@ -2872,10 +2997,9 @@ namespace NSC_ModManager.ViewModel
                     if (Directory.Exists(cpkAssetsPath) &&
                         Directory.EnumerateFiles(cpkAssetsPath, "*.*", SearchOption.AllDirectories).Any())
                     {
-                        YaCpkTool.CPK_repack(cpkAssetsPath);
-                        File.Move(
-                            Path.Combine(root_folder, "cpk_assets.cpk"),
-                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "cpk_assets.cpk"));
+                        RepackHelper.RunRepackProcess(cpkAssetsPath, Path.Combine(root_folder, "moddingapi", "mods", "base_game", "cpk_assets.cpk"));
+
+
                         File.WriteAllBytes(
                             Path.Combine(root_folder, "moddingapi", "mods", "base_game", "cpk_assets.cpk.info"),
                             new byte[4] { 0x20, 0, 0, 0 });
@@ -2886,24 +3010,19 @@ namespace NSC_ModManager.ViewModel
                     if (Directory.Exists(dataWin32Path) &&
                         Directory.EnumerateFiles(dataWin32Path, "*.*", SearchOption.AllDirectories).Any())
                     {
-                        YaCpkTool.CPK_repack(dataWin32Path);
-                        File.Move(
-                            Path.Combine(root_folder, "data_win32_modmanager.cpk"),
-                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk"));
+                        RepackHelper.RunRepackProcess(dataWin32Path, Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk"));
+
                         File.WriteAllBytes(
                             Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk.info"),
                             new byte[4] { 0x21, 0, 0, 0 });
                     }
 
                     // Repack param_modmanager_path folder
-                    string paramModmanagerFullPath = Path.GetFullPath(param_modmanager_path);
+                    string paramModmanagerFullPath = Path.GetFullPath(Path.Combine(root_folder, "param_files"));
                     if (Directory.Exists(paramModmanagerFullPath) &&
                         Directory.EnumerateFiles(paramModmanagerFullPath, "*.*", SearchOption.AllDirectories).Any())
                     {
-                        YaCpkTool.CPK_repack(paramModmanagerFullPath);
-                        File.Move(
-                            param_modmanager_path + ".cpk",
-                            Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk"));
+                        RepackHelper.RunRepackProcess(paramModmanagerFullPath, Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk"));
                         File.WriteAllBytes(
                             Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk.info"),
                             new byte[4] { 0x22, 0, 0, 0 });
@@ -2921,7 +3040,7 @@ namespace NSC_ModManager.ViewModel
                 if (Directory.Exists(Path.Combine(root_folder, "param_files")))
                     Directory.Delete(Path.Combine(root_folder, "param_files"), true);
 
-                //File.Copy(Directory.GetCurrentDirectory() + "\\ParamFiles\\freebtl_set.gfx", Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\freebtl_set\\freebtl_set.gfx", true);
+                File.Copy(Directory.GetCurrentDirectory() + "\\ParamFiles\\freebtl_set.gfx", Properties.Settings.Default.RootGameFolder + "\\data\\ui\\flash\\OTHER\\freebtl_set\\freebtl_set.gfx", true);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     KyurutoDialogTextLoader("Your mods are ready!", 20);
@@ -3714,11 +3833,29 @@ namespace NSC_ModManager.ViewModel
             {
                 SystemSounds.Exclamation.Play();
                 ModernWpf.MessageBox.Show($"Error: {ex.Message}\n\n{ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine($"Error: {ex.Message}\n\n{ex.StackTrace}", "Error");
                 KyurutoDialogTextLoader("An error occurred during compilation. Check error details.", 20);
                 LoadingStatePlay = Visibility.Hidden;
             });
         }
-    }
+        private static void WaitForFile(string filePath, int timeoutSeconds = 300)
+        {
+            Console.WriteLine($"Waiting for file: {filePath}");
+            Stopwatch sw = Stopwatch.StartNew();
 
+            while (!File.Exists(filePath))
+            {
+                if (sw.Elapsed.TotalSeconds > timeoutSeconds)
+                {
+                    throw new TimeoutException($"Timeout: File {filePath} was not created in {timeoutSeconds} seconds.");
+                }
+
+                Thread.Sleep(500); // Ждём 500 мс перед повторной проверкой
+            }
+
+            Console.WriteLine($"File detected: {filePath}");
+        }
+    }
+    
 
 }

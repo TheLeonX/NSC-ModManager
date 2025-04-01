@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ACa5lUGACkI=",
+  "dgSpecHash": "GEJelLxq2TI=",
   "success": true,
   "projectFilePath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
   "expectedPackageFiles": [
@@ -51,30 +51,27 @@
     "C:\\Users\\ARDOR\\.nuget\\packages\\windowsapicodepack-core\\1.1.1\\windowsapicodepack-core.1.1.1.nupkg.sha512",
     "C:\\Users\\ARDOR\\.nuget\\packages\\windowsapicodepack-shell\\1.1.1\\windowsapicodepack-shell.1.1.1.nupkg.sha512",
     "C:\\Users\\ARDOR\\.nuget\\packages\\wpfanimatedgif\\2.0.2\\wpfanimatedgif.2.0.2.nupkg.sha512",
-    "C:\\Users\\ARDOR\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.20\\microsoft.windowsdesktop.app.ref.7.0.20.nupkg.sha512",
-    "C:\\Users\\ARDOR\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.20\\microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
-    "C:\\Users\\ARDOR\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.20\\microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512",
-    "C:\\Users\\ARDOR\\.nuget\\packages\\microsoft.netcore.app.host.win-x86\\7.0.20\\microsoft.netcore.app.host.win-x86.7.0.20.nupkg.sha512"
+    "C:\\Users\\ARDOR\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.26100.54\\microsoft.windows.sdk.net.ref.10.0.26100.54.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Пакет \"WindowsAPICodePack-Core 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net7.0-windows7.0\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "message": "Пакет \"WindowsAPICodePack-Core 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net9.0-windows10.0.26100\". Этот пакет может быть не полностью совместим с вашим проектом.",
       "libraryId": "WindowsAPICodePack-Core",
       "targetGraphs": [
-        "net7.0-windows7.0"
+        "net9.0-windows10.0.26100"
       ]
     },
     {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Пакет \"WindowsAPICodePack-Shell 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net7.0-windows7.0\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "message": "Пакет \"WindowsAPICodePack-Shell 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net9.0-windows10.0.26100\". Этот пакет может быть не полностью совместим с вашим проектом.",
       "libraryId": "WindowsAPICodePack-Shell",
       "targetGraphs": [
-        "net7.0-windows7.0"
+        "net9.0-windows10.0.26100"
       ]
     }
   ]

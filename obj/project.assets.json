@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net7.0-windows7.0": {
+    "net9.0-windows10.0.26100": {
       "DynamicData/7.1.1": {
         "type": "package",
         "dependencies": {
@@ -122,10 +122,10 @@
           "ModernWpfUI": "0.9.4"
         },
         "compile": {
-          "lib/netcoreapp3.0/ModernWpf.MessageBox.dll": {}
+          "lib/net5.0-windows10.0.18362/ModernWpf.MessageBox.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.0/ModernWpf.MessageBox.dll": {}
+          "lib/net5.0-windows10.0.18362/ModernWpf.MessageBox.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WPF"
@@ -636,18 +636,15 @@
           "System.Runtime.Serialization.Primitives": "4.3.0"
         },
         "compile": {
-          "lib/net5.0-windows7.0/ReactiveUI.dll": {
+          "lib/net5.0-windows10.0.19041/ReactiveUI.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net5.0-windows7.0/ReactiveUI.dll": {
+          "lib/net5.0-windows10.0.19041/ReactiveUI.dll": {
             "related": ".xml"
           }
-        },
-        "frameworkReferences": [
-          "Microsoft.WindowsDesktop.App"
-        ]
+        }
       },
       "ReactiveUI.Events.WPF/13.2.18": {
         "type": "package",
@@ -656,12 +653,12 @@
           "System.Reactive": "5.0.0"
         },
         "compile": {
-          "lib/net5.0-windows7.0/ReactiveUI.Events.WPF.dll": {
+          "lib/net5.0-windows10.0.19041/ReactiveUI.Events.WPF.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net5.0-windows7.0/ReactiveUI.Events.WPF.dll": {
+          "lib/net5.0-windows10.0.19041/ReactiveUI.Events.WPF.dll": {
             "related": ".xml"
           }
         },
@@ -676,12 +673,12 @@
           "System.Reactive": "5.0.0"
         },
         "compile": {
-          "lib/net5.0-windows7.0/ReactiveUI.Wpf.dll": {
+          "lib/net5.0-windows10.0.19041/ReactiveUI.Wpf.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net5.0-windows7.0/ReactiveUI.Wpf.dll": {
+          "lib/net5.0-windows10.0.19041/ReactiveUI.Wpf.dll": {
             "related": ".xml"
           }
         },
@@ -859,15 +856,18 @@
       "System.Reactive/5.0.0": {
         "type": "package",
         "compile": {
-          "lib/net5.0/System.Reactive.dll": {
+          "lib/net5.0-windows10.0.19041/System.Reactive.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net5.0/System.Reactive.dll": {
+          "lib/net5.0-windows10.0.19041/System.Reactive.dll": {
             "related": ".xml"
           }
         },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App"
+        ],
         "build": {
           "buildTransitive/net5.0/_._": {}
         }
@@ -3422,7 +3422,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net7.0-windows7.0": [
+    "net9.0-windows10.0.26100": [
       "Extended.Wpf.Toolkit >= 4.5.1",
       "ModernWpf.MessageBox >= 0.5.2",
       "ModernWpfUI >= 0.9.6",
@@ -3451,15 +3451,15 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net7.0-windows"
+        "net9.0-windows10.0.26100.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net7.0-windows7.0": {
-          "targetAlias": "net7.0-windows",
+        "net9.0-windows10.0.26100": {
+          "targetAlias": "net9.0-windows10.0.26100.0",
           "projectReferences": {}
         }
       },
@@ -3476,8 +3476,8 @@
       "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
-      "net7.0-windows7.0": {
-        "targetAlias": "net7.0-windows",
+      "net9.0-windows10.0.26100": {
+        "targetAlias": "net9.0-windows10.0.26100.0",
         "dependencies": {
           "Extended.Wpf.Toolkit": {
             "target": "Package",
@@ -3529,31 +3529,22 @@
         "warn": true,
         "downloadDependencies": [
           {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x86",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[7.0.20, 7.0.20]"
+            "name": "Microsoft.Windows.SDK.NET.Ref",
+            "version": "[10.0.26100.54, 10.0.26100.54]"
           }
         ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           },
+          "Microsoft.Windows.SDK.NET.Ref.Windows": {
+            "privateAssets": "all"
+          },
           "Microsoft.WindowsDesktop.App.WPF": {
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -3562,20 +3553,20 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Пакет \"WindowsAPICodePack-Core 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net7.0-windows7.0\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "message": "Пакет \"WindowsAPICodePack-Core 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net9.0-windows10.0.26100\". Этот пакет может быть не полностью совместим с вашим проектом.",
       "libraryId": "WindowsAPICodePack-Core",
       "targetGraphs": [
-        "net7.0-windows7.0"
+        "net9.0-windows10.0.26100"
       ]
     },
     {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Пакет \"WindowsAPICodePack-Shell 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net7.0-windows7.0\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "message": "Пакет \"WindowsAPICodePack-Shell 1.1.1\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net9.0-windows10.0.26100\". Этот пакет может быть не полностью совместим с вашим проектом.",
       "libraryId": "WindowsAPICodePack-Shell",
       "targetGraphs": [
-        "net7.0-windows7.0"
+        "net9.0-windows10.0.26100"
       ]
     }
   ]

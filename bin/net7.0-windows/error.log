@@ -1,8 +1,0 @@
-Error: Access to the path 'Conditions.dll' is denied.
-
-StackTrace:    at System.IO.FileSystem.RemoveDirectoryRecursive(String fullPath, WIN32_FIND_DATA& findData, Boolean topLevel)
-   at System.IO.FileSystem.RemoveDirectory(String fullPath, Boolean recursive)
-   at System.IO.Directory.Delete(String path, Boolean recursive)
-   at NSC_ModManager.ViewModel.TitleViewModel.CleanGameAssets(Boolean OpenMessage) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 3049
-
-Time: 23.02.2025 17:20:09

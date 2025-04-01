@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
     <RootNamespace>NSC_ModManager</RootNamespace>
     <AssemblyName>NSC_ModManager</AssemblyName>
     <Nullable>enable</Nullable>
@@ -22,11 +22,13 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     
-    <AssemblyVersion>1.6.3.0</AssemblyVersion>
-    <FileVersion>1.6.3.0</FileVersion>
+    <AssemblyVersion>1.6.4.0</AssemblyVersion>
+    <FileVersion>1.6.4.0</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.60</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SignAssembly>False</SignAssembly>
+    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,10 +50,14 @@
     <None Remove="Resources\Styles\UI\logo\modmanager_logo.png" />
     <None Remove="Resources\Styles\UI\logo\toolbox_logo.png" />
     <None Remove="white_MM.ico" />
+    <None Remove="YACpkTool.exe" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="white_MM.ico" />
+    <Content Include="YACpkTool.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
