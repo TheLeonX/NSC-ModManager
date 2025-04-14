@@ -452,3 +452,4 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.2
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModManager.genruntimeconfig.cache
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\ref\NSC_ModManager.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\YACpkTool.exe
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\ModdingAPIFiles\moddingapi\mods\base_game\defaultJutsuList.xfbin
