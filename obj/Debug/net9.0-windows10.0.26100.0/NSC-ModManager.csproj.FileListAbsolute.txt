@@ -255,7 +255,6 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\NSC_ModManager.deps.json
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\NSC_ModManager.runtimeconfig.json
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\NSC_ModManager.dll
-C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\NSC_ModManager.pdb
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\DynamicData.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\Xceed.Wpf.AvalonDock.NET5.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\Xceed.Wpf.AvalonDock.Themes.Aero.NET5.dll
@@ -444,12 +443,11 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.2
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModManager.AssemblyInfoInputs.cache
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModManager.AssemblyInfo.cs
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModManager.csproj.CoreCompileInputs.cache
-C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModManager.sourcelink.json
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModM.3B80A195.Up2Date
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC_ModManager.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\refint\NSC_ModManager.dll
-C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC_ModManager.pdb
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\NSC-ModManager.genruntimeconfig.cache
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.26100.0\ref\NSC_ModManager.dll
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\YACpkTool.exe
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\ModdingAPIFiles\moddingapi\mods\base_game\defaultJutsuList.xfbin
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net9.0-windows10.0.26100.0\ModdingAPIFiles\moddingapi\mods\base_game\EncryptCPK.dll

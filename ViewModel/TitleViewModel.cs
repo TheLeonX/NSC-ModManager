@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CriCpkMaker;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NSC_ModManager.Model;
 using NSC_ModManager.Properties;
@@ -3002,7 +3003,7 @@ namespace NSC_ModManager.ViewModel
 
                         File.WriteAllBytes(
                             Path.Combine(root_folder, "moddingapi", "mods", "base_game", "cpk_assets.cpk.info"),
-                            new byte[4] { 0x20, 0, 0, 0 });
+                            new byte[8] { 0x20, 0, 0, 0, 1, 0, 0, 0 });
                     }
 
                     // Repack data_win32_modmanager folder
@@ -3012,9 +3013,12 @@ namespace NSC_ModManager.ViewModel
                     {
                         RepackHelper.RunRepackProcess(dataWin32Path, Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk"));
 
+                        //CpkBlockEncrypter.EncryptDataBlocksInCpk(Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk"));
+
+
                         File.WriteAllBytes(
                             Path.Combine(root_folder, "moddingapi", "mods", "base_game", "data_win32_modmanager.cpk.info"),
-                            new byte[4] { 0x21, 0, 0, 0 });
+                            new byte[8] { 0x21, 0, 0, 0, 1, 0, 0, 0 });
                     }
 
                     // Repack param_modmanager_path folder
@@ -3025,7 +3029,7 @@ namespace NSC_ModManager.ViewModel
                         RepackHelper.RunRepackProcess(paramModmanagerFullPath, Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk"));
                         File.WriteAllBytes(
                             Path.Combine(root_folder, "moddingapi", "mods", "base_game", "param_files.cpk.info"),
-                            new byte[4] { 0x22, 0, 0, 0 });
+                            new byte[8] { 0x22, 0, 0, 0, 1, 0, 0, 0 });
                     }
                 } catch (Exception ex)
                 {
@@ -3119,7 +3123,7 @@ namespace NSC_ModManager.ViewModel
                 if (string.IsNullOrEmpty(mod_path))
                 {
                     OpenFileDialog myDialog = new OpenFileDialog();
-                    myDialog.Filter = "Naruto Storm Connection Mod (*.nsc)|*.nsc";
+                    myDialog.Filter = "(*.nsc) Naruto Storm Connection Mod|*.nsc|(*.ensc) Encrypted Naruto Storm Connection Mod |*.ensc";
                     myDialog.CheckFileExists = true;
                     myDialog.Multiselect = false;
                     if (myDialog.ShowDialog() == true)

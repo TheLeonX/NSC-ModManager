@@ -6,13 +6,15 @@ using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows;
 
-namespace NSC_ModManager.Properties {
-    public class YaCpkTool {
+namespace NSC_ModManager.Properties
+{
+    public class YaCpkTool
+    {
 
-        public static void CPK_extract(string extractWhat) {
+        public static void CPK_extract(string extractWhat)
+        {
             try
             {
                 CpkMaker cpkMaker = new CpkMaker();
@@ -44,11 +46,62 @@ namespace NSC_ModManager.Properties {
             {
 
                 HandleError(ex);
-               
+
 
             }
         }
+        public static long CpkCrypt_141342730(long a1, byte[] a2, int a3)
+        {
+            int v3 = a3;
+            int offset = 0;
+            int v7 = 0x2B3D1CD;
+            int v8 = 0x154F048D;
+            int v9 = 0x43A3D2F9;
+            uint v10 = 0x617E9602;
+            byte[] v17 = new byte[4];
 
+            // Проверка заголовка CPK (как в оригинале)
+            if (a3 >= 4)
+            {
+                if ((a2[0] == 67 && a2[1] == 82 && a2[2] == 73) ||
+                    (a2[0] == 78 && a2[1] == 85 && a2[2] == 67 && a2[3] == 67))
+                {
+                    // ccDebugMessage(aError_5);
+                    return 0;
+                }
+            }
+
+            if (a3 > 0)
+            {
+                while (v3 > 0)
+                {
+                    // генерируем следующий 32-битный ключ
+                    int v12 = v8 ^ (v8 << 11);
+                    v8 = v7;
+                    v7 = v9;
+                    v9 = (int)v10;
+                    v10 ^= (uint)v12 ^ ((uint)(v12) ^ (v10 >> 11)) >> 8;
+
+                    // раскладываем ключ в байты
+                    v17[0] = (byte)v10;
+                    v17[1] = (byte)(v10 >> 8);
+                    v17[2] = (byte)(v10 >> 16);
+                    v17[3] = (byte)(v10 >> 24);
+
+                    int chunk = Math.Min(v3, 4);
+                    // XOR-шифрование/дешифрование
+                    for (int i = 0; i < chunk; i++)
+                    {
+                        a2[offset + i] ^= v17[i];
+                    }
+
+                    offset += 4;
+                    v3 -= chunk;
+                }
+            }
+
+            return 0;
+        }
         public static void CPK_repack(string directory, string save_directory = "")
         {
             try
@@ -101,6 +154,9 @@ namespace NSC_ModManager.Properties {
                 }
 
                 cpkMaker.WaitForComplete();
+
+                MessageBox.Show(save_directory);
+                // ----- здесь добавляем шифрование/дешифрование всего .cpk -----
             } catch (Exception ex)
             {
                 Debug.WriteLine("Exception: " + ex.Message);
@@ -141,62 +197,72 @@ namespace NSC_ModManager.Properties {
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
 
-        public IniFile(string IniPath = null) {
+        public IniFile(string IniPath = null)
+        {
             Path = new FileInfo(IniPath ?? EXE + ".ini").FullName;
         }
 
-        public string Read(string Key, string Section = null) {
+        public string Read(string Key, string Section = null)
+        {
             var RetVal = new StringBuilder(255);
             GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255, Path);
             return RetVal.ToString();
         }
 
-        public void Write(string Key, string Value, string Section = null) {
+        public void Write(string Key, string Value, string Section = null)
+        {
             WritePrivateProfileString(Section ?? EXE, Key, Value, Path);
         }
 
-        public void DeleteKey(string Key, string Section = null) {
+        public void DeleteKey(string Key, string Section = null)
+        {
             Write(Key, null, Section ?? EXE);
         }
 
-        public void DeleteSection(string Section = null) {
+        public void DeleteSection(string Section = null)
+        {
             Write(null, null, Section ?? EXE);
         }
 
-        public bool KeyExists(string Key, string Section = null) {
+        public bool KeyExists(string Key, string Section = null)
+        {
             return Read(Key, Section).Length > 0;
         }
     }
 
 
-    public class Program {
-        public static void CopyFilesRecursively(string sourcePath, string targetPath) {
+    public class Program
+    {
+        public static void CopyFilesRecursively(string sourcePath, string targetPath)
+        {
             //Now Create all of the directories
-            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories)) {
+            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+            {
                 Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
             }
 
             //Copy all the files & Replaces any files with the same name
-            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories)) {
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+            {
                 File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
         }
         public static void CopyFilesRecursivelyModManager(string sourcePath, string targetPath)
-{
-    try
-    {
-        // Создаем все необходимые директории
-        foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
         {
-            Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
-        }
+            try
+            {
+                // Создаем все необходимые директории
+                foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+                }
 
-        // Фильтруемые расширения для копирования
-        string[] extensions = { "*.xfbin", "*.acb", "*.awb" };
+                // Фильтруемые расширения для копирования
+                string[] extensions = { "*.xfbin", "*.acb", "*.awb" };
 
-        // Ключевые слова для фильтрации файлов .xfbin – с сохранением регистра!
-        string[] skipKeywords = new string[]
-        {
+                // Ключевые слова для фильтрации файлов .xfbin – с сохранением регистра!
+                string[] skipKeywords = new string[]
+                {
             "characode", "damageprm", "duelPlayerParam", "playerSettingParam", "skillCustomizeParam",
             "spSkillCustomizeParam", "characterSelectParam", "afterAttachObject", "costumeParam",
             "playerDoubleEffectParam", "cmnparam", "supportActionParam", "player_icon", "awakeAura",
@@ -205,132 +271,130 @@ namespace NSC_ModManager.Properties {
             "damageeff", "effectprm", "StageInfo", "messageInfo", "commandListParam",
             "Dictionary", "finalSpSkillCutIn", "flagprm", "hugeAwakeComboCameraParam",
             "meDecalParam", "situationVoice", "playerDecalSetting", "pairSpSkillCombinationParam"
-        };
+                };
 
-        foreach (string ext in extensions)
-        {
-            foreach (string filePath in Directory.GetFiles(sourcePath, ext, SearchOption.AllDirectories))
-            {
-                bool skip = false;
-                // Для файлов .xfbin применяем фильтрацию
-                if (Path.GetExtension(filePath).Equals(".xfbin", StringComparison.Ordinal))
+                foreach (string ext in extensions)
                 {
-                    foreach (string keyword in skipKeywords)
+                    foreach (string filePath in Directory.GetFiles(sourcePath, ext, SearchOption.AllDirectories))
                     {
-                        if (filePath.Contains(keyword))
+                        bool skip = false;
+                        // Для файлов .xfbin применяем фильтрацию
+                        if (Path.GetExtension(filePath).Equals(".xfbin", StringComparison.Ordinal))
                         {
-                            skip = true;
-                            break;
+                            foreach (string keyword in skipKeywords)
+                            {
+                                if (filePath.Contains(keyword))
+                                {
+                                    skip = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!skip)
+                        {
+                            string targetFilePath = filePath.Replace(sourcePath, targetPath);
+                            Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
+                            try
+                            {
+                                CopyFileBuffered(filePath, targetFilePath);
+                            } catch (Exception ex)
+                            {
+                                Console.WriteLine($"Ошибка копирования файла {filePath}: {ex.Message}");
+                            }
                         }
                     }
                 }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка в CopyFilesRecursivelyModManager: " + ex.Message);
+            }
+        }
 
-                if (!skip)
+        public static void CopyFileBuffered(string sourceFile, string destFile)
+        {
+            // Уменьшенный размер буфера – 256 КБ
+            const int bufferSize = 256 * 1024;
+            using (var sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                byte[] buffer = new byte[bufferSize];
+                int bytesRead;
+                while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    string targetFilePath = filePath.Replace(sourcePath, targetPath);
-                    Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
-                    try
-                    {
-                        CopyFileBuffered(filePath, targetFilePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Ошибка копирования файла {filePath}: {ex.Message}");
-                    }
+                    destStream.Write(buffer, 0, bytesRead);
                 }
             }
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Ошибка в CopyFilesRecursivelyModManager: " + ex.Message);
-    }
-}
-
-public static void CopyFileBuffered(string sourceFile, string destFile)
-{
-    // Уменьшенный размер буфера – 256 КБ
-    const int bufferSize = 256 * 1024;
-    using (var sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-    using (var destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
-    {
-        byte[] buffer = new byte[bufferSize];
-        int bytesRead;
-        while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
-        {
-            destStream.Write(buffer, 0, bytesRead);
-        }
-    }
-}
 
 
 
 
-        public static int StageBGMOffset = 0x2008F20 + 0xC00 + 0x800; //Find "4C AF BC 3D 15 00 00 00 FF FF FF FF 00 00 00 00" in exe for getting offset. Use Memory Editor and patches to find 2nd offset, cuz its dynamic!
-        public static int[] StageBGMSlots = {
-            StageBGMOffset+0x100,
-            StageBGMOffset+0x4E0,
-            StageBGMOffset+0x520,
-            StageBGMOffset+0x540,
-            StageBGMOffset+0x560,
-            StageBGMOffset+0x5E0,
-            StageBGMOffset+0x600,
-            StageBGMOffset+0x620,
-            StageBGMOffset+0x640,
-            StageBGMOffset+0x660,
-            StageBGMOffset+0x680,
-            StageBGMOffset+0x6A0,
-            StageBGMOffset+0x6C0,
-            StageBGMOffset+0x6E0,
-            StageBGMOffset+0x700,
-            StageBGMOffset+0x720,
-            StageBGMOffset+0x740,
-            StageBGMOffset+0x760,
-            StageBGMOffset+0x800,
-            StageBGMOffset+0x820,
-            StageBGMOffset+0x860,
-            StageBGMOffset+0x8A0,
-            StageBGMOffset+0x8C0,
-            StageBGMOffset+0x8E0,
-            StageBGMOffset+0x900,
-            StageBGMOffset+0x920,
-            StageBGMOffset+0x940,
-            StageBGMOffset+0x960,
-            StageBGMOffset+0x9A0,
-            StageBGMOffset+0x9C0,
-            StageBGMOffset+0x9E0,
-            StageBGMOffset+0xA20,
-            StageBGMOffset+0xA40,
-            StageBGMOffset+0xA60,
-            StageBGMOffset+0xA80,
-            StageBGMOffset+0xAA0,
-            StageBGMOffset+0xAC0,
-            StageBGMOffset+0xAE0,
-            StageBGMOffset+0xB00,
-            StageBGMOffset+0xB20,
-            StageBGMOffset+0xB40,
-            StageBGMOffset+0xB60,
-            StageBGMOffset+0xB80,
-            StageBGMOffset+0xBA0,
-            StageBGMOffset+0xBE0,
-            StageBGMOffset+0xC40,
-            StageBGMOffset+0xC60,
-            StageBGMOffset+0xC80,
-            StageBGMOffset+0xCA0,
-            StageBGMOffset+0xCC0,
-            StageBGMOffset+0xCE0,
-            StageBGMOffset+0xD00,
-            StageBGMOffset+0xD20,
-            StageBGMOffset+0xD40,
-            StageBGMOffset+0xD60,
-            StageBGMOffset+0xD80,
-            StageBGMOffset+0xDA0,
-            StageBGMOffset+0xDC0,
-            StageBGMOffset+0xDE0,
-            StageBGMOffset+0xF60,
-            StageBGMOffset+0xFA0,
-            StageBGMOffset+0xFC0,
-        };
+        //public static int StageBGMOffset = 0x2008F20 + 0xC00 + 0x800; //Find "4C AF BC 3D 15 00 00 00 FF FF FF FF 00 00 00 00" in exe for getting offset. Use Memory Editor and patches to find 2nd offset, cuz its dynamic!
+        //public static int[] StageBGMSlots = {
+        //    StageBGMOffset+0x100,
+        //    StageBGMOffset+0x4E0,
+        //    StageBGMOffset+0x520,
+        //    StageBGMOffset+0x540,
+        //    StageBGMOffset+0x560,
+        //    StageBGMOffset+0x5E0,
+        //    StageBGMOffset+0x600,
+        //    StageBGMOffset+0x620,
+        //    StageBGMOffset+0x640,
+        //    StageBGMOffset+0x660,
+        //    StageBGMOffset+0x680,
+        //    StageBGMOffset+0x6A0,
+        //    StageBGMOffset+0x6C0,
+        //    StageBGMOffset+0x6E0,
+        //    StageBGMOffset+0x700,
+        //    StageBGMOffset+0x720,
+        //    StageBGMOffset+0x740,
+        //    StageBGMOffset+0x760,
+        //    StageBGMOffset+0x800,
+        //    StageBGMOffset+0x820,
+        //    StageBGMOffset+0x860,
+        //    StageBGMOffset+0x8A0,
+        //    StageBGMOffset+0x8C0,
+        //    StageBGMOffset+0x8E0,
+        //    StageBGMOffset+0x900,
+        //    StageBGMOffset+0x920,
+        //    StageBGMOffset+0x940,
+        //    StageBGMOffset+0x960,
+        //    StageBGMOffset+0x9A0,
+        //    StageBGMOffset+0x9C0,
+        //    StageBGMOffset+0x9E0,
+        //    StageBGMOffset+0xA20,
+        //    StageBGMOffset+0xA40,
+        //    StageBGMOffset+0xA60,
+        //    StageBGMOffset+0xA80,
+        //    StageBGMOffset+0xAA0,
+        //    StageBGMOffset+0xAC0,
+        //    StageBGMOffset+0xAE0,
+        //    StageBGMOffset+0xB00,
+        //    StageBGMOffset+0xB20,
+        //    StageBGMOffset+0xB40,
+        //    StageBGMOffset+0xB60,
+        //    StageBGMOffset+0xB80,
+        //    StageBGMOffset+0xBA0,
+        //    StageBGMOffset+0xBE0,
+        //    StageBGMOffset+0xC40,
+        //    StageBGMOffset+0xC60,
+        //    StageBGMOffset+0xC80,
+        //    StageBGMOffset+0xCA0,
+        //    StageBGMOffset+0xCC0,
+        //    StageBGMOffset+0xCE0,
+        //    StageBGMOffset+0xD00,
+        //    StageBGMOffset+0xD20,
+        //    StageBGMOffset+0xD40,
+        //    StageBGMOffset+0xD60,
+        //    StageBGMOffset+0xD80,
+        //    StageBGMOffset+0xDA0,
+        //    StageBGMOffset+0xDC0,
+        //    StageBGMOffset+0xDE0,
+        //    StageBGMOffset+0xF60,
+        //    StageBGMOffset+0xFA0,
+        //    StageBGMOffset+0xFC0,
+        //};
 
         public static string[] StageOriginalList = {
             "STAGE_SI00A",
@@ -403,7 +467,7 @@ public static void CopyFileBuffered(string sourceFile, string destFile)
 
         public static string[] ModType =
         {
-            "Character",
+            "q",
             "Stage",
             "Model",
             //"Accessory"

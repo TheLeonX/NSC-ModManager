@@ -22,13 +22,21 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     
-    <AssemblyVersion>1.6.4.1</AssemblyVersion>
-    <FileVersion>1.6.4.1</FileVersion>
+    <AssemblyVersion>1.6.5.0</AssemblyVersion>
+    <FileVersion>1.6.5.0</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.60</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <SignAssembly>False</SignAssembly>
     <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
