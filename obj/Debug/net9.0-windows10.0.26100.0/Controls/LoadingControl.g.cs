@@ -70,7 +70,7 @@ namespace NSC_ModManager.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/NSC_ModManager;V1.6.5.0;component/controls/loadingcontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/NSC_ModManager;V1.6.5.2;component/controls/loadingcontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Controls\LoadingControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

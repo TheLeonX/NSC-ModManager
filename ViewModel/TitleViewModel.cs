@@ -1894,105 +1894,72 @@ namespace NSC_ModManager.ViewModel
                     //prm
                     PRMEditorViewModel prm_mod = new PRMEditorViewModel();
 
-                    DirectoryInfo mod_d = new DirectoryInfo(Path.GetDirectoryName(Path.GetDirectoryName(character_mod.RootPath)));
-                    FileInfo[] characterPrmList = mod_d.GetFiles(mod_characode + "prm.bin.xfbin", SearchOption.AllDirectories);
-                    Array.Sort(characterPrmList, (x, y) => StringComparer.OrdinalIgnoreCase.Compare(Path.GetFileName(x.DirectoryName), Path.GetFileName(y.DirectoryName)));
+                    var modDir = new DirectoryInfo(Path.GetDirectoryName(Path.GetDirectoryName(character_mod.RootPath)));
+                    var prmFiles = modDir
+                        .GetFiles($"{mod_characode}prm.bin.xfbin", SearchOption.AllDirectories)
+                        .OrderBy(f => f.DirectoryName, StringComparer.OrdinalIgnoreCase)
+                        .ToArray();
 
-                    string prm_path = "";
-                    foreach (FileInfo prm_file in characterPrmList)
+                    if (prmFiles.Length > 0)
                     {
-                        prm_path = prm_file.FullName;
-                    }
-                    if (File.Exists(prm_path) && (prm_path ?? "") != "")
-                    {
-                        string new_prm_path = root_folder + "\\param_files\\" + prm_path.Remove(0, prm_path.IndexOf("data\\"));
-                        //damageeff
-                        DamageEffViewModel damageeff_mod = new DamageEffViewModel();
-                        //effectprm
-                        EffectPrmViewModel effectprm_mod = new EffectPrmViewModel();
+                        string prm_path = prmFiles.Last().FullName;
+                        string relative = prm_path.Substring(prm_path.IndexOf("data\\", StringComparison.OrdinalIgnoreCase));
+                        string new_prm_path = Path.Combine(root_folder, "param_files", relative);
+
+                        // Только если оба файла существуют, выполняем merge
                         if (File.Exists(prm_path) && File.Exists(damageeffModPath))
                         {
-                            //This function merges damageEff and effectprm files, and fixing prm files with new damageEff ids
-                            damageeff_mod.OpenFile(damageeffModPath);
-                            if (damageeff_mod.DamageEffList.Count > 0)
+                            // load mod and vanilla view‑models
+                            var damageeff_mod = new DamageEffViewModel(); damageeff_mod.OpenFile(damageeffModPath);
+                            var effectprm_mod = new EffectPrmViewModel();
+
+                            var effectIdMap = new Dictionary<int, int>();
+                            if (File.Exists(effectprmModPath))
                             {
-                                List<int> NewEffectIds = new List<int>();
-
-                                if (File.Exists(effectprmModPath))
+                                effectprm_mod.OpenFile(effectprmModPath);
+                                foreach (var modEntry in effectprm_mod.EffectPrmList)
                                 {
-                                    effectprm_mod.OpenFile(effectprmModPath);
-                                    //This code adds effectprm entries to vanilla/edited files and saves new and olds effectprm ids
-                                    for (int j = 0; j < effectprm_mod.EffectPrmList.Count; j++)
-                                    {
-                                        NewEffectIds.Add(effectprm_vanilla.MaxEffectID() + 1);
-                                        effectprm_mod.EffectPrmList[j].EffectPrmID = effectprm_vanilla.MaxEffectID() + 1;
-                                        effectprm_vanilla.EffectPrmList.Add((EffectPrmModel)effectprm_mod.EffectPrmList[j].Clone());
-                                    }
+                                    int newId = effectprm_vanilla.MaxEffectID() + 1;
+                                    effectIdMap[modEntry.EffectPrmID] = newId;
+                                    modEntry.EffectPrmID = newId;
+                                    effectprm_vanilla.EffectPrmList.Add((EffectPrmModel)modEntry.Clone());
                                 }
-
-                                List<int> OldHitIds = new List<int>();
-                                List<int> NewHitIds = new List<int>();
-                                //This code changes all effectprm ids in modded damageEff file
-                                for (int c = 0; c < damageeff_mod.DamageEffList.Count; c++)
-                                {
-                                    damageeff_mod.DamageEffList[c].EffectPrmID = NewEffectIds[c];
-                                    damageeff_mod.DamageEffList[c].ExtraEffectPrmID = 0;
-
-                                }
-                                //This code adding new entries to vanilla/edited damageEff file and changes damageEff ids
-                                for (int c = 0; c < damageeff_mod.DamageEffList.Count; c++)
-                                {
-                                    int maxValue = damageeff_vanilla.MaxDamageID();
-                                    OldHitIds.Add(damageeff_mod.DamageEffList[c].DamageEffID);
-                                    NewHitIds.Add(maxValue + 1);
-
-                                    DamageEffModel damageeff_entry = (DamageEffModel)damageeff_mod.DamageEffList[c].Clone();
-                                    damageeff_entry.DamageEffID = maxValue + 1;
-                                    if (OldHitIds.Contains(damageeff_entry.ExtraDamageEffID))
-                                    {
-                                        damageeff_entry.ExtraDamageEffID = NewHitIds[OldHitIds.IndexOf(damageeff_entry.ExtraDamageEffID)];
-                                    }
-
-                                    damageeff_vanilla.DamageEffList.Add(damageeff_entry);
-                                }
-                                //This code opening prm file of character mod
-                                prm_mod.OpenFile(prm_path);
-                                //This function checking each movement section 
-                                for (int ver = 0; ver < prm_mod.VerList.Count; ver++)
-                                {
-                                    for (int pl_anm = 0; pl_anm < prm_mod.VerList[ver].PL_ANM_Sections.Count; pl_anm++)
-                                    {
-                                        for (int function = 0; function < prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList.Count; function++)
-                                        {
-                                            int selectedhit = prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList[function].DamageHitEffectID;
-                                            if (selectedhit != 0)
-                                            {
-                                                for (int g = 0; g < OldHitIds.Count; g++)
-                                                {
-                                                    //This code checking for old damageEff Ids and changing them on new ids
-                                                    if (OldHitIds[g] == selectedhit)
-                                                    {
-                                                        prm_mod.VerList[ver].PL_ANM_Sections[pl_anm].FunctionList[function].DamageHitEffectID = (Int16)NewHitIds[g];
-                                                    }
-
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                }
-
-                                //Creates directory
-                                if (!Directory.Exists(Path.GetDirectoryName(new_prm_path)))
-                                {
-                                    Directory.CreateDirectory(Path.GetDirectoryName(new_prm_path));
-                                }
-                                //Saves edited prm file
-                                prm_mod.SaveFileAs(new_prm_path);
                             }
 
+                            // remap EffectPrmID in damageEff_mod and build hit‑ID map
+                            var hitIdMap = new Dictionary<int, int>();
+                            foreach (var de in damageeff_mod.DamageEffList)
+                            {
+                                if (effectIdMap.TryGetValue(de.EffectPrmID, out var mapped))
+                                {
+                                    de.EffectPrmID = mapped;
+                                    de.ExtraEffectPrmID = 0;
+                                }
+                                int newHit = damageeff_vanilla.MaxDamageID() + 1;
+                                hitIdMap[de.DamageEffID] = newHit;
+
+                                var clone = (DamageEffModel)de.Clone();
+                                clone.DamageEffID = newHit;
+                                if (hitIdMap.TryGetValue(clone.ExtraDamageEffID, out var extra))
+                                    clone.ExtraDamageEffID = extra;
+
+                                damageeff_vanilla.DamageEffList.Add(clone);
+                            }
+
+                            // open and correct prm
+                            prm_mod.OpenFile(prm_path);
+                            foreach (var ver in prm_mod.VerList)
+                                foreach (var sec in ver.PL_ANM_Sections)
+                                    foreach (var fn in sec.FunctionList)
+                                        if (hitIdMap.TryGetValue(fn.DamageHitEffectID, out var nid))
+                                            fn.DamageHitEffectID = (short)nid;
+
+                            // save result
+                            Directory.CreateDirectory(Path.GetDirectoryName(new_prm_path)!);
+                            prm_mod.SaveFileAs(new_prm_path);
                         }
                     }
+
 
 
 
@@ -3836,7 +3803,7 @@ namespace NSC_ModManager.ViewModel
             Application.Current.Dispatcher.Invoke(() =>
             {
                 SystemSounds.Exclamation.Play();
-                ModernWpf.MessageBox.Show($"Error: {ex.Message}\n\n{ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernWpf.MessageBox.Show($"Error: {ex.Message}\n\n {ex.TargetSite}\n\n {ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Debug.WriteLine($"Error: {ex.Message}\n\n{ex.StackTrace}", "Error");
                 KyurutoDialogTextLoader("An error occurred during compilation. Check error details.", 20);
                 LoadingStatePlay = Visibility.Hidden;
