@@ -39,16 +39,22 @@
     <v:String x:Key="m_option010">Select Image</v:String>
     <v:String x:Key="m_option011">Font Color</v:String>
     <v:String x:Key="m_option012">Select Root Folder</v:String>
-    <v:String x:Key="m_option013">Root Folder</v:String>
+    <v:String x:Key="m_option013">Root Folder Naruto Storm Connections</v:String>
     <v:String x:Key="m_option014">S2 Motion Blur</v:String>
     <v:String x:Key="m_option015">Enabled</v:String>
     <v:String x:Key="m_option016">Disabled</v:String>
+    <v:String x:Key="m_option017">Root Folder Naruto Storm 4</v:String>
+    <v:String x:Key="m_option018">Mods folder</v:String>
+    <v:String x:Key="m_option019">Select Mod Folder</v:String>
 
     <!--Roster Editor-->
     <v:String x:Key="m_rosterEditor">Character Roster Editor</v:String>
     <v:String x:Key="m_rosterEditorPage">Page</v:String>
     <v:String x:Key="m_rosterEditorSave">Save Roster</v:String>
     <v:String x:Key="m_rosterEditorRestore">Restore Roster</v:String>
+    <v:String x:Key="m_rosterEditorCostumePlaceHolder">Costume List</v:String>
+    <v:String x:Key="m_rosterEditorSlotPlaceHolder">Slot placeholder</v:String>
+    <v:String x:Key="m_rosterEditorSlotGame">Game slots</v:String>
 
 
     <!--credits-->

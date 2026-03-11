@@ -1,8 +1,0 @@
-conditionprmManager.xfbin ------------------------ used for adding entries in exe so you could use conditionprm.bin.xfbin file.
-pairSpSkillManagerParam.xfbin -------------------- used for adding entries in exe so you could use pairSpSkillCombinationParam.xfbin file.
-partnerSlotParam.xfbin --------------------------- used for adding entries which let you use character as a partner in game (similar to Akamaru).
-plAnmExpanderParam.xfbin ------------------------- (doesn't work atm) used for expanding list of PL_ANM entries.
-specialCondParam.xfbin --------------------------- used for adding entries which let you change character conditions.
-specialInteractionManager.xfbin ------------------ used for adding entries which will activate special interaction for Ultimate Jutsus.
-susanooCondParam.xfbin --------------------------- used for fixing old susano jump for characters.
-teamJutsuParam.xfbin ----------------------------- used for activating team jutsus for characters (first value is count of CharIDs, rest is CharIDs). Replacing First Jutsu with SKL06

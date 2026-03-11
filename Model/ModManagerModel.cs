@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace NSC_ModManager.Model {
     public class ModManagerModel : INotifyPropertyChanged {
@@ -56,6 +58,16 @@ namespace NSC_ModManager.Model {
                 OnPropertyChanged("Author");
             }
         }
+        private string _game;
+        public string Game
+        {
+            get { return _game; }
+            set
+            {
+                _game = value;
+                OnPropertyChanged("Game");
+            }
+        }
         private string _lastUpdate;
         public string LastUpdate {
             get { return _lastUpdate; }
@@ -72,6 +84,39 @@ namespace NSC_ModManager.Model {
                 OnPropertyChanged("EnableMod");
             }
         }
+        private string _screenshotsPath;
+        public string ScreenshotsPath
+        {
+            get { return _screenshotsPath; }
+            set
+            {
+                _screenshotsPath = value;
+                OnPropertyChanged("ScreenshotsPath");
+            }
+        }
+        public BitmapImage ModIconPreview
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(IconPath) || !File.Exists(IconPath))
+                    return null;
+
+                try
+                {
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(IconPath, UriKind.Absolute);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    return bitmap;
+                } catch
+                {
+                    return null;
+                }
+            }
+        }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "") {

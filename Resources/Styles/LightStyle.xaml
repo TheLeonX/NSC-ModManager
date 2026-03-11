@@ -6,6 +6,7 @@
     <!--Images-->
     <BitmapImage x:Key="TitleBackground" UriSource="{Binding Source={x:Static properties:Settings.Default}, Path=BackgroundImagePath}"/>
     <BitmapImage x:Key="ModManager_Logo" UriSource="UI/logo/modmanager_logo.png"/>
+    <BitmapImage x:Key="ModManager_Logo_S4" UriSource="UI/logo/modmanager_logo_S4.png"/>
     <BitmapImage x:Key="KuramaBody" UriSource="UI/kurama/kurama_body.png"/>
     <BitmapImage x:Key="KuramaTail_1" UriSource="UI/kurama/kurama_tail_1.png"/>
     <BitmapImage x:Key="KuramaTail_2" UriSource="UI/kurama/kurama_tail_2.png"/>

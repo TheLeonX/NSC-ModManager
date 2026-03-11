@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -251,6 +252,9 @@ namespace NSC_ModManager.Properties
         {
             try
             {
+                // Привести папки звука в соответствие со StormVersion
+                EnsureSoundFolderMatchesStormVersion(sourcePath);
+
                 // Создаем все необходимые директории
                 foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
                 {
@@ -266,9 +270,9 @@ namespace NSC_ModManager.Properties
             "characode", "damageprm", "duelPlayerParam", "playerSettingParam", "skillCustomizeParam",
             "spSkillCustomizeParam", "characterSelectParam", "afterAttachObject", "costumeParam",
             "playerDoubleEffectParam", "cmnparam", "supportActionParam", "player_icon", "awakeAura",
-            "appearanceAnm", "skillIndexSettingParam", "spTypeSipportParam", "privateCamera",
+            "appearanceAnm", "skillIndexSettingParam", "spTypeSupportParam", "privateCamera",
             "costumeBreakParam", "costumeBreakColorParam", "supportSkillRecoverySpeedParam",
-            "damageeff", "effectprm", "StageInfo", "messageInfo", "commandListParam",
+            "damageeff", "effectprm", "StageInfo", "stageInfo","messageInfo", "commandListParam",
             "Dictionary", "finalSpSkillCutIn", "flagprm", "hugeAwakeComboCameraParam",
             "meDecalParam", "situationVoice", "playerDecalSetting", "pairSpSkillCombinationParam"
                 };
@@ -308,6 +312,235 @@ namespace NSC_ModManager.Properties
             } catch (Exception ex)
             {
                 Console.WriteLine("Ошибка в CopyFilesRecursivelyModManager: " + ex.Message);
+            }
+        }
+
+
+        private static string[] SplitPathSegments(string path)
+        {
+            return path.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+        }
+        private static string JoinPathSegments(string[] segments)
+        {
+            if (segments == null || segments.Length == 0) return string.Empty;
+            return Path.Combine(segments);
+        }
+        private static string MakeRelativeTo(string basePath, string fullPath)
+        {
+            string baseFull = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            string full = Path.GetFullPath(fullPath);
+            if (full.StartsWith(baseFull, StringComparison.OrdinalIgnoreCase))
+                return full.Substring(baseFull.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            return full;
+        }
+        private static string RemoveWin64FromRelative(string relative)
+        {
+            var segments = SplitPathSegments(relative);
+            var filtered = segments.Where(s => !s.Equals("WIN64", StringComparison.OrdinalIgnoreCase)).ToArray();
+            return JoinPathSegments(filtered);
+        }
+
+        public static void CopyParamsRecursivelyModManager(string sourcePath, string targetPath)
+        {
+            try
+            {
+                // Если метод EnsureSoundFolderMatchesStormVersion у вас есть — вызываем
+                EnsureSoundFolderMatchesStormVersion(sourcePath);
+
+                // Создаём директории (с удалением WIN64)
+                foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+                {
+                    string rel = MakeRelativeTo(sourcePath, dirPath);
+                    if (!rel.Contains("message"))
+                        rel = RemoveWin64FromRelative(rel);
+                    string destDir = Path.Combine(targetPath, rel);
+                    if (!Directory.Exists(destDir))
+                        Directory.CreateDirectory(destDir);
+                }
+
+                // Расширения для копирования параметров
+                string[] extensions = { "*.xfbin", "*.acb", "*.awb" };
+
+                // Ключевые слова для фильтрации — если .xfbin содержит один из ключевых слов, это ПАРАМЕТР -> копируем.
+                string[] skipKeywords = new string[]
+                {
+            "characode", "damageprm", "duelPlayerParam", "playerSettingParam", "skillCustomizeParam",
+            "spSkillCustomizeParam", "characterSelectParam", "afterAttachObject", "costumeParam",
+            "playerDoubleEffectParam", "cmnparam", "supportActionParam", "player_icon", "awakeAura",
+            "appearanceAnm", "skillIndexSettingParam", "spTypeSupportParam", "privateCamera",
+            "costumeBreakParam", "costumeBreakColorParam", "supportSkillRecoverySpeedParam",
+            "damageeff", "effectprm", "StageInfo", "stageInfo", "messageInfo", "commandListParam",
+            "Dictionary", "finalSpSkillCutIn", "flagprm", "hugeAwakeComboCameraParam",
+            "meDecalParam", "situationVoice", "playerDecalSetting", "pairSpSkillCombinationParam"
+                };
+
+                foreach (string ext in extensions)
+                {
+                    foreach (string filePath in Directory.GetFiles(sourcePath, ext, SearchOption.AllDirectories))
+                    {
+                        bool copyThis = false;
+
+                        if (string.Equals(Path.GetExtension(filePath), ".xfbin", StringComparison.Ordinal))
+                        {
+                            // Для .xfbin — копируем только если путь содержит одно из ключевых слов (регистрозависимо, как в вашем примере)
+                            foreach (string keyword in skipKeywords)
+                            {
+                                if (filePath.Contains(keyword))
+                                {
+                                    copyThis = true;
+                                    break;
+                                }
+                            }
+                        } else
+                        {
+                            // Для .acb/.awb — копируем все
+                            copyThis = true;
+                        }
+
+                        if (!copyThis) continue;
+
+                        string rel = MakeRelativeTo(sourcePath, filePath);
+                        if (!rel.Contains("message"))
+                            rel = RemoveWin64FromRelative(rel);
+
+                        // special-case: rename stageInfo.bin.xfbin -> StageInfo.bin.xfbin (ignore case)
+                        string fileNameOnly = Path.GetFileName(filePath);
+                        if (string.Equals(fileNameOnly, "stageInfo.bin.xfbin", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string relDir = Path.GetDirectoryName(rel);
+                            rel = string.IsNullOrEmpty(relDir) ? "StageInfo.bin.xfbin" : Path.Combine(relDir, "StageInfo.bin.xfbin");
+                        }
+
+                        string targetFilePath = Path.Combine(targetPath, rel);
+                        Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
+                        try
+                        {
+                            CopyFileBuffered(filePath, targetFilePath);
+                        } catch (Exception ex)
+                        {
+                            Console.WriteLine($"Ошибка копирования файла {filePath}: {ex.Message}");
+                        }
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка в CopyParamsRecursivelyModManager: " + ex.Message);
+            }
+        }
+        private static void EnsureSoundFolderMatchesStormVersion(string rootPath)
+        {
+            try
+            {
+                int stormVersion = Properties.Settings.Default.StormVersion;
+
+                // Найти все каталоги с именем "SndEvent" и "sndev" (игнорируем регистр)
+                var allDirs = Directory.EnumerateDirectories(rootPath, "*", SearchOption.AllDirectories).ToList();
+                var sndEventDirs = allDirs.Where(d => string.Equals(Path.GetFileName(d), "SndEvent", StringComparison.OrdinalIgnoreCase)).ToList();
+                var sndevDirs = allDirs.Where(d => string.Equals(Path.GetFileName(d), "sndev", StringComparison.OrdinalIgnoreCase)).ToList();
+
+                if (stormVersion == 1)
+                {
+                    // NSC: нужно иметь SndEvent. Если SndEvent нет, но есть sndev -> переименовать/объединить.
+                    if (!sndEventDirs.Any() && sndevDirs.Any())
+                    {
+                        foreach (string sndevDir in sndevDirs)
+                        {
+                            string parent = Path.GetDirectoryName(sndevDir);
+                            if (string.IsNullOrEmpty(parent)) continue;
+                            string target = Path.Combine(parent, "SndEvent");
+                            try
+                            {
+                                Directory.Move(sndevDir, target);
+                            } catch (IOException)
+                            {
+                                // если переименование не удалось (например, разные тома), выполнить по-файлово
+                                MergeDirectories(sndevDir, target);
+                                TryDeleteDirectoryIfEmpty(sndevDir);
+                            }
+                        }
+                    }
+                } else if (stormVersion == 2)
+                {
+                    // NS4: нужно иметь sndev. Если sndev нет, но есть SndEvent -> переименовать/объединить.
+                    if (!sndevDirs.Any() && sndEventDirs.Any())
+                    {
+                        foreach (string sndEventDir in sndEventDirs)
+                        {
+                            string parent = Path.GetDirectoryName(sndEventDir);
+                            if (string.IsNullOrEmpty(parent)) continue;
+                            string target = Path.Combine(parent, "sndev");
+                            try
+                            {
+                                Directory.Move(sndEventDir, target);
+                            } catch (IOException)
+                            {
+                                MergeDirectories(sndEventDir, target);
+                                TryDeleteDirectoryIfEmpty(sndEventDir);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка в EnsureSoundFolderMatchesStormVersion: " + ex.Message);
+            }
+        }
+
+        private static void MergeDirectories(string sourceDir, string targetDir)
+        {
+            // Создать корень целевой папки
+            Directory.CreateDirectory(targetDir);
+
+            // Создать все подкаталоги
+            foreach (string dirPath in Directory.GetDirectories(sourceDir, "*", SearchOption.AllDirectories))
+            {
+                string relative = dirPath.Substring(sourceDir.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                string newDir = Path.Combine(targetDir, relative);
+                Directory.CreateDirectory(newDir);
+            }
+
+            // Переместить все файлы
+            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            {
+                string relative = filePath.Substring(sourceDir.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                string destFile = Path.Combine(targetDir, relative);
+                string destDir = Path.GetDirectoryName(destFile);
+                if (!Directory.Exists(destDir))
+                    Directory.CreateDirectory(destDir);
+
+                try
+                {
+                    // если файл уже существует, перезаписать
+                    if (File.Exists(destFile))
+                    {
+                        File.Delete(destFile);
+                    }
+                    File.Move(filePath, destFile);
+                } catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при перемещении файла {filePath} -> {destFile}: {ex.Message}");
+                }
+            }
+        }
+
+        private static void TryDeleteDirectoryIfEmpty(string dir)
+        {
+            try
+            {
+                // Удалим директорию, если она пуста (рекурсивно удаляем пустые родительские)
+                if (Directory.Exists(dir) && !Directory.EnumerateFileSystemEntries(dir).Any())
+                {
+                    Directory.Delete(dir);
+                    string parent = Path.GetDirectoryName(dir);
+                    while (!string.IsNullOrEmpty(parent) && Directory.Exists(parent) && !Directory.EnumerateFileSystemEntries(parent).Any())
+                    {
+                        Directory.Delete(parent);
+                        parent = Path.GetDirectoryName(parent);
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при удалении пустой директории: " + ex.Message);
             }
         }
 
@@ -473,6 +706,23 @@ namespace NSC_ModManager.Properties
             //"Accessory"
 
         };
+
+        public static string[] langS4List =
+        {
+            "arae",
+            "chi",
+            "eng",
+            "esmx",
+            "fre",
+            "ger",
+            "ita",
+            "kokr",
+            "pol",
+            "por",
+            "rus",
+            "spa",
+        };
+
 
         public static string[] langList =
         {
@@ -3490,6 +3740,1002 @@ namespace NSC_ModManager.Properties
             "ICE",
             "ELECTRIC",
             "FIRE"
+        };
+
+
+        public static string[] CONDITION_NSC_LIST =
+        {
+            "DUMMY",
+            "AWAKE_2NRT",
+            "AWAKE_2NRT_REAC",
+            "AWAKE_2NRX",
+            "AWAKE_2NRX_REAC",
+            "AWAKE_2SSK",
+            "AWAKE_2SSK_REAC",
+            "AWAKE_2SSY",
+            "AWAKE_2SSY_REAC",
+            "AWAKE_2SKR",
+            "AWAKE_2SKR_REAC",
+            "AWAKE_2ROC",
+            "AWAKE_2ROC_REAC",
+            "AWAKE_2NEJ",
+            "AWAKE_2NEJ_REAC",
+            "AWAKE_2TEN",
+            "AWAKE_2TEN_REAC",
+            "AWAKE_2SIK",
+            "AWAKE_2SIK_REAC",
+            "AWAKE_2TYO",
+            "AWAKE_2TYO_REAC",
+            "AWAKE_2INO",
+            "AWAKE_2INO_REAC",
+            "AWAKE_2KIB",
+            "AWAKE_2KIB_REAC",
+            "AWAKE_2SIN",
+            "AWAKE_2SIN_REAC",
+            "AWAKE_2HNT",
+            "AWAKE_2HNT_REAC",
+            "AWAKE_2GAR",
+            "AWAKE_2GAR_REAC",
+            "AWAKE_2KNK",
+            "AWAKE_2KNK_REAC",
+            "AWAKE_2TMR",
+            "AWAKE_2TMR_REAC",
+            "AWAKE_2KKS",
+            "AWAKE_2KKS_REAC",
+            "AWAKE_2GUY",
+            "AWAKE_2GUY_REAC",
+            "AWAKE_2ASM",
+            "AWAKE_2ASM_REAC",
+            "AWAKE_2JRY",
+            "AWAKE_2JRY_REAC",
+            "AWAKE_2TND",
+            "AWAKE_2TND_REAC",
+            "AWAKE_2ORC",
+            "AWAKE_2ORC_REAC",
+            "AWAKE_2KBT",
+            "AWAKE_2KBT_REAC",
+            "AWAKE_2ITC",
+            "AWAKE_2ITC_REAC",
+            "AWAKE_2KSM",
+            "AWAKE_2KSM_REAC",
+            "AWAKE_2CYB",
+            "AWAKE_2CYB_REAC",
+            "AWAKE_2SAI",
+            "AWAKE_2SAI_REAC",
+            "AWAKE_2YMT",
+            "AWAKE_2YMT_REAC",
+            "AWAKE_2SCO",
+            "AWAKE_2SCO_REAC",
+            "AWAKE_2DDR",
+            "AWAKE_2DDR_REAC",
+            "AWAKE_2HDN",
+            "AWAKE_2HDN_REAC",
+            "AWAKE_2KZU",
+            "AWAKE_2KZU_REAC",
+            "AWAKE_2SGT",
+            "AWAKE_2SGT_REAC",
+            "AWAKE_2JYG",
+            "AWAKE_2JYG_REAC",
+            "AWAKE_2KRN",
+            "AWAKE_2KRN_REAC",
+            "AWAKE_2TOB",
+            "AWAKE_2TOB_REAC",
+            "AWAKE_2KNN",
+            "AWAKE_2KNN_REAC",
+            "AWAKE_2PEI",
+            "AWAKE_2PEI_REAC",
+            "AWAKE_2KLB",
+            "AWAKE_2KLB_REAC",
+            "AWAKE_2FOU",
+            "AWAKE_2FOU_REAC",
+            "AWAKE_2NRG",
+            "AWAKE_2NRG_REAC",
+            "AWAKE_2SSZ",
+            "AWAKE_2SSZ_REAC",
+            "AWAKE_2MDR",
+            "AWAKE_2MDR_REAC",
+            "AWAKE_2DNZ",
+            "AWAKE_2DNZ_REAC",
+            "AWAKE_2RKG",
+            "AWAKE_2RKG_REAC",
+            "AWAKE_2TKG",
+            "AWAKE_2TKG_REAC",
+            "AWAKE_2MKG",
+            "AWAKE_2MKG_REAC",
+            "AWAKE_1NRT",
+            "AWAKE_1NRT_REAC",
+            "AWAKE_1SSK",
+            "AWAKE_1SSK_REAC",
+            "AWAKE_1SSX",
+            "AWAKE_1SSX_REAC",
+            "AWAKE_1SKR",
+            "AWAKE_1SKR_REAC",
+            "AWAKE_1ROC",
+            "AWAKE_1ROC_REAC",
+            "AWAKE_1NEJ",
+            "AWAKE_1NEJ_REAC",
+            "AWAKE_1HNT",
+            "AWAKE_1HNT_REAC",
+            "AWAKE_1GAR",
+            "AWAKE_1GAR_REAC",
+            "AWAKE_1HKG",
+            "AWAKE_1HKG_REAC",
+            "AWAKE_1KMM",
+            "AWAKE_1KMM_REAC",
+            "AWAKE_1TEN",
+            "AWAKE_1TEN_REAC",
+            "AWAKE_1INO",
+            "AWAKE_1INO_REAC",
+            "AWAKE_1SIK",
+            "AWAKE_1SIK_REAC",
+            "AWAKE_1TYO",
+            "AWAKE_1TYO_REAC",
+            "AWAKE_1KIB",
+            "AWAKE_1KIB_REAC",
+            "AWAKE_1SIN",
+            "AWAKE_1SIN_REAC",
+            "AWAKE_1TMR",
+            "AWAKE_1TMR_REAC",
+            "AWAKE_1KNK",
+            "AWAKE_1KNK_REAC",
+            "AWAKE_1ZBZ",
+            "AWAKE_1ZBZ_REAC",
+            "AWAKE_1HAK",
+            "AWAKE_1HAK_REAC",
+            "AWAKE_1FIR",
+            "AWAKE_1FIR_REAC",
+            "AWAKE_1SEC",
+            "AWAKE_1SEC_REAC",
+            "AWAKE_2KKX",
+            "AWAKE_2KKX_REAC",
+            "AWAKE_2OBT",
+            "AWAKE_2OBT_REAC",
+            "AWAKE_2GAX",
+            "AWAKE_2GAX_REAC",
+            "AWAKE_2TMX",
+            "AWAKE_2TMX_REAC",
+            "AWAKE_2KNX",
+            "AWAKE_2KNX_REAC",
+            "AWAKE_2KBX",
+            "AWAKE_2KBX_REAC",
+            "AWAKE_3NRT",
+            "AWAKE_3NRT_REAC",
+            "AWAKE_3SSK",
+            "AWAKE_3SSK_REAC",
+            "AWAKE_3MDR",
+            "AWAKE_3MDR_REAC",
+            "AWAKE_3DRI",
+            "AWAKE_3DRI_REAC",
+            "AWAKE_3RUS",
+            "AWAKE_3RUS_REAC",
+            "AWAKE_3TOB",
+            "AWAKE_3TOB_REAC",
+            "AWAKE_3YGR",
+            "AWAKE_3YGR_REAC",
+            "AWAKE_3UTK",
+            "AWAKE_3UTK_REAC",
+            "AWAKE_3MFN",
+            "AWAKE_3MFN_REAC",
+            "AWAKE_3HAN",
+            "AWAKE_3HAN_REAC",
+            "AWAKE_3NYG",
+            "AWAKE_3NYG_REAC",
+            "AWAKE_3WHO",
+            "AWAKE_3WHO_REAC",
+            "AWAKE_3KLB",
+            "AWAKE_3KLB_REAC",
+            "AWAKE_3HNZ",
+            "AWAKE_3HNZ_REAC",
+            "AWAKE_3NGT",
+            "AWAKE_3NGT_REAC",
+            "AWAKE_3TYV",
+            "AWAKE_3TYV_REAC",
+            "AWAKE_3GAR",
+            "AWAKE_3GAR_REAC",
+            "AWAKE_4NRT",
+            "AWAKE_4NRT_REAC",
+            "AWAKE_3KKS",
+            "AWAKE_3KKS_REAC",
+            "AWAKE_3KHM",
+            "AWAKE_3KHM_REAC",
+            "AWAKE_3IRK",
+            "AWAKE_3IRK_REAC",
+            "AWAKE_3KBT",
+            "AWAKE_3KBT_REAC",
+            "AWAKE_3OBT",
+            "AWAKE_3OBT_REAC",
+            "AWAKE_4SSI",
+            "AWAKE_4SSI_REAC",
+            "AWAKE_3KSN",
+            "AWAKE_3KSN_REAC",
+            "AWAKE_3MNT",
+            "AWAKE_3MNT_REAC",
+            "AWAKE_3HSM",
+            "AWAKE_3HSM_REAC",
+            "AWAKE_3MDR_2",
+            "AWAKE_3MDR_2_REAC",
+            "AWAKE_4KKG",
+            "AWAKE_4KKG_REAC",
+            "AWAKE_4MKG",
+            "AWAKE_4MKG_REAC",
+            "AWAKE_4MUU",
+            "AWAKE_4MUU_REAC",
+            "AWAKE_4RKG",
+            "AWAKE_4RKG_REAC",
+            "AWAKE_5OBT",
+            "AWAKE_5OBT_REAC",
+            "AWAKE_5MDR",
+            "AWAKE_5MDR_REAC",
+            "AWAKE_5JRB",
+            "AWAKE_5JRB_REAC",
+            "AWAKE_5KDM",
+            "AWAKE_5KDM_REAC",
+            "AWAKE_5SKN",
+            "AWAKE_5SKN_REAC",
+            "AWAKE_5TYY",
+            "AWAKE_5TYY_REAC",
+            "AWAKE_6NRT",
+            "AWAKE_6NRT_REAC",
+            "AWAKE_5KGY",
+            "AWAKE_5KGY_REAC",
+            "AWAKE_6SSK",
+            "AWAKE_6SSK_REAC",
+            "AWAKE_6SKR",
+            "AWAKE_6SKR_REAC",
+            "AWAKE_6HNT",
+            "AWAKE_6HNT_REAC",
+            "AWAKE_5NRT",
+            "AWAKE_5NRT_REAC",
+            "AWAKE_5SSK",
+            "AWAKE_5SSK_REAC",
+            "AWAKE_6HNB",
+            "AWAKE_6HNB_REAC",
+            "AWAKE_5OBH",
+            "AWAKE_5OBH_REAC",
+            "AWAKE_4RIN",
+            "AWAKE_4RIN_REAC",
+            "AWAKE_3GUY",
+            "AWAKE_3GUY_REAC",
+            "AWAKE_7BRT",
+            "AWAKE_7BRT_REAC",
+            "AWAKE_7SLD",
+            "AWAKE_7SLD_REAC",
+            "AWAKE_7NRT",
+            "AWAKE_7NRT_REAC",
+            "AWAKE_7SSK",
+            "AWAKE_7SSK_REAC",
+            "AWAKE_7NRN",
+            "AWAKE_7NRN_REAC",
+            "AWAKE_7SSX",
+            "AWAKE_7SSX_REAC",
+            "AWAKE_7SKR",
+            "AWAKE_7SKR_REAC",
+            "AWAKE_7GAR",
+            "AWAKE_7GAR_REAC",
+            "AWAKE_7BRN",
+            "AWAKE_7BRN_REAC",
+            "AWAKE_7BRX",
+            "AWAKE_7BRX_REAC",
+            "AWAKE_7SLN",
+            "AWAKE_7SLN_REAC",
+            "AWAKE_4MNR",
+            "AWAKE_4MNR_REAC",
+            "AWAKE_7MTK",
+            "AWAKE_7MTK_REAC",
+            "AWAKE_8MMS",
+            "AWAKE_8MMS_REAC",
+            "AWAKE_8KIN",
+            "AWAKE_8KIN_REAC",
+            "AWAKE_4HSM",
+            "AWAKE_4HSM_REAC",
+            "AWAKE_BKKK",
+            "AWAKE_BKKK_REAC",
+            "AWAKE_9DLT",
+            "AWAKE_9DLT_REAC",
+            "AWAKE_8MTA",
+            "AWAKE_8MTA_REAC",
+            "AWAKE_9BRM",
+            "AWAKE_9BRM_REAC",
+            "AWAKE_9ISH",
+            "AWAKE_9ISH_REAC",
+            "AWAKE_PARAMUP",
+            "AWAKE_PARAMUP_REAC",
+            "TEAMGAUGE_MAX_LEADER",
+            "TEAMGAUGE_MAX_SUPPORT",
+            "ATK_UP",
+            "DEF_UP",
+            "SPD_UP",
+            "BREAK_UP",
+            "CHAKRA_UP",
+            "CHAKRA_USE_DOWN",
+            "SPT_UP",
+            "SPT_ATK_UP",
+            "TEAM_DOWN",
+            "ATK_DOWN",
+            "DEF_DOWN",
+            "SPD_DOWN",
+            "CHAKRA_DOWN",
+            "SPT_DOWN",
+            "TEAM_UP",
+            "POISON",
+            "SLEEP",
+            "SEAL",
+            "DRIVE_ATK_SEAL",
+            "DRIVE2_SPT_UP",
+            "AUTO_DODGE",
+            "REVIVE",
+            "SHAVE_CHAKRA",
+            "SUPER_ARMOR",
+            "IGNORE_ITEM",
+            "IGNORE_POISON",
+            "IGNORE_SEAL",
+            "IGNORE_NUMB",
+            "IGNORE_SLEEP",
+            "IGNORE_GUARD_BREAK",
+            "IGNORE_BAD_STATUS",
+            "ADD_POISON",
+            "ADD_SEAL",
+            "ENDURANCE_POISON",
+            "ENDURANCE_SEAL",
+            "RECOVER_LIFE",
+            "RECOVER_CHAKRA",
+            "MSN_RECOVER_LIFE",
+            "MSN_RECOVER_CHAKRA",
+            "MSN_DECREASE_LIFE",
+            "MSN_DECREASE_CHAKRA",
+            "SUPPORT_SEAL",
+            "DODGE_UP",
+            "DODGE_DOWN",
+            "BAD_STAT_TIME_SUB",
+            "BAD_STAT_TIME_ADD",
+            "BREAK_DOWN",
+            "ITEM_HYOUROU",
+            "ITEM_HYOUROU_EX",
+            "ITEM_HYOUROU_SP",
+            "ITEM_KIKKOU",
+            "ITEM_KIKKOU_EX",
+            "ITEM_KIKKOU_SP",
+            "ITEM_HIKYAKU",
+            "ITEM_HIKYAKU_EX",
+            "ITEM_HIKYAKU_SP",
+            "ITEM_KAWARIMI",
+            "ITEM_KAWARIMI_EX",
+            "ITEM_KAWARIMI_SP",
+            "ITEM_CHIKARA",
+            "ITEM_CHIKARA_EX",
+            "ITEM_CHIKARA_SP",
+            "ITEM_DATSURIKI",
+            "ITEM_DATSURIKI_EX",
+            "ITEM_DATSURIKI_SP",
+            "ITEM_KUZUSHI",
+            "ITEM_KUZUSHI_EX",
+            "ITEM_KUZUSHI_SP",
+            "ITEM_DONSOKU",
+            "ITEM_DONSOKU_EX",
+            "ITEM_DONSOKU_SP",
+            "ITEM_DOKUKE",
+            "ITEM_DOKUKE_EX",
+            "ITEM_DOKUKE_SP",
+            "ITEM_MADOROMI",
+            "ITEM_MADOROMI_EX",
+            "ITEM_MADOROMI_SP",
+            "ITEM_CHAKRA_SEAL",
+            "ITEM_CHAKRA_SEAL_EX",
+            "ITEM_CHAKRA_SEAL_SP",
+            "PROJ_THROUGH",
+            "PROJ_THROUGH_EX",
+            "PROJ_THROUGH_SP",
+            "ITEM_CHAKRA_DRAIN",
+            "ITEM_CHAKRA_DRAIN_EX",
+            "ITEM_SUPERARMOUR",
+            "ITEM_SUPERARMOUR_EX",
+            "ITEM_UNITY",
+            "ITEM_UNITY_EX",
+            "ITEM_SACRIFICE",
+            "ITEM_SACRIFICE_EX",
+            "ITEM_SACRIFICE_SP",
+            "ITEM_POTION_LV01",
+            "ITEM_POTION_LV02",
+            "ITEM_POTION_LV03",
+            "ITEM_POTION_LV04",
+            "ITEM_POTION_LV05",
+            "ITEM_RECOVER_CHAKRA_LV01",
+            "ITEM_RECOVER_CHAKRA_LV02",
+            "ITEM_RECOVER_CHAKRA_LV03",
+            "ITEM_CHAKRA_BAND_LV01",
+            "ITEM_CHAKRA_BAND_LV02",
+            "ITEM_CHAKRA_BAND_LV03",
+            "ITEM_CHAKRA_REVIVAL_LV01",
+            "ITEM_CHAKRA_REVIVAL_LV02",
+            "ITEM_CHAKRA_REVIVAL_LV03",
+            "ITEM_JINRAI",
+            "ITEM_JINRAI_EX",
+            "ITEM_JINRAI_EX2",
+            "ADD_POISON_EX",
+            "ADD_POISON_VALUE",
+            "ADD_POISON_EX_VALUE",
+            "ADD_SEAL_VALUE",
+            "TEAM_SEAL",
+            "CHAKRA_SEAL",
+            "ALL_RECOVER",
+            "ATK_UP_MIN",
+            "ATK_UP_LOW",
+            "ATK_UP_MED",
+            "ATK_UP_HIGH",
+            "ATK_UP_EX_HIGH",
+            "ATK_UP_MAX",
+            "DEF_UP_MIN",
+            "DEF_UP_LOW",
+            "DEF_UP_MED",
+            "DEF_UP_HIGH",
+            "DEF_UP_EX_HIGH",
+            "DEF_UP_MAX",
+            "CHAKRA_UP_LOW",
+            "CHAKRA_UP_MED",
+            "CHAKRA_UP_HIGH",
+            "CHAKRA_USE_DOWN_LOW",
+            "CHAKRA_USE_DOWN_MED",
+            "CHAKRA_USE_DOWN_HIGH",
+            "SPT_ATK_UP_LOW",
+            "SPT_ATK_UP_HIGH",
+            "SPT_UP_LOW",
+            "SPT_UP_MED",
+            "SPT_UP_HIGH",
+            "TEAM_UP_LOW",
+            "TEAM_UP_HIGH",
+            "ATK_DEF_UP_MIN",
+            "ATK_DEF_UP_LOW",
+            "ATK_DEF_UP_MED",
+            "ATK_DEF_UP_HIGH",
+            "ATK_DEF_UP_EX_HIGH",
+            "ATK_DEF_UP_MAX",
+            "SPD_UP_LOW",
+            "SPD_UP_MED",
+            "SPD_UP_HIGH",
+            "DODGE_UP_LOW",
+            "DODGE_UP_MED",
+            "DODGE_UP_HIGH",
+            "GUARDBREAK_UP_LOW",
+            "GUARDBREAK_UP_MED",
+            "GUARDBREAK_UP_HIGH",
+            "LIFE_RCV_LOW",
+            "LIFE_RCV_MED",
+            "LIFE_RCV_HIGH",
+            "SPATK_SPT_TEAM_UP_LOW",
+            "SPATK_SPT_TEAM_UP_MED",
+            "SPATK_SPT_TEAM_UP_HIGH",
+            "CHAKRA_CHAKRAUSE_UP_LOW",
+            "CHAKRA_CHAKRAUSE_UP_MED",
+            "CHAKRA_CHAKRAUSE_UP_HIGH",
+            "SPTYPE_KAIMON_ATK",
+            "SPTYPE_KAIMON_DEF",
+            "SPTYPE_KAIMON_SPD",
+            "SPTYPE_2TKG_ATK",
+            "SPTYPE_2TKG_GBR",
+            "SPTYPE_2TKG_SPD",
+            "2KBT_SPTYPE_LV1_SPDDOWN",
+            "2KBT_SPTYPE_LV2_SPDDOWN",
+            "2KBT_SPTYPE_LV3_SPDDOWN",
+            "3IRK_KOBU",
+            "3MNT_WARP",
+            "3MNT_WARP_HUGE",
+            "2HDN_CURSE",
+            "2KAR_PERFUME",
+            "2KAR_PERFUME_POISON",
+            "2KAR_PERFUME_ATK_DOWN",
+            "2KAR_PERFUME_DEF_DOWN",
+            "2KAR_PERFUME_SPD_DOWN",
+            "GRPBTL_BURST",
+            "GRPBTL_AWAKE",
+            "B02B_3_2OBT",
+            "8MMS_THROW_SUCCESS",
+            "REMINISCENE_DEF_1_1",
+            "REMINISCENE_DEF_1_2",
+            "REMINISCENE_DEF_1_3",
+            "REMINISCENE_DEF_1_4",
+            "REMINISCENE_DEF_2_1",
+            "REMINISCENE_DEF_2_2",
+            "REMINISCENE_DEF_2_3",
+            "REMINISCENE_DEF_2_4",
+            "REMINISCENE_DEF_3_1",
+            "REMINISCENE_DEF_3_2",
+            "REMINISCENE_DEF_3_3",
+            "REMINISCENE_DEF_3_4",
+            "REMINISCENE_DEF_4_1",
+            "REMINISCENE_DEF_4_2",
+            "REMINISCENE_DEF_4_3",
+            "REMINISCENE_DEF_4_4",
+            "REMINISCENE_ATK",
+            "SURVIVAL_ATK",
+            "SURVIVAL_SPT_ATK",
+            "TARGET_MATCH_ATK_UP",
+            "TARGET_MATCH_SPD_UP",
+            "TARGET_MATCH_CHAKRA_INFINITE",
+            "TARGET_MATCH_ATK_UP_GUARDBREAK_UP",
+            "TARGET_MATCH_ABSORB_LIFE",
+            "TARGET_MATCH_ALL_UP",
+
+        };
+
+        public static string[] CONDITION_NS4_LIST =
+        {
+            "DUMMY",
+            "AWAKE_2NRT",
+            "AWAKE_2NRT_REAC",
+            "AWAKE_2NRX",
+            "AWAKE_2NRX_REAC",
+            "AWAKE_2SSK",
+            "AWAKE_2SSK_REAC",
+            "AWAKE_2SSY",
+            "AWAKE_2SSY_REAC",
+            "AWAKE_2SKR",
+            "AWAKE_2SKR_REAC",
+            "AWAKE_2ROC",
+            "AWAKE_2ROC_REAC",
+            "AWAKE_2NEJ",
+            "AWAKE_2NEJ_REAC",
+            "AWAKE_2TEN",
+            "AWAKE_2TEN_REAC",
+            "AWAKE_2SIK",
+            "AWAKE_2SIK_REAC",
+            "AWAKE_2TYO",
+            "AWAKE_2TYO_REAC",
+            "AWAKE_2INO",
+            "AWAKE_2INO_REAC",
+            "AWAKE_2KIB",
+            "AWAKE_2KIB_REAC",
+            "AWAKE_2SIN",
+            "AWAKE_2SIN_REAC",
+            "AWAKE_2HNT",
+            "AWAKE_2HNT_REAC",
+            "AWAKE_2GAR",
+            "AWAKE_2GAR_REAC",
+            "AWAKE_2KNK",
+            "AWAKE_2KNK_REAC",
+            "AWAKE_2TMR",
+            "AWAKE_2TMR_REAC",
+            "AWAKE_2KKS",
+            "AWAKE_2KKS_REAC",
+            "AWAKE_2GUY",
+            "AWAKE_2GUY_REAC",
+            "AWAKE_2ASM",
+            "AWAKE_2ASM_REAC",
+            "AWAKE_2JRY",
+            "AWAKE_2JRY_REAC",
+            "AWAKE_2TND",
+            "AWAKE_2TND_REAC",
+            "AWAKE_2ORC",
+            "AWAKE_2ORC_REAC",
+            "AWAKE_2KBT",
+            "AWAKE_2KBT_REAC",
+            "AWAKE_2ITC",
+            "AWAKE_2ITC_REAC",
+            "AWAKE_2KSM",
+            "AWAKE_2KSM_REAC",
+            "AWAKE_2CYB",
+            "AWAKE_2CYB_REAC",
+            "AWAKE_2SAI",
+            "AWAKE_2SAI_REAC",
+            "AWAKE_2YMT",
+            "AWAKE_2YMT_REAC",
+            "AWAKE_2SCO",
+            "AWAKE_2SCO_REAC",
+            "AWAKE_2DDR",
+            "AWAKE_2DDR_REAC",
+            "AWAKE_2HDN",
+            "AWAKE_2HDN_REAC",
+            "AWAKE_2KZU",
+            "AWAKE_2KZU_REAC",
+            "AWAKE_2SGT",
+            "AWAKE_2SGT_REAC",
+            "AWAKE_2JYG",
+            "AWAKE_2JYG_REAC",
+            "AWAKE_2KRN",
+            "AWAKE_2KRN_REAC",
+            "AWAKE_2TOB",
+            "AWAKE_2TOB_REAC",
+            "AWAKE_2KNN",
+            "AWAKE_2KNN_REAC",
+            "AWAKE_2PEI",
+            "AWAKE_2PEI_REAC",
+            "AWAKE_2KLB",
+            "AWAKE_2KLB_REAC",
+            "AWAKE_2FOU",
+            "AWAKE_2FOU_REAC",
+            "AWAKE_2NRG",
+            "AWAKE_2NRG_REAC",
+            "AWAKE_2SSZ",
+            "AWAKE_2SSZ_REAC",
+            "AWAKE_2MDR",
+            "AWAKE_2MDR_REAC",
+            "AWAKE_2DNZ",
+            "AWAKE_2DNZ_REAC",
+            "AWAKE_2RKG",
+            "AWAKE_2RKG_REAC",
+            "AWAKE_2TKG",
+            "AWAKE_2TKG_REAC",
+            "AWAKE_2MKG",
+            "AWAKE_2MKG_REAC",
+            "AWAKE_1NRT",
+            "AWAKE_1NRT_REAC",
+            "AWAKE_1SSK",
+            "AWAKE_1SSK_REAC",
+            "AWAKE_1SSX",
+            "AWAKE_1SSX_REAC",
+            "AWAKE_1SKR",
+            "AWAKE_1SKR_REAC",
+            "AWAKE_1ROC",
+            "AWAKE_1ROC_REAC",
+            "AWAKE_1NEJ",
+            "AWAKE_1NEJ_REAC",
+            "AWAKE_1HNT",
+            "AWAKE_1HNT_REAC",
+            "AWAKE_1GAR",
+            "AWAKE_1GAR_REAC",
+            "AWAKE_1HKG",
+            "AWAKE_1HKG_REAC",
+            "AWAKE_1KMM",
+            "AWAKE_1KMM_REAC",
+            "AWAKE_1TEN",
+            "AWAKE_1TEN_REAC",
+            "AWAKE_1INO",
+            "AWAKE_1INO_REAC",
+            "AWAKE_1SIK",
+            "AWAKE_1SIK_REAC",
+            "AWAKE_1TYO",
+            "AWAKE_1TYO_REAC",
+            "AWAKE_1KIB",
+            "AWAKE_1KIB_REAC",
+            "AWAKE_1SIN",
+            "AWAKE_1SIN_REAC",
+            "AWAKE_1TMR",
+            "AWAKE_1TMR_REAC",
+            "AWAKE_1KNK",
+            "AWAKE_1KNK_REAC",
+            "AWAKE_1ZBZ",
+            "AWAKE_1ZBZ_REAC",
+            "AWAKE_1HAK",
+            "AWAKE_1HAK_REAC",
+            "AWAKE_1FIR",
+            "AWAKE_1FIR_REAC",
+            "AWAKE_1SEC",
+            "AWAKE_1SEC_REAC",
+            "AWAKE_2KKX",
+            "AWAKE_2KKX_REAC",
+            "AWAKE_2OBT",
+            "AWAKE_2OBT_REAC",
+            "AWAKE_2GAX",
+            "AWAKE_2GAX_REAC",
+            "AWAKE_2TMX",
+            "AWAKE_2TMX_REAC",
+            "AWAKE_2KNX",
+            "AWAKE_2KNX_REAC",
+            "AWAKE_2KBX",
+            "AWAKE_2KBX_REAC",
+            "AWAKE_3NRT",
+            "AWAKE_3NRT_REAC",
+            "AWAKE_3SSK",
+            "AWAKE_3SSK_REAC",
+            "AWAKE_3MDR",
+            "AWAKE_3MDR_REAC",
+            "AWAKE_3DRI",
+            "AWAKE_3DRI_REAC",
+            "AWAKE_3RUS",
+            "AWAKE_3RUS_REAC",
+            "AWAKE_3TOB",
+            "AWAKE_3TOB_REAC",
+            "AWAKE_3YGR",
+            "AWAKE_3YGR_REAC",
+            "AWAKE_3UTK",
+            "AWAKE_3UTK_REAC",
+            "AWAKE_3MFN",
+            "AWAKE_3MFN_REAC",
+            "AWAKE_3HAN",
+            "AWAKE_3HAN_REAC",
+            "AWAKE_3NYG",
+            "AWAKE_3NYG_REAC",
+            "AWAKE_3WHO",
+            "AWAKE_3WHO_REAC",
+            "AWAKE_3KLB",
+            "AWAKE_3KLB_REAC",
+            "AWAKE_3HNZ",
+            "AWAKE_3HNZ_REAC",
+            "AWAKE_3NGT",
+            "AWAKE_3NGT_REAC",
+            "AWAKE_3TYV",
+            "AWAKE_3TYV_REAC",
+            "AWAKE_3GAR",
+            "AWAKE_3GAR_REAC",
+            "AWAKE_4NRT",
+            "AWAKE_4NRT_REAC",
+            "AWAKE_3KKS",
+            "AWAKE_3KKS_REAC",
+            "AWAKE_3KHM",
+            "AWAKE_3KHM_REAC",
+            "AWAKE_3IRK",
+            "AWAKE_3IRK_REAC",
+            "AWAKE_3KBT",
+            "AWAKE_3KBT_REAC",
+            "AWAKE_3OBT",
+            "AWAKE_3OBT_REAC",
+            "AWAKE_4SSI",
+            "AWAKE_4SSI_REAC",
+            "AWAKE_3KSN",
+            "AWAKE_3KSN_REAC",
+            "AWAKE_3MNT",
+            "AWAKE_3MNT_REAC",
+            "AWAKE_3HSM",
+            "AWAKE_3HSM_REAC",
+            "AWAKE_3MDR_2",
+            "AWAKE_3MDR_2_REAC",
+            "AWAKE_4KKG",
+            "AWAKE_4KKG_REAC",
+            "AWAKE_4MKG",
+            "AWAKE_4MKG_REAC",
+            "AWAKE_4MUU",
+            "AWAKE_4MUU_REAC",
+            "AWAKE_4RKG",
+            "AWAKE_4RKG_REAC",
+            "AWAKE_5OBT",
+            "AWAKE_5OBT_REAC",
+            "AWAKE_5MDR",
+            "AWAKE_5MDR_REAC",
+            "AWAKE_5JRB",
+            "AWAKE_5JRB_REAC",
+            "AWAKE_5KDM",
+            "AWAKE_5KDM_REAC",
+            "AWAKE_5SKN",
+            "AWAKE_5SKN_REAC",
+            "AWAKE_5TYY",
+            "AWAKE_5TYY_REAC",
+            "AWAKE_6NRT",
+            "AWAKE_6NRT_REAC",
+            "AWAKE_5KGY",
+            "AWAKE_5KGY_REAC",
+            "AWAKE_6SSK",
+            "AWAKE_6SSK_REAC",
+            "AWAKE_6SKR",
+            "AWAKE_6SKR_REAC",
+            "AWAKE_6HNT",
+            "AWAKE_6HNT_REAC",
+            "AWAKE_5NRT",
+            "AWAKE_5NRT_REAC",
+            "AWAKE_5SSK",
+            "AWAKE_5SSK_REAC",
+            "AWAKE_6HNB",
+            "AWAKE_6HNB_REAC",
+            "AWAKE_5OBH",
+            "AWAKE_5OBH_REAC",
+            "AWAKE_4RIN",
+            "AWAKE_4RIN_REAC",
+            "AWAKE_3GUY",
+            "AWAKE_3GUY_REAC",
+            "AWAKE_7BRT",
+            "AWAKE_7BRT_REAC",
+            "AWAKE_7SLD",
+            "AWAKE_7SLD_REAC",
+            "AWAKE_7NRT",
+            "AWAKE_7NRT_REAC",
+            "AWAKE_7SSK",
+            "AWAKE_7SSK_REAC",
+            "AWAKE_7NRN",
+            "AWAKE_7NRN_REAC",
+            "AWAKE_7SSX",
+            "AWAKE_7SSX_REAC",
+            "AWAKE_7SKR",
+            "AWAKE_7SKR_REAC",
+            "AWAKE_7GAR",
+            "AWAKE_7GAR_REAC",
+            "AWAKE_7BRN",
+            "AWAKE_7BRN_REAC",
+            "AWAKE_7BRX",
+            "AWAKE_7BRX_REAC",
+            "AWAKE_7SLN",
+            "AWAKE_7SLN_REAC",
+            "AWAKE_4MNR",
+            "AWAKE_4MNR_REAC",
+            "AWAKE_7MTK",
+            "AWAKE_7MTK_REAC",
+            "AWAKE_8MMS",
+            "AWAKE_8MMS_REAC",
+            "AWAKE_8KIN",
+            "AWAKE_8KIN_REAC",
+            "AWAKE_4HSM",
+            "AWAKE_4HSM_REAC",
+            "AWAKE_BKKK",
+            "AWAKE_BKKK_REAC",
+            "AWAKE_PARAMUP",
+            "AWAKE_PARAMUP_REAC",
+            "TEAMGAUGE_MAX_LEADER",
+            "TEAMGAUGE_MAX_SUPPORT",
+            "ATK_UP",
+            "DEF_UP",
+            "SPD_UP",
+            "BREAK_UP",
+            "CHAKRA_UP",
+            "CHAKRA_USE_DOWN",
+            "SPT_UP",
+            "SPT_ATK_UP",
+            "TEAM_DOWN",
+            "ATK_DOWN",
+            "DEF_DOWN",
+            "SPD_DOWN",
+            "CHAKRA_DOWN",
+            "SPT_DOWN",
+            "TEAM_UP",
+            "POISON",
+            "SLEEP",
+            "SEAL",
+            "DRIVE_ATK_SEAL",
+            "DRIVE2_SPT_UP",
+            "AUTO_DODGE",
+            "REVIVE",
+            "SHAVE_CHAKRA",
+            "SUPER_ARMOR",
+            "IGNORE_ITEM",
+            "IGNORE_POISON",
+            "IGNORE_SEAL",
+            "IGNORE_NUMB",
+            "IGNORE_SLEEP",
+            "IGNORE_GUARD_BREAK",
+            "IGNORE_BAD_STATUS",
+            "ADD_POISON",
+            "ADD_SEAL",
+            "ENDURANCE_POISON",
+            "ENDURANCE_SEAL",
+            "RECOVER_LIFE",
+            "RECOVER_CHAKRA",
+            "MSN_RECOVER_LIFE",
+            "MSN_RECOVER_CHAKRA",
+            "MSN_DECREASE_LIFE",
+            "MSN_DECREASE_CHAKRA",
+            "SUPPORT_SEAL",
+            "DODGE_UP",
+            "DODGE_DOWN",
+            "BAD_STAT_TIME_SUB",
+            "BAD_STAT_TIME_ADD",
+            "BREAK_DOWN",
+            "ITEM_HYOUROU",
+            "ITEM_HYOUROU_EX",
+            "ITEM_HYOUROU_SP",
+            "ITEM_KIKKOU",
+            "ITEM_KIKKOU_EX",
+            "ITEM_KIKKOU_SP",
+            "ITEM_HIKYAKU",
+            "ITEM_HIKYAKU_EX",
+            "ITEM_HIKYAKU_SP",
+            "ITEM_KAWARIMI",
+            "ITEM_KAWARIMI_EX",
+            "ITEM_KAWARIMI_SP",
+            "ITEM_CHIKARA",
+            "ITEM_CHIKARA_EX",
+            "ITEM_CHIKARA_SP",
+            "ITEM_DATSURIKI",
+            "ITEM_DATSURIKI_EX",
+            "ITEM_DATSURIKI_SP",
+            "ITEM_KUZUSHI",
+            "ITEM_KUZUSHI_EX",
+            "ITEM_KUZUSHI_SP",
+            "ITEM_DONSOKU",
+            "ITEM_DONSOKU_EX",
+            "ITEM_DONSOKU_SP",
+            "ITEM_DOKUKE",
+            "ITEM_DOKUKE_EX",
+            "ITEM_DOKUKE_SP",
+            "ITEM_MADOROMI",
+            "ITEM_MADOROMI_EX",
+            "ITEM_MADOROMI_SP",
+            "ITEM_CHAKRA_SEAL",
+            "ITEM_CHAKRA_SEAL_EX",
+            "ITEM_CHAKRA_SEAL_SP",
+            "PROJ_THROUGH",
+            "PROJ_THROUGH_EX",
+            "PROJ_THROUGH_SP",
+            "ITEM_CHAKRA_DRAIN",
+            "ITEM_CHAKRA_DRAIN_EX",
+            "ITEM_SUPERARMOUR",
+            "ITEM_SUPERARMOUR_EX",
+            "ITEM_UNITY",
+            "ITEM_UNITY_EX",
+            "ITEM_SACRIFICE",
+            "ITEM_SACRIFICE_EX",
+            "ITEM_SACRIFICE_SP",
+            "ITEM_POTION_LV01",
+            "ITEM_POTION_LV02",
+            "ITEM_POTION_LV03",
+            "ITEM_POTION_LV04",
+            "ITEM_POTION_LV05",
+            "ITEM_RECOVER_CHAKRA_LV01",
+            "ITEM_RECOVER_CHAKRA_LV02",
+            "ITEM_RECOVER_CHAKRA_LV03",
+            "ITEM_CHAKRA_BAND_LV01",
+            "ITEM_CHAKRA_BAND_LV02",
+            "ITEM_CHAKRA_BAND_LV03",
+            "ITEM_CHAKRA_REVIVAL_LV01",
+            "ITEM_CHAKRA_REVIVAL_LV02",
+            "ITEM_CHAKRA_REVIVAL_LV03",
+            "ITEM_JINRAI",
+            "ITEM_JINRAI_EX",
+            "ITEM_JINRAI_EX2",
+            "ADD_POISON_EX",
+            "ADD_POISON_VALUE",
+            "ADD_POISON_EX_VALUE",
+            "ADD_SEAL_VALUE",
+            "TEAM_SEAL",
+            "CHAKRA_SEAL",
+            "ALL_RECOVER",
+            "ATK_UP_MIN",
+            "ATK_UP_LOW",
+            "ATK_UP_MED",
+            "ATK_UP_HIGH",
+            "ATK_UP_EX_HIGH",
+            "ATK_UP_MAX",
+            "DEF_UP_MIN",
+            "DEF_UP_LOW",
+            "DEF_UP_MED",
+            "DEF_UP_HIGH",
+            "DEF_UP_EX_HIGH",
+            "DEF_UP_MAX",
+            "CHAKRA_UP_LOW",
+            "CHAKRA_UP_MED",
+            "CHAKRA_UP_HIGH",
+            "CHAKRA_USE_DOWN_LOW",
+            "CHAKRA_USE_DOWN_MED",
+            "CHAKRA_USE_DOWN_HIGH",
+            "SPT_ATK_UP_LOW",
+            "SPT_ATK_UP_HIGH",
+            "SPT_UP_LOW",
+            "SPT_UP_MED",
+            "SPT_UP_HIGH",
+            "TEAM_UP_LOW",
+            "TEAM_UP_HIGH",
+            "ATK_DEF_UP_MIN",
+            "ATK_DEF_UP_LOW",
+            "ATK_DEF_UP_MED",
+            "ATK_DEF_UP_HIGH",
+            "ATK_DEF_UP_EX_HIGH",
+            "ATK_DEF_UP_MAX",
+            "SPD_UP_LOW",
+            "SPD_UP_MED",
+            "SPD_UP_HIGH",
+            "DODGE_UP_LOW",
+            "DODGE_UP_MED",
+            "DODGE_UP_HIGH",
+            "GUARDBREAK_UP_LOW",
+            "GUARDBREAK_UP_MED",
+            "GUARDBREAK_UP_HIGH",
+            "LIFE_RCV_LOW",
+            "LIFE_RCV_MED",
+            "LIFE_RCV_HIGH",
+            "SPATK_SPT_TEAM_UP_LOW",
+            "SPATK_SPT_TEAM_UP_MED",
+            "SPATK_SPT_TEAM_UP_HIGH",
+            "CHAKRA_CHAKRAUSE_UP_LOW",
+            "CHAKRA_CHAKRAUSE_UP_MED",
+            "CHAKRA_CHAKRAUSE_UP_HIGH",
+            "SPTYPE_KAIMON_ATK",
+            "SPTYPE_KAIMON_DEF",
+            "SPTYPE_KAIMON_SPD",
+            "SPTYPE_2TKG_ATK",
+            "SPTYPE_2TKG_GBR",
+            "SPTYPE_2TKG_SPD",
+            "2KBT_SPTYPE_LV1_SPDDOWN",
+            "2KBT_SPTYPE_LV2_SPDDOWN",
+            "2KBT_SPTYPE_LV3_SPDDOWN",
+            "3IRK_KOBU",
+            "3MNT_WARP",
+            "3MNT_WARP_HUGE",
+            "2HDN_CURSE",
+            "2KAR_PERFUME",
+            "2KAR_PERFUME_POISON",
+            "2KAR_PERFUME_ATK_DOWN",
+            "2KAR_PERFUME_DEF_DOWN",
+            "2KAR_PERFUME_SPD_DOWN",
+            "GRPBTL_BURST",
+            "GRPBTL_AWAKE",
+            "B02B_3_2OBT",
+            "8MMS_THROW_SUCCESS"
+
         };
     }
 

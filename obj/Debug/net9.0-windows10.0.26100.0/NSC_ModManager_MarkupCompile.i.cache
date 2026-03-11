@@ -8,13 +8,13 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\obj\Debug\net9.0-windows10.0.2
 NSC_ModManager
 none
 false
-TRACE;DEBUG;NET;NET9_0;NETCOREAPP
+TRACE;DEBUG;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS10_0_26100_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS10_0_26100_0_OR_GREATER;WINDOWS10_0_22621_0_OR_GREATER;WINDOWS10_0_22000_0_OR_GREATER;WINDOWS10_0_20348_0_OR_GREATER;WINDOWS10_0_19041_0_OR_GREATER;WINDOWS10_0_18362_0_OR_GREATER;WINDOWS10_0_17763_0_OR_GREATER;WINDOWS8_0_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\App.xaml
-6390980019
+7770841760
 3-1356853786
-97-565002952
-237-713811185
-Controls\KuramaControl.xaml;Controls\LoadingControl.xaml;Resources\Localization\lang.xaml;Resources\Styles\LightStyle.xaml;View\CharacterRosterEditorView.xaml;View\TitleView.xaml;
+110-90190709
+2371336709476
+Controls\KuramaControl.xaml;Controls\LoadingControl.xaml;Resources\Localization\lang.xaml;Resources\Styles\LightStyle.xaml;View\CharacterRosterEditorNS4View.xaml;View\CharacterRosterEditorView.xaml;View\TitleView.xaml;
 
-True
+False
 

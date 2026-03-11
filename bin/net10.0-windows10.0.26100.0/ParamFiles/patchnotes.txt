@@ -1,0 +1,11 @@
+<font size="50" align="center">PATCH NOTES
+<font size="20" align="center">2.0.0.1/n/n
+
+<font size="50" align="center">Mod Manager/n
+
+<font size="45" align="left"><color red>Naruto Storm 4</color>/n
+<font size="35" align="left">Fixes/n
+<font size="25" align="left">- Fixed issue when characters entered awakening mode randomly.
+<font size="25" align="left">- Fixed issue when mod manager would show error message if you have selected only Storm 4 root folder.
+<font size="25" align="left">- Fixed issue when 0xc0000142 error would pop up after compiling mods if you didn't cleaned game from old API.
+<font size="20" align="left"><color yellow>It doesn't fix issue for users who using cracked version, this error can also appear if you using cracked version of game, steam is required!</color>

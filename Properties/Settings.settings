@@ -20,7 +20,7 @@
     <Setting Name="ModdingGroupLink" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://discord.gg/naruto-storm-modding-server-841394026599022682</Value>
     </Setting>
-    <Setting Name="RootGameFolder" Type="System.String" Scope="User">
+    <Setting Name="RootGameNSCFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="EnableMotionBlur" Type="System.Boolean" Scope="User">
@@ -28,6 +28,15 @@
     </Setting>
     <Setting Name="MustUpgrade" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="StormVersion" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="RootGameNS4Folder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ModManagerFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

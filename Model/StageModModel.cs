@@ -32,6 +32,16 @@ namespace NSC_ModManager.Model {
                 OnPropertyChanged("BgmID");
             }
         }
+        private int _bgmID_NS4;
+        public int BgmID_NS4
+        {
+            get { return _bgmID_NS4; }
+            set
+            {
+                _bgmID_NS4 = value;
+                OnPropertyChanged("BgmID_NS4");
+            }
+        }
         private bool _hell;
         public bool Hell {
             get { return _hell; }
@@ -46,6 +56,16 @@ namespace NSC_ModManager.Model {
             set {
                 _rootPath = value;
                 OnPropertyChanged("RootPath");
+            }
+        }
+        private string _gameVersion;
+        public string GameVersion
+        {
+            get { return _gameVersion; }
+            set
+            {
+                _gameVersion = value;
+                OnPropertyChanged("GameVersion");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;

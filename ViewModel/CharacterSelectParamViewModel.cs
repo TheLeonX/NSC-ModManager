@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -688,7 +689,7 @@ namespace NSC_ModManager.ViewModel {
                 List<int> Slots = new List<int>();
 
                 for (int i = 0; i < CharacterSelectParamList.Count; i++) {
-                    if (CharacterSelectParamList[i].PageIndex == page) {
+                    if (CharacterSelectParamList[i].PageIndex == page && CharacterSelectParamList[i].CostumeIndex == 0) {
                         Slots.Add(CharacterSelectParamList[i].SlotIndex);
                     }
                 }
@@ -808,6 +809,27 @@ namespace NSC_ModManager.ViewModel {
                         CSP_entry.DictionaryCode = BinaryReader.b_ReadString(FileBytes, ptr + 0x130 + BinaryReader.b_ReadInt(FileBytes, ptr + 0x130));
                         CSP_entry.DictionaryIndex = BinaryReader.b_ReadInt(FileBytes, ptr + 0x138);
                         CharacterSelectParamList.Add(CSP_entry);
+                    }
+
+
+                    foreach (var entry in CharacterSelectParamList)
+                    {
+                        if (entry.CostumeIndex != 0)
+                        {
+                            var baseEntry = CharacterSelectParamList.FirstOrDefault(e =>
+                                e.PageIndex == entry.PageIndex &&
+                                e.SlotIndex == entry.SlotIndex &&
+                                e.CostumeIndex == 0);
+
+                            if (!File.Exists(entry.CharacterIconPath) && baseEntry != null)
+                            {
+                                entry.CharacterIconPath =
+                                    AppDomain.CurrentDomain.BaseDirectory +
+                                    "\\Resources\\Styles\\UI\\charsel_icons\\" +
+                                    baseEntry.CSP_code +
+                                    ".png";
+                            }
+                        }
                     }
                 } else {
                     ModernWpf.MessageBox.Show("You can't open that file with that tool. ");
@@ -1178,7 +1200,8 @@ namespace NSC_ModManager.ViewModel {
 
 
             ObservableCollection<CharacterSelectParamModel> tempCol = new ObservableCollection<CharacterSelectParamModel>();
-            for (int i = 0; i< CharacterSelectParamList.Count; i++) {
+            for (int i = 0; i< CharacterSelectParamList.Count; i++)
+            {
                 if (CharacterSelectParamList[i].SaveInFile == false) {
                     tempCol.Add(CharacterSelectParamList[i]);
                     CharacterSelectParamList.RemoveAt(i);
@@ -1205,6 +1228,8 @@ namespace NSC_ModManager.ViewModel {
 
             for (int x = 0; x < CharacterSelectParamList.Count; x++) {
                 int ptr = startPtr + (x * 0x140);
+
+
                 CSP_Code_pointer.Add(fileBytes36.Length);
                 if (CharacterSelectParamList[x].CSP_code != "" && CharacterSelectParamList[x].CSP_code is not null) {
                     fileBytes36 = BinaryReader.b_AddBytes(fileBytes36, Encoding.ASCII.GetBytes(CharacterSelectParamList[x].CSP_code));

@@ -1048,69 +1048,94 @@ namespace NSC_ModManager.ViewModel
             List<int> MainTextPointer = new List<int>();
 
 
-            for (int x2 = 0; x2 < MessageInfo_List[ListIndex].Count; x2++) {
+            for (int x2 = 0; x2 < MessageInfo_List[ListIndex].Count; x2++)
+            {
+                // SPEAKER
                 SpeakerTextPointer.Add(file.Count);
-                int nameLength3 = MessageInfo_List[ListIndex][x2].Speaker.Length;
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].Speaker) != "") {
-                    for (int a17 = 0; a17 < nameLength3; a17++) {
-                        file.Add(MessageInfo_List[ListIndex][x2].Speaker[a17]);
+                byte[] speakerBytes = MessageInfo_List[ListIndex][x2].Speaker ?? new byte[0];
+                int nameLength3 = speakerBytes.Length;
+                if (nameLength3 > 0)
+                {
+                    for (int a17 = 0; a17 < nameLength3; a17++)
+                    {
+                        file.Add(speakerBytes[a17]);
                     }
                     file.Add(0);
                 }
+
+                // SECONDARY
                 SecondaryTextPointer.Add(file.Count);
-                nameLength3 = MessageInfo_List[ListIndex][x2].SecondaryText.Length;
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].SecondaryText) != "") {
-                    for (int a17 = 0; a17 < nameLength3; a17++) {
-                        file.Add(MessageInfo_List[ListIndex][x2].SecondaryText[a17]);
+                byte[] secondaryBytes = MessageInfo_List[ListIndex][x2].SecondaryText ?? new byte[0];
+                nameLength3 = secondaryBytes.Length;
+                if (nameLength3 > 0)
+                {
+                    for (int a17 = 0; a17 < nameLength3; a17++)
+                    {
+                        file.Add(secondaryBytes[a17]);
                     }
                     file.Add(0);
                 }
+
+                // MAIN
                 MainTextPointer.Add(file.Count);
-                nameLength3 = MessageInfo_List[ListIndex][x2].MainText.Length;
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].MainText) != "") {
-                    for (int a17 = 0; a17 < nameLength3; a17++) {
-                        file.Add(MessageInfo_List[ListIndex][x2].MainText[a17]);
+                byte[] mainBytes = MessageInfo_List[ListIndex][x2].MainText ?? new byte[0];
+                nameLength3 = mainBytes.Length;
+                if (nameLength3 > 0)
+                {
+                    for (int a17 = 0; a17 < nameLength3; a17++)
+                    {
+                        file.Add(mainBytes[a17]);
                     }
                     file.Add(0);
                 }
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].Speaker) != "") {
+
+                // POINTERS (только если соответствующие строки не пустые)
+                if (speakerBytes.Length > 0)
+                {
                     int newPointer3 = SpeakerTextPointer[x2] - 0x30 * x2 - 0x08;
                     byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
-                    for (int a7 = 0; a7 < 4; a7++) {
+                    for (int a7 = 0; a7 < 4; a7++)
+                    {
                         file[0x30 * x2 + 0x08 + a7] = ptrBytes3[a7];
                     }
                 }
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].SecondaryText) != "") {
+                if (secondaryBytes.Length > 0)
+                {
                     int newPointer3 = SecondaryTextPointer[x2] - 0x30 * x2 - 0x10;
                     byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
-                    for (int a7 = 0; a7 < 4; a7++) {
+                    for (int a7 = 0; a7 < 4; a7++)
+                    {
                         file[0x30 * x2 + 0x10 + a7] = ptrBytes3[a7];
                     }
                 }
-                if (Encoding.UTF8.GetString(MessageInfo_List[ListIndex][x2].MainText) != "") {
+                if (mainBytes.Length > 0)
+                {
                     int newPointer3 = MainTextPointer[x2] - 0x30 * x2 - 0x18;
                     byte[] ptrBytes3 = BitConverter.GetBytes(newPointer3);
-                    for (int a7 = 0; a7 < 4; a7++) {
+                    for (int a7 = 0; a7 < 4; a7++)
+                    {
                         file[0x30 * x2 + 0x18 + a7] = ptrBytes3[a7];
                     }
                 }
 
-
-
                 // VALUES
                 byte[] o_a = MessageInfo_List[ListIndex][x2].CRC32Code;
-                for (int a8 = 0; a8 < 4; a8++) {
+                for (int a8 = 0; a8 < 4; a8++)
+                {
                     file[0x30 * x2 + 0 + a8] = o_a[a8];
                 }
-                for (int a8 = 0; a8 < 2; a8++) {
+                for (int a8 = 0; a8 < 2; a8++)
+                {
                     file[0x30 * x2 + 0x24 + a8] = 0xFF;
                 }
                 o_a = BitConverter.GetBytes(MessageInfo_List[ListIndex][x2].ACBFileID);
-                for (int a8 = 0; a8 < 2; a8++) {
+                for (int a8 = 0; a8 < 2; a8++)
+                {
                     file[0x30 * x2 + 0x26 + a8] = o_a[a8];
                 }
                 o_a = BitConverter.GetBytes(MessageInfo_List[ListIndex][x2].CueID);
-                for (int a8 = 0; a8 < 2; a8++) {
+                for (int a8 = 0; a8 < 2; a8++)
+                {
                     file[0x30 * x2 + 0x28 + a8] = o_a[a8];
                 }
                 file[0x30 * x2 + 0x2A] = BitConverter.GetBytes(MessageInfo_List[ListIndex][x2].DisableText)[0];

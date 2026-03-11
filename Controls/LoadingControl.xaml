@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NSC_ModManager.Controls"
+             xmlns:local2="clr-namespace:NSC_ModManager"
              mc:Ignorable="d" 
              MinHeight="70" MaxHeight="70" MinWidth="70" MaxWidth="70">
     <UserControl.Resources>
@@ -188,8 +189,8 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <Image x:Name="MainImage" Source="{DynamicResource LoadingMainBody}" Effect="{StaticResource MyEffect}" Style="{StaticResource MainLoadingAnimation}" RenderTransformOrigin="0.5,0.5" Panel.ZIndex="1" Visibility="{Binding LoadingState, RelativeSource={RelativeSource AncestorType={x:Type local:LoadingControl}}}"/>
-        <Image x:Name="SecondImage" Source="{DynamicResource LoadingSecondBody}" Effect="{StaticResource MyEffect}" Style="{StaticResource SecondLoadingAnimation}" RenderTransformOrigin="0.5,0.5" Panel.ZIndex="0" Visibility="{Binding LoadingState, RelativeSource={RelativeSource AncestorType={x:Type local:LoadingControl}}}"/>
+        <Image x:Name="MainImage" Source="{DynamicResource LoadingMainBody}" Effect="{StaticResource MyEffect}" Style="{StaticResource MainLoadingAnimation}" RenderTransformOrigin="0.5,0.5" Panel.ZIndex="1" local2:AnimatedVisibility.TargetVisibility="{Binding LoadingState, RelativeSource={RelativeSource AncestorType={x:Type local:LoadingControl}}}"/>
+        <Image x:Name="SecondImage" Source="{DynamicResource LoadingSecondBody}" Effect="{StaticResource MyEffect}" Style="{StaticResource SecondLoadingAnimation}" RenderTransformOrigin="0.5,0.5" Panel.ZIndex="0" local2:AnimatedVisibility.TargetVisibility="{Binding LoadingState, RelativeSource={RelativeSource AncestorType={x:Type local:LoadingControl}}}"/>
 
     </Grid>
 </UserControl>

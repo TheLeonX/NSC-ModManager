@@ -81,6 +81,17 @@ namespace NSC_ModManager.Model
                 OnPropertyChanged("RootPath");
             }
         }
+
+        private string _gameVersion;
+        public string GameVersion
+        {
+            get { return _gameVersion; }
+            set
+            {
+                _gameVersion = value;
+                OnPropertyChanged("GameVersion");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

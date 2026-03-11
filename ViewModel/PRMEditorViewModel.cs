@@ -1704,12 +1704,10 @@ namespace NSC_ModManager.ViewModel
                     }
                     File.Copy(filePath, filePath + ".backup");
                     File.WriteAllBytes(filePath, ConvertToFile());
-                    ModernWpf.MessageBox.Show("File saved to " + filePath + ".");
+                    //ModernWpf.MessageBox.Show("File saved to " + filePath + ".");
                 } else {
                     SaveFileAs();
                 }
-            } else {
-                ModernWpf.MessageBox.Show("Unable to save file. File data is empty!");
             }
         }
 
@@ -1736,10 +1734,6 @@ namespace NSC_ModManager.ViewModel
                     filePath = s.FileName;
                 }
                 File.WriteAllBytes(filePath, ConvertToFile());
-                if (basepath == "")
-                    ModernWpf.MessageBox.Show("File saved to " + filePath + ".");
-            } else {
-                ModernWpf.MessageBox.Show("Unable to save file. File data is empty!");
             }
         }
 

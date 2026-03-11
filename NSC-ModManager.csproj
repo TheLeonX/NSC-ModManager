@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <RootNamespace>NSC_ModManager</RootNamespace>
     <AssemblyName>NSC_ModManager</AssemblyName>
     <Nullable>enable</Nullable>
@@ -22,21 +22,21 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     
-    <AssemblyVersion>1.6.5.2</AssemblyVersion>
-    <FileVersion>1.6.5.2</FileVersion>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <FileVersion>2.0.0.1</FileVersion>
     <Authors>TheLeonX</Authors>
     <Version>1.60</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <SignAssembly>False</SignAssembly>
-    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,6 +56,9 @@
     <None Remove="Resources\Styles\UI\loading\toolbox_load_1.png" />
     <None Remove="Resources\Styles\UI\loading\toolbox_load_2.png" />
     <None Remove="Resources\Styles\UI\logo\modmanager_logo.png" />
+    <None Remove="Resources\Styles\UI\logo\modmanager_logo_S4.png" />
+    <None Remove="Resources\Styles\UI\logo\NS4.png" />
+    <None Remove="Resources\Styles\UI\logo\NSC.png" />
     <None Remove="Resources\Styles\UI\logo\toolbox_logo.png" />
     <None Remove="white_MM.ico" />
     <None Remove="YACpkTool.exe" />
@@ -89,6 +92,9 @@
     <Resource Include="Resources\Styles\UI\loading\toolbox_load_1.png" />
     <Resource Include="Resources\Styles\UI\loading\toolbox_load_2.png" />
     <Resource Include="Resources\Styles\UI\logo\modmanager_logo.png" />
+    <Resource Include="Resources\Styles\UI\logo\modmanager_logo_S4.png" />
+    <Resource Include="Resources\Styles\UI\logo\NS4.png" />
+    <Resource Include="Resources\Styles\UI\logo\NSC.png" />
     <Resource Include="Resources\Styles\UI\logo\toolbox_logo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -98,6 +104,8 @@
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.1" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.2" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio.WaveFormRenderer" Version="2.0.0" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
     <PackageReference Include="Octokit" Version="9.1.2" />
@@ -117,6 +125,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Update="View\CharacterRosterEditorNS4View.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -131,7 +142,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ParamFiles\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\TemplateImages\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -142,6 +153,9 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="vcredist_x86.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -170,5 +184,8 @@
     <Content Include="CpkMaker.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XFBIN_LIB\XFBIN_LIB.csproj" />
   </ItemGroup>
 </Project>

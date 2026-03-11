@@ -1,0 +1,11 @@
+Error: Access to the path is denied.
+
+StackTrace:    at System.IO.FileSystem.MoveFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at System.IO.File.Move(String sourceFileName, String destFileName, Boolean overwrite)
+   at NSC_ModManager.ViewModel.RepackHelper.RunRepackProcess(String inputFolder, String outputCpk) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 213
+   at NSC_ModManager.ViewModel.TitleViewModel.bw_CompileModProcess_NS4(String path) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 7528
+   at NSC_ModManager.ViewModel.TitleViewModel.bw_CompileModProcess(Object sender, DoWorkEventArgs e) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 928
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+
+Time: 11.03.2026 21:02:37
