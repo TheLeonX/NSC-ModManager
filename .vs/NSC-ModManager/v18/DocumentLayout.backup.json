@@ -43,12 +43,12 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NSC-ModManager",
+              "Title": "NSC-ModManager.csproj",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeDocumentMoniker": "NSC-ModManager.csproj",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeToolTip": "NSC-ModManager.csproj",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABkAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-03-11T18:14:47.821Z",
               "EditorCaption": ""
@@ -63,8 +63,7 @@
               "RelativeToolTip": "Properties\\Program.cs",
               "ViewState": "AgIAAGUSAAAAAAAAAAAAAH0SAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T15:16:19.382Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-28T15:16:19.382Z"
             },
             {
               "$type": "Document",
@@ -74,7 +73,7 @@
               "RelativeDocumentMoniker": "ViewModel\\TitleViewModel.cs",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeToolTip": "ViewModel\\TitleViewModel.cs",
-              "ViewState": "AgIAABwQAAAAAAAAAAAewBsQAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAM4aAAAAAAAAAAAewPwaAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-01T19:44:18.683Z",
               "EditorCaption": ""
@@ -100,8 +99,7 @@
               "RelativeToolTip": "View\\TitleView.xaml.cs",
               "ViewState": "AgIAAO0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-01T19:33:14.766Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-01T19:33:14.766Z"
             },
             {
               "$type": "Document",

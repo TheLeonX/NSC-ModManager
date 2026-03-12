@@ -3832,7 +3832,7 @@ namespace NSC_ModManager.ViewModel
                         continue;
                     }
 
-                    List<int> SkipEntriesList = new List<int> { 55, 56, 58 };
+                    List<int> SkipEntriesList = new List<int> {};
                     if (!replace_tuj)
                     {
                         mod_tuj_id = tuj_entryCount;
@@ -6837,7 +6837,7 @@ namespace NSC_ModManager.ViewModel
                         continue;
                     }
 
-                    List<int> SkipEntriesList = new List<int> { 55, 56, 58 };
+                    List<int> SkipEntriesList = new List<int> {  };
                     if (!replace_tuj)
                     {
                         mod_tuj_id = tuj_entryCount;
