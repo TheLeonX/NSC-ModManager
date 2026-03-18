@@ -1,11 +1,9 @@
-Error: Access to the path is denied.
+Error: Specified argument was out of the range of valid values.
 
-StackTrace:    at System.IO.FileSystem.MoveFile(String sourceFullPath, String destFullPath, Boolean overwrite)
-   at System.IO.File.Move(String sourceFileName, String destFileName, Boolean overwrite)
-   at NSC_ModManager.ViewModel.RepackHelper.RunRepackProcess(String inputFolder, String outputCpk) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 213
-   at NSC_ModManager.ViewModel.TitleViewModel.bw_CompileModProcess_NS4(String path) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 7528
-   at NSC_ModManager.ViewModel.TitleViewModel.bw_CompileModProcess(Object sender, DoWorkEventArgs e) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 928
-   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
-   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+StackTrace:    at NSC_ModManager.BinaryReader.b_ReadString(Byte[] actual, Int32 index, Int32 count) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\BinaryReader.cs:line 168
+   at NSC_ModManager.ViewModel.PRMEditorViewModel.GenerateVer(PRMEditorModel binary) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\PRMEditorViewModel.cs:line 934
+   at NSC_ModManager.ViewModel.PRMEditorViewModel.OpenFile(String basepath) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\PRMEditorViewModel.cs:line 851
+   at NSC_ModManager.ViewModel.TitleViewModel.ExtractNus4(String nus4Path, String destinationFolder) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 7989
+   at NSC_ModManager.ViewModel.TitleViewModel.InstallMod(String mod_path) in C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\ViewModel\TitleViewModel.cs:line 7767
 
-Time: 11.03.2026 21:02:37
+Time: 17.03.2026 10:29:37
