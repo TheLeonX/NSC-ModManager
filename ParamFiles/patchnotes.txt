@@ -1,20 +1,11 @@
 <font size="50" align="center">PATCH NOTES
-<font size="20" align="center">2.0.1.0/n/n
+<font size="20" align="center">2.0.1.1/n/n
 
 <font size="50" align="center">Mod Manager/n
-<font size="35" align="left">New Features/n
-<font size="25" align="left">- Added Shuriken Tilts.
-<font size="25" align="left">- Added Tilt Disabler/Enabler in Enable Control Function, Disable Control Function and Change Control Timed Function for MovesetPlus./n/n
-
-<font size="45" align="left"><color red>Storm 4</color>/n
-<font size="35" align="left">Fixes/n
-<font size="25" align="left">- Fixed issue when DAMAGE_ID_DOWN action from NSC didn't worked correctly in Storm 4.
-<font size="25" align="left">- Fixed issue when 5ssk's Down Finisher didn't do damage if prm file was taken from NSC./n/n
 
 <font size="45" align="left"><color red>Storm Connections</color>/n
 <font size="35" align="left">Fixes/n
-<font size="25" align="left">- Fixed issue when game didn't reacted on control functions for tilts and chakra shurikens.
-<font size="25" align="left">- Fixed issue when you couldn't perform blockstun cancel using tilt./n/n
+<font size="25" align="left">- Fixed an issue when character would throw shuriken instead of using air jutsu if one existed in case if you selected two different jutsus.
 
 <font size="35" align="left">Known issues/n
 <font size="25" align="left">- Unable to use jutsu selector in online in NSC.

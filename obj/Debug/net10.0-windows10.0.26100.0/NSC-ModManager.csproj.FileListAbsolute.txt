@@ -552,4 +552,3 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Resources\data\sound\separam.xfbin
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Resources\data\sound\Se\btlcmn.xfbin
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\XFBIN_LIB.pdb
-C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NS4\damageprm.bin.xfbin.bak

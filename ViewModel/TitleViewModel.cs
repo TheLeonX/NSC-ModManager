@@ -147,7 +147,7 @@ namespace NSC_ModManager.ViewModel
     }
     public class RepackHelper
     {
-        private static void RemoveZoneIdentifier(string path)
+        public static void RemoveZoneIdentifier(string path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return;
@@ -8585,6 +8585,10 @@ namespace NSC_ModManager.ViewModel
                 Program.CopyFilesRecursively(moddingAPIFilesPath, root_path);
 
                 string exePath = Path.Combine(root_path, "NSUNSC.exe");
+
+
+                RepackHelper.RemoveZoneIdentifier(Path.Combine(root_path, "d3dcompiler_47.dll"));
+                RepackHelper.RemoveZoneIdentifier(Path.Combine(root_path, "d3dcompiler_47_o.dll"));
                 if (File.Exists(exePath))
                 {
                     string sourceFile =

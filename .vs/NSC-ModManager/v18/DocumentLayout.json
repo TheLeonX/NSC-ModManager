@@ -3,15 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\nsc-modmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:nsc-modmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:viewmodel\\titleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ARDOR\\AppData\\Local\\SourceServer\\eff57607c7d278ffa88448d25d46562338749d4b0a3956c401dfd3d30b5022a7\\ViewModel\\TitleViewModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\nsc-modmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|solutionrelative:nsc-modmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BEEC72A-C3EF-4C1F-9445-3882AEA67A2D}|NSC-ModManager.csproj|c:\\users\\ardor\\desktop\\c# projects\\nsc-modmanager\\properties\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,7 +37,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -45,7 +45,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "TitleViewModel.cs",
               "DocumentMoniker": "C:\\Users\\ARDOR\\AppData\\Local\\SourceServer\\eff57607c7d278ffa88448d25d46562338749d4b0a3956c401dfd3d30b5022a7\\ViewModel\\TitleViewModel.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\SourceServer\\eff57607c7d278ffa88448d25d46562338749d4b0a3956c401dfd3d30b5022a7\\ViewModel\\TitleViewModel.cs",
@@ -58,15 +58,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "NSC-ModManager.csproj",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeDocumentMoniker": "NSC-ModManager.csproj",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
               "RelativeToolTip": "NSC-ModManager.csproj",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-11T18:14:47.821Z"
+              "WhenOpened": "2026-03-11T18:14:47.821Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -82,13 +83,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "TitleViewModel.cs",
               "DocumentMoniker": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeDocumentMoniker": "ViewModel\\TitleViewModel.cs",
               "ToolTip": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\ViewModel\\TitleViewModel.cs",
               "RelativeToolTip": "ViewModel\\TitleViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMfAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAI0hAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-01T19:44:18.683Z",
               "EditorCaption": ""
