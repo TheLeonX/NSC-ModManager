@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "yEO/v7mx81M=",
+  "dgSpecHash": "tT1Ho6BdoLg=",
   "success": true,
   "projectFilePath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
   "expectedPackageFiles": [
@@ -38,6 +38,18 @@
   ],
   "logs": [
     {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "У пакета \"log4net\" 2.0.12 есть известная уязвимость https://github.com/advisories/GHSA-4f7c-pmjv-c25w (уровень серьезности: средний уровень)",
+      "projectPath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
+      "libraryId": "log4net",
+      "targetGraphs": [
+        "net10.0-windows10.0.26100.0"
+      ]
+    },
+    {
       "code": "NU1701",
       "level": "Warning",
       "message": "Пакет \"JonSkeet.MiscUtil 0.2.0\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net10.0-windows10.0.26100\". Этот пакет может быть не полностью совместим с вашим проектом.",
@@ -46,7 +58,7 @@
       "filePath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
       "libraryId": "JonSkeet.MiscUtil",
       "targetGraphs": [
-        "net10.0-windows10.0.26100"
+        "net10.0-windows10.0.26100.0"
       ]
     },
     {
@@ -58,7 +70,7 @@
       "filePath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
       "libraryId": "WindowsAPICodePack-Core",
       "targetGraphs": [
-        "net10.0-windows10.0.26100"
+        "net10.0-windows10.0.26100.0"
       ]
     },
     {
@@ -70,7 +82,7 @@
       "filePath": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
       "libraryId": "WindowsAPICodePack-Shell",
       "targetGraphs": [
-        "net10.0-windows10.0.26100"
+        "net10.0-windows10.0.26100.0"
       ]
     }
   ]

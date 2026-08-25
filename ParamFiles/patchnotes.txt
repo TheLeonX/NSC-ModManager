@@ -1,11 +1,10 @@
 <font size="50" align="center">PATCH NOTES
-<font size="20" align="center">2.0.1.1/n/n
+<font size="20" align="center">2.1.0.0/n/n
 
 <font size="50" align="center">Mod Manager/n
 
 <font size="45" align="left"><color red>Storm Connections</color>/n
-<font size="35" align="left">Fixes/n
-<font size="25" align="left">- Fixed an issue when character would throw shuriken instead of using air jutsu if one existed in case if you selected two different jutsus.
-
-<font size="35" align="left">Known issues/n
-<font size="25" align="left">- Unable to use jutsu selector in online in NSC.
+<font size="35" align="left">Update/n
+<font size="25" align="left">- Mod Manager was updated to 1.70 version of game./n
+<font size="35" align="left">Update/n
+<font size="25" align="left">- Fixed an issue when jutsu selector didn't worked in online mode./n

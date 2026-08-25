@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj": {
-      "version": "1.60.0",
+      "version": "1.70.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\ARDOR\\Desktop\\C# Projects\\NSC-ModManager\\NSC-ModManager.csproj",
         "projectName": "NSC_ModManager",
@@ -30,7 +30,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net10.0-windows10.0.26100": {
+          "net10.0-windows10.0.26100.0": {
+            "framework": "net10.0-windows10.0.26100",
             "targetAlias": "net10.0-windows10.0.26100.0",
             "projectReferences": {
               "C:\\Users\\ARDOR\\Desktop\\C# Projects\\XFBIN_LIB\\XFBIN_LIB.csproj": {
@@ -49,10 +50,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
-        "net10.0-windows10.0.26100": {
+        "net10.0-windows10.0.26100.0": {
+          "framework": "net10.0-windows10.0.26100",
           "targetAlias": "net10.0-windows10.0.26100.0",
           "dependencies": {
             "Extended.Wpf.Toolkit": {
@@ -128,7 +130,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -449,6 +451,7 @@
         },
         "frameworks": {
           "net7.0": {
+            "framework": "net7.0",
             "targetAlias": "net7.0",
             "projectReferences": {}
           }
@@ -463,10 +466,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net7.0": {
+          "framework": "net7.0",
           "targetAlias": "net7.0",
           "dependencies": {
             "JonSkeet.MiscUtil": {
@@ -494,7 +498,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

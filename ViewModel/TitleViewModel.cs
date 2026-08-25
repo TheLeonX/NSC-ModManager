@@ -4174,13 +4174,13 @@ namespace NSC_ModManager.ViewModel
                 byte[] charicon_s_filebytes = File.ReadAllBytes(chariconGfxPath);
                 string charicon_s_updated_path = Path.Combine(Properties.Settings.Default.RootGameNSCFolder, "data", "ui", "flash", "OTHER", "charicon_s", "charicon_s.gfx");
 
-                byte[] charicon_s_header = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0, 0xCB);
-                byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCB, 0x4580);
-                byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x464B, 0x120A);
-                byte[] charicon_s_end = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x5855, 0x1502B); //0x08,0x15,0x7D,0x14F7D - change counts!
+                byte[] charicon_s_header = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0, 0xCC);
+                byte[] charicon_s_body1 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0xCC, 0x460E);
+                byte[] charicon_s_body2 = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x46DA, 0x1232);
+                byte[] charicon_s_end = BinaryReader.b_ReadByteArray(charicon_s_filebytes, 0x590C, 0x152A8); //0x08,0x15,0x7D,0x14F7D - change counts!
                 byte[] charicon_s_newFile = new byte[0];
-                int icon_count = 0x1CE;
-                int icon_count2 = 0xE3;
+                int icon_count = 0x1D2;
+                int icon_count2 = 0xE5;
                 int external_image_count = 5;
                 for (int i = 0; i < CharselIconNamesList.Count; i++)
                 {
@@ -4214,7 +4214,7 @@ namespace NSC_ModManager.ViewModel
                 charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + 1 + (CharselIconNamesList.Count * 2)), 0x08, 0, 2);
                 charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + (CharselIconNamesList.Count * 2)), 0x15, 0, 2);
                 charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + 1 + (CharselIconNamesList.Count * 2)), 0x7D, 0, 2);
-                charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + (CharselIconNamesList.Count * 2)), 0x14F7D, 0, 2);
+                charicon_s_end = BinaryReader.b_ReplaceBytes(charicon_s_end, BitConverter.GetBytes(icon_count + (CharselIconNamesList.Count * 2)), 0x151FA, 0, 2);
                 charicon_s_newFile = BinaryReader.b_AddBytes(charicon_s_newFile, charicon_s_header);
                 charicon_s_newFile = BinaryReader.b_AddBytes(charicon_s_newFile, charicon_s_body1);
                 charicon_s_newFile = BinaryReader.b_AddBytes(charicon_s_newFile, charicon_s_body2);
