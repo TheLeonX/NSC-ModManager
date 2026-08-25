@@ -1,10 +1,16 @@
 <font size="50" align="center">PATCH NOTES
+<font size="50" align="center">Mod Manager/n
 <font size="20" align="center">2.1.0.0/n/n
 
-<font size="50" align="center">Mod Manager/n
+
 
 <font size="45" align="left"><color red>Storm Connections</color>/n
 <font size="35" align="left">Update/n
 <font size="25" align="left">- Mod Manager was updated to 1.70 version of game./n
-<font size="35" align="left">Update/n
+<font size="35" align="left">Fixes/n
 <font size="25" align="left">- Fixed an issue when jutsu selector didn't worked in online mode./n
+
+<font size="20" align="center">2.1.0.1/n/n
+
+<font size="35" align="left">Fixes/n
+<font size="25" align="left">- Fixed issues which made crashes after finishing online match./n
