@@ -559,3 +559,6 @@ C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Resources\data\spc\8nrfbod2_dmg01.xfbin
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Resources\data\spc\8nrgbod2.xfbin
 C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Resources\data\spc\8nrgbod2_dmg01.xfbin
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\xcmn_menu.gfx
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Shaders\Build-MotionBlurS2.ps1
+C:\Users\ARDOR\Desktop\C# Projects\NSC-ModManager\bin\net10.0-windows10.0.26100.0\ParamFiles\NSC\Shaders\MotionBlurS2.hlsl

@@ -4123,8 +4123,14 @@ namespace NSC_ModManager.ViewModel
 
                 // Update charsel.gfx
                 byte[] charsel_gfx = File.ReadAllBytes(charselGfxPath);
-                int charsel_offset_2 = 0x40950; // 1 + count of pages
-                charsel_gfx[charsel_offset_2] = (byte)(1 + characterSelectParam_vanilla.MaxPage());
+                const int charselPageCountOffset = 0x24A05;
+                int normalPageCount = characterSelectParam_vanilla.MaxPage() + 1;
+                int totalPageCount = normalPageCount + 1; // Normal pages + the preset page.
+                if (totalPageCount > byte.MaxValue)
+                    throw new InvalidDataException($"Character-select page count {totalPageCount} exceeds the GFX limit.");
+                if (charsel_gfx.Length <= charselPageCountOffset || charsel_gfx[charselPageCountOffset] != 8)
+                    throw new InvalidDataException("The bundled NSC charsel.gfx does not match the supported page-count patch.");
+                charsel_gfx[charselPageCountOffset] = (byte)totalPageCount;
                 string charsel_updated_path = Path.Combine(Properties.Settings.Default.RootGameNSCFolder, "data", "ui", "flash", "OTHER", "charsel", "charsel.gfx");
                 File.WriteAllBytes(charsel_updated_path, charsel_gfx);
 
@@ -4613,6 +4619,13 @@ namespace NSC_ModManager.ViewModel
                 File.Copy(
                     Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "patchnotes.txt"),
                     Path.Combine(root_folder, "data", "ui", "flash", "OTHER", "gametitle", "patchnotes.txt"),
+                    true);
+
+
+
+                File.Copy(
+                    Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "NSC", "xcmn_menu.gfx"),
+                    Path.Combine(root_folder, "data", "ui", "flash", "OTHER", "xcmn_menu", "xcmn_menu.gfx"),
                     true);
 
 
@@ -8591,6 +8604,33 @@ namespace NSC_ModManager.ViewModel
                 RepackHelper.RemoveZoneIdentifier(Path.Combine(root_path, "d3dcompiler_47_o.dll"));
                 if (File.Exists(exePath))
                 {
+                    // NSUNSC loads only nuccPostEffect_dx11.nsh. When the S2
+                    // motion-blur option is enabled, install the S2 variant
+                    // under that engine-facing filename.
+                    string postEffectSourceName = EnableMotionBlur_field
+                        ? "nuccPostEffect_dx11_S2.nsh"
+                        : "nuccPostEffect_dx11.nsh";
+                    string postEffectSource = Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "ParamFiles",
+                        "NSC",
+                        postEffectSourceName);
+                    string postEffectTargetDirectory = Path.Combine(
+                        root_path,
+                        "data",
+                        "system");
+                    string postEffectTarget = Path.Combine(
+                        postEffectTargetDirectory,
+                        "nuccPostEffect_dx11.nsh");
+
+                    if (!File.Exists(postEffectSource))
+                        throw new FileNotFoundException(
+                            $"The selected NSC post-effect file is missing: {postEffectSource}",
+                            postEffectSource);
+
+                    Directory.CreateDirectory(postEffectTargetDirectory);
+                    File.Copy(postEffectSource, postEffectTarget, true);
+
                     string sourceFile =
                         Path.Combine(Directory.GetCurrentDirectory(), "ParamFiles", "NSC", "charsel.gfx");
 

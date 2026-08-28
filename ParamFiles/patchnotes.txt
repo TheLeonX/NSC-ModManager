@@ -1,16 +1,44 @@
 <font size="50" align="center">PATCH NOTES
 <font size="50" align="center">Mod Manager/n
+
+
+
+<font size="20" align="center">2.1.2.0/n/n
+
+
+<font size="35" align="left">Update/n
+<font size="25" align="left">- Added new prm functions: <color red>Start Deflect</color> and <color red>Stop Deflect</color>./n
+<font size="25" align="left">- Added 2D Camera./n
+<font size="45" align="left"><color red>Storm Connections</color>/n
+<font size="35" align="left">Fixes/n
+<font size="25" align="left">- Fixed issue when awakening conditions didn't worked correctly./n
+<font size="25" align="left">- Fixed issue when new entries in guardEffectParam crashed the game./n
+
+
+<font size="20" align="center">2.1.1.0/n/n
+
+<font size="45" align="left"><color red>Storm Connections</color>/n
+<font size="35" align="left">Update/n
+<font size="25" align="left">- Added support for 8 colors for each costume./n
+<font size="25" align="left">- Added proper support for costume slots when they reach 16 and more count./n
+<font size="35" align="left">Fixes/n
+<font size="25" align="left">- Fixed an issue when awakening conditions didn't worked correctly./n
+<font size="25" align="left">- Fixed an issue when preset page was disabled in character select menu./n
+<font size="25" align="left">- Fixed issue when motion blur didn't installed with mods compilation process./n
+<font size="25" align="left">- Fixed motion blur depth for 30/60 fps./n
+<font size="25" align="left">- Fixed display for blue indicators for costumes in character select menu./n
+
+
+
+<font size="20" align="center">2.1.0.1/n/n
+
+<font size="35" align="left">Fixes/n
+<font size="25" align="left">- Fixed issues which made crashes after finishing online match./n
+
 <font size="20" align="center">2.1.0.0/n/n
-
-
 
 <font size="45" align="left"><color red>Storm Connections</color>/n
 <font size="35" align="left">Update/n
 <font size="25" align="left">- Mod Manager was updated to 1.70 version of game./n
 <font size="35" align="left">Fixes/n
 <font size="25" align="left">- Fixed an issue when jutsu selector didn't worked in online mode./n
-
-<font size="20" align="center">2.1.0.1/n/n
-
-<font size="35" align="left">Fixes/n
-<font size="25" align="left">- Fixed issues which made crashes after finishing online match./n
